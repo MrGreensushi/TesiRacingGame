@@ -1,0 +1,183 @@
+using Mirror;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
+namespace QuickStart
+{
+    public class PlayerScript : NetworkBehaviour
+    {
+        public TextMeshPro playerNameText;
+        public GameObject floatingInfo;
+        public Renderer render;
+        private Material playerMaterialClone;
+        public GameObject uiPrefab;
+
+        //Wheels
+        public WheelCollider frontDriverW, frontPassengerW;
+        public WheelCollider rearDriverW, rearPassengerW;
+        public Transform frontDriverT, frontPassengerT;
+        public Transform rearDriverT, rearPassengerT;
+        public float maxSteerAngle = 30;
+        public float motorForce = 50;
+
+        Rigidbody _rigidbody;
+
+
+        public float Velocity { get => _rigidbody.velocity.magnitude; }
+
+        [SyncVar(hook = nameof(OnNameChanged))]
+        public string playerName;
+
+        [SyncVar(hook = nameof(OnColorChanged))]
+        public Color playerColor = Color.white;
+
+        void OnNameChanged(string _Old, string _New)
+        {
+            playerNameText.text = playerName;
+        }
+        void OnColorChanged(Color _Old, Color _New)
+        {
+            playerNameText.color = _New;//Setta il nuovo colore
+            playerMaterialClone = new Material(render.material); //Recupera materiale attuale
+            playerMaterialClone.color = _New; //Cambia colore del materiale con quello nuovo
+            render.material = playerMaterialClone; //Aggiorna materiale
+        }
+        public override void OnStartLocalPlayer()
+        {
+            //Set up camera
+            Camera.main.transform.SetParent(transform);
+            Camera.main.transform.localPosition = new Vector3(0, 4, -6);
+            Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
+            Camera.main.orthographic = false;
+            Camera.main.fieldOfView = 60;
+
+
+            //Setup player infos
+            floatingInfo.transform.localPosition = new Vector3(0, -0.3f, 0.6f);
+            floatingInfo.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            string name = "Player " + Random.Range(100, 999);
+            Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+            //Aggiorna nome player in basso a sinistra
+            CarsManager.instance.PlayerNameUI = name;
+            CarsManager.instance.playerNameText.color = color;
+
+            //send infos to the server
+            CmdSetupPlayer(name, color);
+
+        }
+
+        [Command]
+        public void CmdSetupPlayer(string _name, Color _col)
+        {
+            //Player info sent to server, then server updates sync vars which handles it on all clients
+            playerName = _name;
+            playerColor = _col;
+            OnColorChanged(Color.black, _col);
+            NetworkConnectionToClient conn = null;
+            //recupera tutte le altre ui
+
+            //recupera id di tutte le macchine
+            List<string> names = new List<string>();
+            List<Color> colors = new List<Color>();
+            foreach (var item in CarsManager.instance.cars)
+            {
+                names.Add(item.Car.Id);
+                colors.Add(item.Player.playerColor);
+            }
+            if (names.Count > 0)
+                TargetInstantiatePreviousUis(conn, names.ToArray(), colors.ToArray());
+            //Aggiungo UI nel Manager del server
+            GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
+            CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), _name, _col);
+
+            //chiedo ad ogni client di stampare la UI della nuova macchina
+            InstantiateUI(_name, _col);
+
+
+        }
+
+        [TargetRpc]
+        public void TargetInstantiatePreviousUis(NetworkConnection target, string[] names, Color[] colors)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
+                CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
+            }
+        }
+
+        [ClientRpc]
+        void InstantiateUI(string name, Color _col)
+        {
+
+            //instanzio la UI e aggoingo la macchina al manager
+            GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
+            CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), name, _col);
+        }
+
+
+        private void UpdateWheelPoses()
+        {
+            UpdateWheelPose(frontDriverW, frontDriverT);
+            UpdateWheelPose(frontPassengerW, frontPassengerT);
+            UpdateWheelPose(rearDriverW, rearDriverT);
+            UpdateWheelPose(rearPassengerW, rearPassengerT);
+        }
+
+        private void UpdateWheelPose(WheelCollider _collider, Transform _transform)
+        {
+            Vector3 _pos = _transform.position;
+            Quaternion _quat = _transform.rotation;
+
+            _collider.GetWorldPose(out _pos, out _quat);
+
+            _transform.position = _pos;
+            _transform.rotation = _quat;
+        }
+
+        private void Awake()
+        {
+
+            _rigidbody = GetComponent<Rigidbody>();
+            //lower center of mass to avoid flipping the car too easily
+            _rigidbody.centerOfMass += Vector3.down * 0.8f;
+
+        }
+
+        private void FixedUpdate()
+        {
+            if (!isLocalPlayer)
+                return;
+            float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
+            frontDriverW.steerAngle = moveX;
+            frontPassengerW.steerAngle = moveX;
+
+            float moveZ = Input.GetAxis("Vertical") * motorForce;
+            frontPassengerW.motorTorque = moveZ;
+            frontDriverW.motorTorque = moveZ;
+
+            //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
+            UpdateWheelPoses();
+
+
+        }
+
+        void Update()
+        {
+            if (!isLocalPlayer)
+            {
+                //non-local player run this
+                floatingInfo.transform.LookAt(Camera.main.transform);
+                return;
+            }
+
+        }
+
+
+
+
+    }
+}
