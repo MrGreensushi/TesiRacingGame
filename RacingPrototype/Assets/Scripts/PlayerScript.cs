@@ -11,15 +11,22 @@ namespace QuickStart
         public GameObject floatingInfo;
         public Renderer render;
         private Material playerMaterialClone;
+        private Material lightsMaterialClone;
         public GameObject uiPrefab;
+
+        //Trail only for server
+        [SerializeField] TrailRenderer trilRenderer;
 
         //Wheels
         public WheelCollider frontDriverW, frontPassengerW;
         public WheelCollider rearDriverW, rearPassengerW;
         public Transform frontDriverT, frontPassengerT;
         public Transform rearDriverT, rearPassengerT;
+
+        //Driving
         public float maxSteerAngle = 30;
         public float motorForce = 50;
+        public float breakForce = 30;
 
         Rigidbody _rigidbody;
 
@@ -32,6 +39,9 @@ namespace QuickStart
         [SyncVar(hook = nameof(OnColorChanged))]
         public Color playerColor = Color.white;
 
+        [SyncVar(hook = nameof(OnLightsChanged))]
+        public Color ligthsColor = Color.clear;
+
         void OnNameChanged(string _Old, string _New)
         {
             playerNameText.text = playerName;
@@ -43,6 +53,13 @@ namespace QuickStart
             playerMaterialClone.color = _New; //Cambia colore del materiale con quello nuovo
             render.material = playerMaterialClone; //Aggiorna materiale
         }
+        void OnLightsChanged(Color _Old, Color _New)
+        {
+            lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
+            render.materials[1] = lightsMaterialClone;
+            render.materials[1].SetColor("_EmissionColor", _New); //modifica copia materiale
+        }
+
         public override void OnStartLocalPlayer()
         {
             //Set up camera
@@ -76,6 +93,12 @@ namespace QuickStart
             playerName = _name;
             playerColor = _col;
             OnColorChanged(Color.black, _col);
+
+
+            //colore del giocatore corrisponde anche al colore della scia
+            trilRenderer.enabled = true;
+            trilRenderer.startColor = _col;
+
             NetworkConnectionToClient conn = null;
             //recupera tutte le altre ui
 
@@ -118,7 +141,6 @@ namespace QuickStart
             CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), name, _col);
         }
 
-
         private void UpdateWheelPoses()
         {
             UpdateWheelPose(frontDriverW, frontDriverT);
@@ -159,11 +181,28 @@ namespace QuickStart
             frontPassengerW.motorTorque = moveZ;
             frontDriverW.motorTorque = moveZ;
 
+            int breaking = Input.GetButton("Fire2") ? 1 : 0;
+            frontDriverW.brakeTorque = breakForce * breaking;
+            frontPassengerW.brakeTorque = breakForce * breaking;
+
+            Color _col = breaking == 1 ? Color.white : Color.clear;
+            if (_col != render.materials[1].GetColor("_EmissionColor"))
+            {
+                CmdBrakeLights(_col);
+            }
+
             //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
             UpdateWheelPoses();
 
 
         }
+
+        [Command]
+        public void CmdBrakeLights(Color _col)
+        {
+            ligthsColor = _col;
+        }
+
 
         void Update()
         {
@@ -176,8 +215,11 @@ namespace QuickStart
 
         }
 
-
-
-
+        public override void OnStopLocalPlayer()
+        {
+            Camera.main.transform.SetParent(null);
+            CarsManager.instance.RemoveCar(playerName);
+            base.OnStopLocalPlayer();
+        }
     }
 }

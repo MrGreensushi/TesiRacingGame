@@ -41,6 +41,15 @@ namespace QuickStart
 
         }
 
+        public void RemoveCar(string name)
+        {
+            var disconnected = cars.Find(x => x.Player.playerName == name);
+            cars.Remove(disconnected);
+            Destroy(disconnected.Ui.gameObject);
+
+        }
+
+
         private void Update()
         {
             if (isServer) UpdateUi();
@@ -49,8 +58,18 @@ namespace QuickStart
         [Server]
         void UpdateUi()
         {
+            //Destroy Ui of all disconnected cars
+            var disconnected = cars.FindAll(x => x.Player == null);
+            foreach (var toDelete in disconnected)
+            {
+                cars.Remove(toDelete);
+                Destroy(toDelete.Ui.gameObject);
+            }
+
             List<CarInfos> sorted = cars;
             sorted.Sort();
+
+
             foreach (var item in cars)
             {
                 //update car descriptor
@@ -69,9 +88,6 @@ namespace QuickStart
 
 
         }
-
-
-
 
 
         [ClientRpc]
