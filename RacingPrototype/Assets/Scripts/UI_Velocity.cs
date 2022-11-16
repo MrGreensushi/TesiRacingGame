@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -47,11 +48,10 @@ namespace QuickStart
         {
             var now = NetworkTime.time - offsetTime;
 
-            var minutes = now / 60;
-            var seconds = now % 60;
+            var minutes = Mathf.FloorToInt((float)now / 60.0f);
+            var seconds = (int)now - minutes * 60;
             var millsec = (now - (int)now) * 1000;
-            return string.Format("{0:0}", minutes) + ":"
-                + string.Format("{0:00}", seconds) + ":"
+            return minutes + ":" + string.Format("{0:00}", seconds) + ":"
                 + string.Format("{0:000}", millsec);
 
         }

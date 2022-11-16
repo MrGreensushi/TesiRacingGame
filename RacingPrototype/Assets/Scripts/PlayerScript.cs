@@ -13,6 +13,7 @@ namespace QuickStart
         private Material playerMaterialClone;
         private Material lightsMaterialClone;
         public GameObject uiPrefab;
+        public Transform centerOfMass;
 
         //Trail only for server
         [SerializeField] TrailRenderer trilRenderer;
@@ -31,7 +32,15 @@ namespace QuickStart
         Rigidbody _rigidbody;
 
 
-        public float Velocity { get => _rigidbody.velocity.magnitude; }
+        public float Velocity
+        {
+            get
+            {
+                if (_rigidbody != null)
+                    return _rigidbody.velocity.magnitude;
+                else return 0;
+            }
+        }
 
         [SyncVar(hook = nameof(OnNameChanged))]
         public string playerName;
@@ -73,6 +82,10 @@ namespace QuickStart
             //Setup player infos
             floatingInfo.transform.localPosition = new Vector3(0, -0.3f, 0.6f);
             floatingInfo.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            //Lower center of mass
+            _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody.centerOfMass = centerOfMass.localPosition;
 
             string name = "Player " + Random.Range(100, 999);
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
@@ -158,15 +171,6 @@ namespace QuickStart
 
             _transform.position = _pos;
             _transform.rotation = _quat;
-        }
-
-        private void Awake()
-        {
-
-            _rigidbody = GetComponent<Rigidbody>();
-            //lower center of mass to avoid flipping the car too easily
-            _rigidbody.centerOfMass += Vector3.down * 0.8f;
-
         }
 
         private void FixedUpdate()
