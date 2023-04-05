@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499975,
+                "file_path": "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-499975.onnx",
+                "reward": null,
+                "creation_time": 1680089582.3733785,
+                "auxillary_file_paths": [
+                    "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-499975.pt"
+                ]
+            },
+            {
+                "steps": 999966,
+                "file_path": "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-999966.onnx",
+                "reward": null,
+                "creation_time": 1680091266.25503,
+                "auxillary_file_paths": [
+                    "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-999966.pt"
+                ]
+            },
+            {
+                "steps": 1499956,
+                "file_path": "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-1499956.onnx",
+                "reward": 2.3157603051513433,
+                "creation_time": 1680093020.2470992,
+                "auxillary_file_paths": [
+                    "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-1499956.pt"
+                ]
+            },
+            {
+                "steps": 1500020,
+                "file_path": "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-1500020.onnx",
+                "reward": 2.3157603051513433,
+                "creation_time": 1680093020.4968905,
+                "auxillary_file_paths": [
+                    "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-1500020.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500020,
+            "file_path": "results\\MoreComplex0_DirRew\\My Behavior.onnx",
+            "reward": 2.3157603051513433,
+            "creation_time": 1680093020.4968905,
+            "auxillary_file_paths": [
+                "results\\MoreComplex0_DirRew\\My Behavior\\My Behavior-1500020.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

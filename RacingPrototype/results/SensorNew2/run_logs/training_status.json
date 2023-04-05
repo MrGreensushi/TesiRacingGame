@@ -1,0 +1,56 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499942,
+                "file_path": "results\\SensorNew2\\My Behavior\\My Behavior-499942.onnx",
+                "reward": 47.11134544759989,
+                "creation_time": 1669572748.5705132,
+                "auxillary_file_paths": [
+                    "results\\SensorNew2\\My Behavior\\My Behavior-499942.pt"
+                ]
+            },
+            {
+                "steps": 999996,
+                "file_path": "results\\SensorNew2\\My Behavior\\My Behavior-999996.onnx",
+                "reward": 280.0544181764126,
+                "creation_time": 1669573038.659777,
+                "auxillary_file_paths": [
+                    "results\\SensorNew2\\My Behavior\\My Behavior-999996.pt"
+                ]
+            },
+            {
+                "steps": 1499962,
+                "file_path": "results\\SensorNew2\\My Behavior\\My Behavior-1499962.onnx",
+                "reward": 155.1510270833969,
+                "creation_time": 1669573329.3927693,
+                "auxillary_file_paths": [
+                    "results\\SensorNew2\\My Behavior\\My Behavior-1499962.pt"
+                ]
+            },
+            {
+                "steps": 1500026,
+                "file_path": "results\\SensorNew2\\My Behavior\\My Behavior-1500026.onnx",
+                "reward": 155.1510270833969,
+                "creation_time": 1669573329.444806,
+                "auxillary_file_paths": [
+                    "results\\SensorNew2\\My Behavior\\My Behavior-1500026.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500026,
+            "file_path": "results\\SensorNew2\\My Behavior.onnx",
+            "reward": 155.1510270833969,
+            "creation_time": 1669573329.444806,
+            "auxillary_file_paths": [
+                "results\\SensorNew2\\My Behavior\\My Behavior-1500026.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

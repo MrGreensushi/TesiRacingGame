@@ -1,0 +1,263 @@
+using QuickStart;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
+
+
+public class Offline_MLcar : Agent
+{
+    [SerializeField] OfflineCar _offlineCar;
+    [HideInInspector] public bool lap = false;
+    [HideInInspector] public int checkpoint, wrongCheck;
+    private bool startCollision = false, stillCollision = false;
+    private bool carCollision = false, stillCarCollision = false;
+    float startTime, previousDirection = 0;
+    [SerializeField] Offline_StartingPoint_Manager spManager;
+    [SerializeField] Offline_LapsManager lapsManager;
+    public Offline_CarsManager carsManager;
+    float collisionDuration = 0f;
+    int lapsDone = 0, lapsEpisode = 3;
+    //Curriculum learning
+    EnvironmentParameters m_ResetParams;
+    float config_number;
+    public bool accelerationRew = false, directionRew = true, breakingRew = false;
+
+    public override void Initialize()
+    {
+        m_ResetParams = Academy.Instance.EnvironmentParameters;
+
+    }
+    public override void OnEpisodeBegin()
+    {
+
+        _offlineCar.StopCar();
+        ConfigCar();
+        checkpoint = 0;
+        wrongCheck = 0;
+        lap = false;
+        transform.rotation = Quaternion.identity;
+        startTime = Time.time;
+        lapsDone = 0;
+        previousDirection = 0;
+    }
+
+    public void ConfigCar()
+    {
+        config_number = m_ResetParams.GetWithDefault("config_num", 3);
+
+        if (carsManager != null)
+            carsManager.RemoveCar(_offlineCar.playerName);
+
+        transform.localPosition = spManager.StartingPoint(config_number, transform);
+        lapsManager = transform.parent.parent.GetComponentInChildren<Offline_LapsManager>();
+        carsManager = transform.parent.parent.GetComponentInChildren<Offline_CarsManager>();
+        carsManager.AddCar(_offlineCar, _offlineCar.playerName);
+
+        /*switch (config_number)
+        {
+            case 0.0f:
+                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Car"), LayerMask.NameToLayer("Car"));
+                break;
+            case 1.0f:
+                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Car"), LayerMask.NameToLayer("Car"), false);
+                break;
+            default:
+                break;
+        }*/
+
+
+    }
+
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        float moveX = actions.ContinuousActions[0]; //Girare a sinisatra o destra
+        float moveZ = actions.ContinuousActions[1]; //Accellerare o retromarcia
+        int breaking = actions.DiscreteActions[0]; //frenare o meno
+        _offlineCar.UseInput(moveX, moveZ, breaking);
+
+        Rewards(moveZ, breaking);
+
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        Vector3 checkpointForward = lapsManager.NextGateForward(_offlineCar.playerName);
+        float directionDot = Vector3.Dot(transform.forward, checkpointForward);
+        sensor.AddObservation(directionDot);
+
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        continuousActions[0] = Input.GetAxis("Horizontal");
+        continuousActions[1] = Input.GetAxis("Vertical");
+
+        ActionSegment<int> discreateActions = actionsOut.DiscreteActions;
+        discreateActions[0] = Input.GetButton("Fire2") ? 1 : 0;
+    }
+
+    //Se sbatto conto un muro penalizzo l'agent
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Wall wall))
+        {
+            //ho colpito un muro
+            startCollision = true;
+            stillCollision = true;
+            collisionDuration = Time.time;
+        }
+        if (collision.gameObject.TryGetComponent(out OfflineCar car))
+        {
+            //ho colpito un muro
+            carCollision = true;
+            stillCarCollision = true;
+            collisionDuration = Time.time;
+        }
+
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Wall wall) ||
+            collision.gameObject.TryGetComponent(out OfflineCar car))
+        {
+            //Se la collisione dura da più di 2 secondi allora fine episodio
+            if ((Time.time - collisionDuration) >= 1f)
+            {
+                EndEpisode();
+            }
+
+        }
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Wall wall))
+        {
+            //collisione contro il muro finita
+            stillCollision = false;
+        }
+        if (collision.gameObject.TryGetComponent(out OfflineCar car))
+        {
+            //ho colpito un muro
+            stillCarCollision = false;
+        }
+    }
+
+
+    private void Rewards(float moveZ, int breaking)
+    {
+        /*
+        Vector3 checkpointForward = lapsManager.NextGateForward(_offlineCar.playerName);
+        float directionDot = Vector3.Dot(_offlineCar.VelocityNormal, checkpointForward);
+        if (moveZ > 0 && breaking == 0)
+        {
+            Debug.LogWarning(moveZ * 0.005f);
+            totRew += moveZ * 0.005f;
+            AddReward(moveZ * 0.005f);
+        }
+        else
+        {
+            totRew -= 0.005f;
+            AddReward(-0.005f);
+        }
+
+        //Reward in base alla direzione della macchina
+        if (_offlineCar.Velocity > 0.1f)
+        {
+            float rew = 0.005f * directionDot;
+            totRew += rew;
+            AddReward(rew);
+        }*/
+
+        //Premio l'agente in base alla direzione della macchina rispetto al prossimo checkpoint
+        if (directionRew)
+            if (moveZ > 0)
+            {
+                Vector3 checkpointForward = lapsManager.NextGateForward(_offlineCar.playerName);
+                float directionDot = Vector3.Dot(_offlineCar.VelocityNormal, checkpointForward);
+
+                if (directionDot >= previousDirection)//girando mi sono messo in una posizione migliore rispetto alla precedente
+                    AddReward(0.005f * directionDot);
+                else
+                    AddReward(-0.005f);
+
+                previousDirection = directionDot;
+            }
+
+        //Premio l'agente in base a quanto preme l'acceleratore
+        if (accelerationRew)
+            if (moveZ == 1 && breaking == 0)
+                AddReward(0.005f);
+
+        //penalizzo l'agente se frena 
+        if (breakingRew)
+            AddReward(-breaking * 0.005f);
+
+
+        if (checkpoint > 0)
+        {
+            AddReward(0.5f * checkpoint);
+            Debug.Log($"Reward {0.5f * checkpoint} for checkpoint");
+            checkpoint = 0;
+
+
+
+        }
+
+        if (wrongCheck > 0)
+        {
+            AddReward(-wrongCheck);
+            Debug.Log($"Reward {-wrongCheck}for wrong checkpoint");
+            wrongCheck = 0;
+            EndEpisode();
+        }
+
+        if (lap)
+        {
+            lap = false;
+            AddReward(1);
+            Debug.Log($"Reward {1} for completing a lap");
+
+            //reward in base al lapTime
+            float totTime = Time.time - startTime;
+            lapsDone++;
+            if (lapsDone >= lapsEpisode)
+                EndEpisode();
+        }
+
+        //Se rimango contro un muro penalizzo l'agent
+        if (stillCollision)
+        {
+            AddReward(-0.005f);
+            Debug.Log("Reward -0.005 for Staying on a wall");
+        }
+
+        //Se sbatto conto un muro penalizzo l'agent
+        if (startCollision)
+        {
+            AddReward(-0.5f);
+            startCollision = false;
+            Debug.Log("Reward -0.5 for starting a collision");
+        }
+
+        //Se rimango contro un muro penalizzo l'agent
+        if (stillCarCollision)
+        {
+            AddReward(-0.005f);
+            Debug.Log("Reward -0.005 for Staying on a car");
+        }
+
+        //Se sbatto conto un muro penalizzo l'agent
+        if (carCollision)
+        {
+            AddReward(-0.5f);
+            carCollision = false;
+            Debug.Log("Reward -0.5 for starting a collision with a car");
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1669648416",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\Github\\TesiRacingGame\\RacingPrototype\\venv\\Scripts\\mlagents-learn config\\MyAgentBehavior.yaml --run-id=Curriculum --force",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cu110",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1669648485"
+    },
+    "total": 69.02805149999999,
+    "count": 1,
+    "self": 0.005630999999993946,
+    "children": {
+        "run_training.setup": {
+            "total": 0.08728179999999996,
+            "count": 1,
+            "self": 0.08728179999999996
+        },
+        "TrainerController.start_learning": {
+            "total": 68.9351387,
+            "count": 1,
+            "self": 0.00011969999999905667,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 68.9350008,
+                    "count": 1,
+                    "self": 68.9350008
+                },
+                "TrainerController._save_models": {
+                    "total": 1.8199999999524152e-05,
+                    "count": 1,
+                    "self": 1.8199999999524152e-05
+                }
+            }
+        }
+    }
+}

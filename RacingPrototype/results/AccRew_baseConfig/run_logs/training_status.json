@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499948,
+                "file_path": "results\\AccRew_baseConfig\\My Behavior\\My Behavior-499948.onnx",
+                "reward": null,
+                "creation_time": 1670453935.303501,
+                "auxillary_file_paths": [
+                    "results\\AccRew_baseConfig\\My Behavior\\My Behavior-499948.pt"
+                ]
+            },
+            {
+                "steps": 999937,
+                "file_path": "results\\AccRew_baseConfig\\My Behavior\\My Behavior-999937.onnx",
+                "reward": 73.8969949303195,
+                "creation_time": 1670454452.7169425,
+                "auxillary_file_paths": [
+                    "results\\AccRew_baseConfig\\My Behavior\\My Behavior-999937.pt"
+                ]
+            },
+            {
+                "steps": 1499988,
+                "file_path": "results\\AccRew_baseConfig\\My Behavior\\My Behavior-1499988.onnx",
+                "reward": 103.65624285582453,
+                "creation_time": 1670454968.8962839,
+                "auxillary_file_paths": [
+                    "results\\AccRew_baseConfig\\My Behavior\\My Behavior-1499988.pt"
+                ]
+            },
+            {
+                "steps": 1500052,
+                "file_path": "results\\AccRew_baseConfig\\My Behavior\\My Behavior-1500052.onnx",
+                "reward": 103.65624285582453,
+                "creation_time": 1670454969.0100598,
+                "auxillary_file_paths": [
+                    "results\\AccRew_baseConfig\\My Behavior\\My Behavior-1500052.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500052,
+            "file_path": "results\\AccRew_baseConfig\\My Behavior.onnx",
+            "reward": 103.65624285582453,
+            "creation_time": 1670454969.0100598,
+            "auxillary_file_paths": [
+                "results\\AccRew_baseConfig\\My Behavior\\My Behavior-1500052.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

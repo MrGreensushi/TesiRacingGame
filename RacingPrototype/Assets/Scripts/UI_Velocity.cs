@@ -29,7 +29,7 @@ namespace QuickStart
 
         public void Udpate(CarDescriptor x)
         {
-            Velocity = Mathf.RoundToInt(x.Velocity).ToString();
+            Velocity = Kmh(x.Velocity).ToString();
             Laps = x.Laps.ToString();
             Rank = x.Rank.ToString();
             Time = TimeFormat();
@@ -37,7 +37,7 @@ namespace QuickStart
 
         public void Udpate(float velocity, int laps, int rank, string time)
         {
-            Velocity = Mathf.RoundToInt(velocity).ToString();
+            Velocity = Kmh(velocity).ToString();
             Laps = laps.ToString();
             Rank = rank.ToString();
             Time = time;
@@ -56,6 +56,10 @@ namespace QuickStart
 
         }
 
+        int Kmh(float x)
+        {
+            return Mathf.FloorToInt(x * 60 * 60 / 1000);
+        }
 
     }
 

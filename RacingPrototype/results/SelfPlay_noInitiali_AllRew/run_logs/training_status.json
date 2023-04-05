@@ -1,0 +1,51 @@
+{
+    "config_num": {
+        "lesson_num": 3
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499988,
+                "file_path": "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-499988.onnx",
+                "reward": 91.19221917338048,
+                "creation_time": 1680025256.5972269,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-499988.pt"
+                ]
+            },
+            {
+                "steps": 999947,
+                "file_path": "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-999947.onnx",
+                "reward": 12.263193958571978,
+                "creation_time": 1680026478.9534597,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-999947.pt"
+                ]
+            },
+            {
+                "steps": 1100444,
+                "file_path": "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-1100444.onnx",
+                "reward": 13.766223479594503,
+                "creation_time": 1680026825.2200434,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-1100444.pt"
+                ]
+            }
+        ],
+        "elo": 1252.8020466042872,
+        "final_checkpoint": {
+            "steps": 1100444,
+            "file_path": "results\\SelfPlay_noInitiali_AllRew\\My Behavior.onnx",
+            "reward": 13.766223479594503,
+            "creation_time": 1680026825.2200434,
+            "auxillary_file_paths": [
+                "results\\SelfPlay_noInitiali_AllRew\\My Behavior\\My Behavior-1100444.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

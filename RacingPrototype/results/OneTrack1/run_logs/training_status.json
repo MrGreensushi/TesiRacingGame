@@ -1,0 +1,56 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499968,
+                "file_path": "results\\OneTrack1\\My Behavior\\My Behavior-499968.onnx",
+                "reward": null,
+                "creation_time": 1669395201.9577954,
+                "auxillary_file_paths": [
+                    "results\\OneTrack1\\My Behavior\\My Behavior-499968.pt"
+                ]
+            },
+            {
+                "steps": 999948,
+                "file_path": "results\\OneTrack1\\My Behavior\\My Behavior-999948.onnx",
+                "reward": 8.806321275730928,
+                "creation_time": 1669395653.5494204,
+                "auxillary_file_paths": [
+                    "results\\OneTrack1\\My Behavior\\My Behavior-999948.pt"
+                ]
+            },
+            {
+                "steps": 1499989,
+                "file_path": "results\\OneTrack1\\My Behavior\\My Behavior-1499989.onnx",
+                "reward": null,
+                "creation_time": 1669396096.248471,
+                "auxillary_file_paths": [
+                    "results\\OneTrack1\\My Behavior\\My Behavior-1499989.pt"
+                ]
+            },
+            {
+                "steps": 1500053,
+                "file_path": "results\\OneTrack1\\My Behavior\\My Behavior-1500053.onnx",
+                "reward": null,
+                "creation_time": 1669396096.292371,
+                "auxillary_file_paths": [
+                    "results\\OneTrack1\\My Behavior\\My Behavior-1500053.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500053,
+            "file_path": "results\\OneTrack1\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669396096.292371,
+            "auxillary_file_paths": [
+                "results\\OneTrack1\\My Behavior\\My Behavior-1500053.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

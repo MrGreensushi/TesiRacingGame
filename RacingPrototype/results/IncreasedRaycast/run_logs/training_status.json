@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499939,
+                "file_path": "results\\IncreasedRaycast\\My Behavior\\My Behavior-499939.onnx",
+                "reward": null,
+                "creation_time": 1669805225.0429952,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast\\My Behavior\\My Behavior-499939.pt"
+                ]
+            },
+            {
+                "steps": 999983,
+                "file_path": "results\\IncreasedRaycast\\My Behavior\\My Behavior-999983.onnx",
+                "reward": null,
+                "creation_time": 1669805586.7698255,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast\\My Behavior\\My Behavior-999983.pt"
+                ]
+            },
+            {
+                "steps": 1499957,
+                "file_path": "results\\IncreasedRaycast\\My Behavior\\My Behavior-1499957.onnx",
+                "reward": null,
+                "creation_time": 1669805950.446486,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast\\My Behavior\\My Behavior-1499957.pt"
+                ]
+            },
+            {
+                "steps": 1500021,
+                "file_path": "results\\IncreasedRaycast\\My Behavior\\My Behavior-1500021.onnx",
+                "reward": null,
+                "creation_time": 1669805950.500321,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast\\My Behavior\\My Behavior-1500021.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500021,
+            "file_path": "results\\IncreasedRaycast\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669805950.500321,
+            "auxillary_file_paths": [
+                "results\\IncreasedRaycast\\My Behavior\\My Behavior-1500021.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499960,
+                "file_path": "results\\NoVel3\\My Behavior\\My Behavior-499960.onnx",
+                "reward": null,
+                "creation_time": 1669628114.3239691,
+                "auxillary_file_paths": [
+                    "results\\NoVel3\\My Behavior\\My Behavior-499960.pt"
+                ]
+            },
+            {
+                "steps": 999982,
+                "file_path": "results\\NoVel3\\My Behavior\\My Behavior-999982.onnx",
+                "reward": 23.64471499621868,
+                "creation_time": 1669628475.9650686,
+                "auxillary_file_paths": [
+                    "results\\NoVel3\\My Behavior\\My Behavior-999982.pt"
+                ]
+            },
+            {
+                "steps": 1499984,
+                "file_path": "results\\NoVel3\\My Behavior\\My Behavior-1499984.onnx",
+                "reward": null,
+                "creation_time": 1669628859.0375633,
+                "auxillary_file_paths": [
+                    "results\\NoVel3\\My Behavior\\My Behavior-1499984.pt"
+                ]
+            },
+            {
+                "steps": 1500048,
+                "file_path": "results\\NoVel3\\My Behavior\\My Behavior-1500048.onnx",
+                "reward": null,
+                "creation_time": 1669628859.0926318,
+                "auxillary_file_paths": [
+                    "results\\NoVel3\\My Behavior\\My Behavior-1500048.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500048,
+            "file_path": "results\\NoVel3\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669628859.0926318,
+            "auxillary_file_paths": [
+                "results\\NoVel3\\My Behavior\\My Behavior-1500048.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -28,6 +28,11 @@ namespace QuickStart
         public float maxSteerAngle = 30;
         public float motorForce = 50;
         public float breakForce = 30;
+        public int initial_boost = 15;
+        public float boost_duration = 0.1f;
+
+        //ML Agent
+        public ML_Car agent;
 
         Rigidbody _rigidbody;
 
@@ -41,6 +46,10 @@ namespace QuickStart
                 else return 0;
             }
         }
+        public Vector3 VelocityNormal { get => _rigidbody.velocity.normalized; }
+        public Vector3 VectorizedVelocity { get => _rigidbody.velocity; }
+
+        public int[] LastAction { get => agent.lastAction; }
 
         [SyncVar(hook = nameof(OnNameChanged))]
         public string playerName;
@@ -87,7 +96,16 @@ namespace QuickStart
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.centerOfMass = centerOfMass.localPosition;
 
-            string name = "Player " + Random.Range(100, 999);
+            //check il nome sia unico
+            string name;
+            List<PlayerScript> allCars = new List<PlayerScript>();
+            allCars.AddRange(FindObjectsOfType<PlayerScript>());
+            do
+            {
+                name = "Player " + Random.Range(100, 999);
+
+            } while (allCars.FindIndex(x => x.playerName == name) >= 0);
+
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
 
             //Aggiorna nome player in basso a sinistra
@@ -96,7 +114,6 @@ namespace QuickStart
 
             //send infos to the server
             CmdSetupPlayer(name, color);
-
         }
 
         [Command]
@@ -107,10 +124,12 @@ namespace QuickStart
             playerColor = _col;
             OnColorChanged(Color.black, _col);
 
+            _rigidbody = GetComponent<Rigidbody>();
 
             //colore del giocatore corrisponde anche al colore della scia
             trilRenderer.enabled = true;
             trilRenderer.startColor = _col;
+            trilRenderer.endColor = _col;
 
             NetworkConnectionToClient conn = null;
             //recupera tutte le altre ui
@@ -132,7 +151,7 @@ namespace QuickStart
             //chiedo ad ogni client di stampare la UI della nuova macchina
             InstantiateUI(_name, _col);
 
-
+            agent.enabled = true;
         }
 
         [TargetRpc]
@@ -173,32 +192,69 @@ namespace QuickStart
             _transform.rotation = _quat;
         }
 
-        private void FixedUpdate()
+        /* private void FixedUpdate()
+         {
+             if (!isLocalPlayer)
+                 return;
+             float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
+             frontDriverW.steerAngle = moveX;
+             frontPassengerW.steerAngle = moveX;
+
+             float moveZ = Input.GetAxis("Vertical") * motorForce;
+             frontPassengerW.motorTorque = moveZ;
+             frontDriverW.motorTorque = moveZ;
+
+             int breaking = Input.GetButton("Fire2") ? 1 : 0;
+             frontDriverW.brakeTorque = breakForce * breaking;
+             frontPassengerW.brakeTorque = breakForce * breaking;
+
+             Color _col = breaking == 1 ? Color.white : Color.clear;
+             if (_col != render.materials[1].GetColor("_EmissionColor"))
+             {
+                 CmdBrakeLights(_col);
+             }
+
+             //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
+             UpdateWheelPoses();
+
+
+         }*/
+
+        public void UseInput(float movex, float movez, int breaking)
         {
-            if (!isLocalPlayer)
-                return;
-            float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
+            float moveX = movex * maxSteerAngle;
             frontDriverW.steerAngle = moveX;
             frontPassengerW.steerAngle = moveX;
 
-            float moveZ = Input.GetAxis("Vertical") * motorForce;
+
+            float moveZ = movez * motorForce;
             frontPassengerW.motorTorque = moveZ;
             frontDriverW.motorTorque = moveZ;
 
-            int breaking = Input.GetButton("Fire2") ? 1 : 0;
+            //Bost per la velocità per aiutare la macchina ad accelerare più velocemente 
+            if (Velocity > 0 && moveZ > 0)
+                _rigidbody.AddForce(initial_boost * transform.forward * motorForce * Mathf.Exp(-Velocity * boost_duration));
+
+
             frontDriverW.brakeTorque = breakForce * breaking;
             frontPassengerW.brakeTorque = breakForce * breaking;
 
             Color _col = breaking == 1 ? Color.white : Color.clear;
             if (_col != render.materials[1].GetColor("_EmissionColor"))
             {
-                CmdBrakeLights(_col);
+                lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
+                render.materials[1] = lightsMaterialClone;
+                render.materials[1].SetColor("_EmissionColor", _col); //modifica copia materiale
             }
 
             //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
             UpdateWheelPoses();
+        }
 
-
+        [TargetRpc]
+        public void TargetRpcUseInput(float movex, float movez, int breaking)
+        {
+            UseInput(movex, movez, breaking);
         }
 
         [Command]
@@ -224,6 +280,16 @@ namespace QuickStart
             Camera.main.transform.SetParent(null);
             CarsManager.instance.RemoveCar(playerName);
             base.OnStopLocalPlayer();
+        }
+        public void StopCar()
+        {
+            /*frontDriverW.brakeTorque = Mathf.Infinity;
+            frontPassengerW.brakeTorque = Mathf.Infinity;
+            rearDriverW.brakeTorque = Mathf.Infinity;
+            rearDriverW.brakeTorque = Mathf.Infinity;
+            */
+            if (_rigidbody != null)
+                _rigidbody.velocity = Vector3.zero;
         }
     }
 }

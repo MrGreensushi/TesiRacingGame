@@ -17,10 +17,11 @@ namespace QuickStart
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.transform.parent.GetComponent<PlayerScript>() == null) return;
-            string nome = other.transform.parent.GetComponent<PlayerScript>().playerName;
+            var car = other.transform.parent.GetComponent<PlayerScript>();
+            if (car == null) return;
+            string nome = car.playerName;
             _lapsManager.CarPassedThrough(id, nome);
-            Debug.Log($"Collision: {nome} has entered gate {id}");
+            //Debug.Log($"Collision: {nome} has entered gate {id}");
         }
     }
 }

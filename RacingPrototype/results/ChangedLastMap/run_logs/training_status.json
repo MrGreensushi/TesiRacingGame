@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499951,
+                "file_path": "results\\ChangedLastMap\\My Behavior\\My Behavior-499951.onnx",
+                "reward": 31.295695988668335,
+                "creation_time": 1669741813.4335253,
+                "auxillary_file_paths": [
+                    "results\\ChangedLastMap\\My Behavior\\My Behavior-499951.pt"
+                ]
+            },
+            {
+                "steps": 999984,
+                "file_path": "results\\ChangedLastMap\\My Behavior\\My Behavior-999984.onnx",
+                "reward": 14.348107650876045,
+                "creation_time": 1669742216.7933643,
+                "auxillary_file_paths": [
+                    "results\\ChangedLastMap\\My Behavior\\My Behavior-999984.pt"
+                ]
+            },
+            {
+                "steps": 1499977,
+                "file_path": "results\\ChangedLastMap\\My Behavior\\My Behavior-1499977.onnx",
+                "reward": 23.73215888813138,
+                "creation_time": 1669742615.215889,
+                "auxillary_file_paths": [
+                    "results\\ChangedLastMap\\My Behavior\\My Behavior-1499977.pt"
+                ]
+            },
+            {
+                "steps": 1500041,
+                "file_path": "results\\ChangedLastMap\\My Behavior\\My Behavior-1500041.onnx",
+                "reward": 23.73215888813138,
+                "creation_time": 1669742615.2839036,
+                "auxillary_file_paths": [
+                    "results\\ChangedLastMap\\My Behavior\\My Behavior-1500041.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500041,
+            "file_path": "results\\ChangedLastMap\\My Behavior.onnx",
+            "reward": 23.73215888813138,
+            "creation_time": 1669742615.2839036,
+            "auxillary_file_paths": [
+                "results\\ChangedLastMap\\My Behavior\\My Behavior-1500041.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499985,
+                "file_path": "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-499985.onnx",
+                "reward": null,
+                "creation_time": 1670444338.5969992,
+                "auxillary_file_paths": [
+                    "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-499985.pt"
+                ]
+            },
+            {
+                "steps": 999974,
+                "file_path": "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-999974.onnx",
+                "reward": 70.91222535446286,
+                "creation_time": 1670444822.4916806,
+                "auxillary_file_paths": [
+                    "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-999974.pt"
+                ]
+            },
+            {
+                "steps": 1499947,
+                "file_path": "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-1499947.onnx",
+                "reward": 64.17246324941516,
+                "creation_time": 1670445314.7611887,
+                "auxillary_file_paths": [
+                    "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-1499947.pt"
+                ]
+            },
+            {
+                "steps": 1500011,
+                "file_path": "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-1500011.onnx",
+                "reward": 64.17246324941516,
+                "creation_time": 1670445314.8806238,
+                "auxillary_file_paths": [
+                    "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-1500011.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500011,
+            "file_path": "results\\DirRew_baseConfig1\\My Behavior.onnx",
+            "reward": 64.17246324941516,
+            "creation_time": 1670445314.8806238,
+            "auxillary_file_paths": [
+                "results\\DirRew_baseConfig1\\My Behavior\\My Behavior-1500011.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

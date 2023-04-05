@@ -1,0 +1,32 @@
+{
+    "config_num": {
+        "lesson_num": 0
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 14784,
+                "file_path": "results\\Curriculum00000\\My Behavior\\My Behavior-14784.onnx",
+                "reward": null,
+                "creation_time": 1669650892.4815047,
+                "auxillary_file_paths": [
+                    "results\\Curriculum00000\\My Behavior\\My Behavior-14784.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 14784,
+            "file_path": "results\\Curriculum00000\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669650892.4815047,
+            "auxillary_file_paths": [
+                "results\\Curriculum00000\\My Behavior\\My Behavior-14784.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

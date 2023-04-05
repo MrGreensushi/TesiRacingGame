@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499963,
+                "file_path": "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-499963.onnx",
+                "reward": null,
+                "creation_time": 1670065682.869183,
+                "auxillary_file_paths": [
+                    "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-499963.pt"
+                ]
+            },
+            {
+                "steps": 999977,
+                "file_path": "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-999977.onnx",
+                "reward": 39.192250745370984,
+                "creation_time": 1670066184.41062,
+                "auxillary_file_paths": [
+                    "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-999977.pt"
+                ]
+            },
+            {
+                "steps": 1499974,
+                "file_path": "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-1499974.onnx",
+                "reward": 154.84372866339982,
+                "creation_time": 1670066783.6179018,
+                "auxillary_file_paths": [
+                    "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-1499974.pt"
+                ]
+            },
+            {
+                "steps": 1500038,
+                "file_path": "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-1500038.onnx",
+                "reward": 154.84372866339982,
+                "creation_time": 1670066783.7343087,
+                "auxillary_file_paths": [
+                    "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-1500038.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500038,
+            "file_path": "results\\NewDirectionSensor_DirRew\\My Behavior.onnx",
+            "reward": 154.84372866339982,
+            "creation_time": 1670066783.7343087,
+            "auxillary_file_paths": [
+                "results\\NewDirectionSensor_DirRew\\My Behavior\\My Behavior-1500038.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
