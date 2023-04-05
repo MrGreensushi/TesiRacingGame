@@ -58,3 +58,11 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+#Virtual enviroment
+venv/
+
+#Big File
+Assets/AssetStore/CartoonTracksPack1/Track1/Textures/road_normal.png
+Assets/AssetStore/CartoonTracksPack1/Track1/Textures/road.psd
+
+
