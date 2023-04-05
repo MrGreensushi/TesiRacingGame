@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499998,
+                "file_path": "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-499998.onnx",
+                "reward": 107.67769720777869,
+                "creation_time": 1670088086.3385353,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-499998.pt"
+                ]
+            },
+            {
+                "steps": 999989,
+                "file_path": "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-999989.onnx",
+                "reward": null,
+                "creation_time": 1670088579.664651,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-999989.pt"
+                ]
+            },
+            {
+                "steps": 1499980,
+                "file_path": "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-1499980.onnx",
+                "reward": 162.23770221074423,
+                "creation_time": 1670089070.1433141,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-1499980.pt"
+                ]
+            },
+            {
+                "steps": 1500044,
+                "file_path": "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-1500044.onnx",
+                "reward": 162.23770221074423,
+                "creation_time": 1670089070.2585063,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-1500044.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500044,
+            "file_path": "results\\FromNewSensorDirRew_AllRews\\My Behavior.onnx",
+            "reward": 162.23770221074423,
+            "creation_time": 1670089070.2585063,
+            "auxillary_file_paths": [
+                "results\\FromNewSensorDirRew_AllRews\\My Behavior\\My Behavior-1500044.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

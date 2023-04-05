@@ -1,0 +1,54 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1680093813",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\Github\\TesiRacingGame\\RacingPrototype\\venv\\Scripts\\mlagents-learn config\\MoreComplex.yaml --run-id=MoreComplex1_AccRew --initialize-from=MoreComplex0_DirRew",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cu110",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1680093824"
+    },
+    "total": 11.2085716,
+    "count": 1,
+    "self": 0.009812799999998845,
+    "children": {
+        "run_training.setup": {
+            "total": 0.08546129999999985,
+            "count": 1,
+            "self": 0.08546129999999985
+        },
+        "TrainerController.start_learning": {
+            "total": 11.113297500000002,
+            "count": 1,
+            "self": 0.0003292000000012507,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 10.9037667,
+                    "count": 1,
+                    "self": 10.9037667
+                },
+                "trainer_threads": {
+                    "total": 1.300000000981072e-06,
+                    "count": 1,
+                    "self": 1.300000000981072e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.20920029999999912,
+                    "count": 1,
+                    "self": 0.008335199999997656,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.20086510000000146,
+                            "count": 1,
+                            "self": 0.20086510000000146
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499982,
+                "file_path": "results\\NoVelocityReward\\My Behavior\\My Behavior-499982.onnx",
+                "reward": 59.467811807990074,
+                "creation_time": 1669487908.5719426,
+                "auxillary_file_paths": [
+                    "results\\NoVelocityReward\\My Behavior\\My Behavior-499982.pt"
+                ]
+            },
+            {
+                "steps": 999969,
+                "file_path": "results\\NoVelocityReward\\My Behavior\\My Behavior-999969.onnx",
+                "reward": null,
+                "creation_time": 1669488270.5595539,
+                "auxillary_file_paths": [
+                    "results\\NoVelocityReward\\My Behavior\\My Behavior-999969.pt"
+                ]
+            },
+            {
+                "steps": 1394488,
+                "file_path": "results\\NoVelocityReward\\My Behavior\\My Behavior-1394488.onnx",
+                "reward": null,
+                "creation_time": 1669488561.1866164,
+                "auxillary_file_paths": [
+                    "results\\NoVelocityReward\\My Behavior\\My Behavior-1394488.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1394488,
+            "file_path": "results\\NoVelocityReward\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669488561.1866164,
+            "auxillary_file_paths": [
+                "results\\NoVelocityReward\\My Behavior\\My Behavior-1394488.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

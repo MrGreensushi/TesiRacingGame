@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499962,
+                "file_path": "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-499962.onnx",
+                "reward": null,
+                "creation_time": 1670077595.5399861,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-499962.pt"
+                ]
+            },
+            {
+                "steps": 999966,
+                "file_path": "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-999966.onnx",
+                "reward": null,
+                "creation_time": 1670078061.7282186,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-999966.pt"
+                ]
+            },
+            {
+                "steps": 1499974,
+                "file_path": "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-1499974.onnx",
+                "reward": 135.17743414640427,
+                "creation_time": 1670078534.1901202,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-1499974.pt"
+                ]
+            },
+            {
+                "steps": 1500038,
+                "file_path": "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-1500038.onnx",
+                "reward": 135.17743414640427,
+                "creation_time": 1670078534.3084466,
+                "auxillary_file_paths": [
+                    "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-1500038.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500038,
+            "file_path": "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior.onnx",
+            "reward": 135.17743414640427,
+            "creation_time": 1670078534.3084466,
+            "auxillary_file_paths": [
+                "results\\FromNewSensorDirRew_AddAccelerationReward2\\My Behavior\\My Behavior-1500038.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

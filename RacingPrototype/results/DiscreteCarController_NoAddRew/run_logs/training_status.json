@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499969,
+                "file_path": "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-499969.onnx",
+                "reward": null,
+                "creation_time": 1669835938.4408216,
+                "auxillary_file_paths": [
+                    "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-499969.pt"
+                ]
+            },
+            {
+                "steps": 999960,
+                "file_path": "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-999960.onnx",
+                "reward": -0.8666665321215987,
+                "creation_time": 1669836334.5539265,
+                "auxillary_file_paths": [
+                    "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-999960.pt"
+                ]
+            },
+            {
+                "steps": 1499985,
+                "file_path": "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-1499985.onnx",
+                "reward": null,
+                "creation_time": 1669836734.7946932,
+                "auxillary_file_paths": [
+                    "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-1499985.pt"
+                ]
+            },
+            {
+                "steps": 1500049,
+                "file_path": "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-1500049.onnx",
+                "reward": null,
+                "creation_time": 1669836734.8603165,
+                "auxillary_file_paths": [
+                    "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-1500049.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500049,
+            "file_path": "results\\DiscreteCarController_NoAddRew\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669836734.8603165,
+            "auxillary_file_paths": [
+                "results\\DiscreteCarController_NoAddRew\\My Behavior\\My Behavior-1500049.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499979,
+                "file_path": "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-499979.onnx",
+                "reward": 204.8794805931393,
+                "creation_time": 1680178879.7859614,
+                "auxillary_file_paths": [
+                    "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-499979.pt"
+                ]
+            },
+            {
+                "steps": 999959,
+                "file_path": "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-999959.onnx",
+                "reward": 151.31898484379053,
+                "creation_time": 1680179877.9513774,
+                "auxillary_file_paths": [
+                    "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-999959.pt"
+                ]
+            },
+            {
+                "steps": 1499989,
+                "file_path": "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-1499989.onnx",
+                "reward": null,
+                "creation_time": 1680180821.5979013,
+                "auxillary_file_paths": [
+                    "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-1499989.pt"
+                ]
+            },
+            {
+                "steps": 1500053,
+                "file_path": "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-1500053.onnx",
+                "reward": null,
+                "creation_time": 1680180821.6834884,
+                "auxillary_file_paths": [
+                    "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-1500053.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500053,
+            "file_path": "results\\NoCurriculum_AccRew1\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1680180821.6834884,
+            "auxillary_file_paths": [
+                "results\\NoCurriculum_AccRew1\\My Behavior\\My Behavior-1500053.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

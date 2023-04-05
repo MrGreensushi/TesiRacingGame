@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499946,
+                "file_path": "results\\InitialBoost\\My Behavior\\My Behavior-499946.onnx",
+                "reward": null,
+                "creation_time": 1669726011.6768067,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost\\My Behavior\\My Behavior-499946.pt"
+                ]
+            },
+            {
+                "steps": 999968,
+                "file_path": "results\\InitialBoost\\My Behavior\\My Behavior-999968.onnx",
+                "reward": 17.0,
+                "creation_time": 1669726376.8121474,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost\\My Behavior\\My Behavior-999968.pt"
+                ]
+            },
+            {
+                "steps": 1499946,
+                "file_path": "results\\InitialBoost\\My Behavior\\My Behavior-1499946.onnx",
+                "reward": 8.701666734026125,
+                "creation_time": 1669726736.4253242,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost\\My Behavior\\My Behavior-1499946.pt"
+                ]
+            },
+            {
+                "steps": 1500010,
+                "file_path": "results\\InitialBoost\\My Behavior\\My Behavior-1500010.onnx",
+                "reward": 8.701666734026125,
+                "creation_time": 1669726736.4746866,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost\\My Behavior\\My Behavior-1500010.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500010,
+            "file_path": "results\\InitialBoost\\My Behavior.onnx",
+            "reward": 8.701666734026125,
+            "creation_time": 1669726736.4746866,
+            "auxillary_file_paths": [
+                "results\\InitialBoost\\My Behavior\\My Behavior-1500010.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

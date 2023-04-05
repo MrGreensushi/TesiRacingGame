@@ -1,0 +1,60 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499999,
+                "file_path": "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-499999.onnx",
+                "reward": 72.4419933706522,
+                "creation_time": 1680006972.269824,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-499999.pt"
+                ]
+            },
+            {
+                "steps": 999992,
+                "file_path": "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-999992.onnx",
+                "reward": null,
+                "creation_time": 1680008083.2608664,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-999992.pt"
+                ]
+            },
+            {
+                "steps": 1499976,
+                "file_path": "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-1499976.onnx",
+                "reward": null,
+                "creation_time": 1680009188.783234,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-1499976.pt"
+                ]
+            },
+            {
+                "steps": 1500040,
+                "file_path": "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-1500040.onnx",
+                "reward": null,
+                "creation_time": 1680009188.8663883,
+                "auxillary_file_paths": [
+                    "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-1500040.pt"
+                ]
+            }
+        ],
+        "elo": 1257.1209150982893,
+        "final_checkpoint": {
+            "steps": 1500040,
+            "file_path": "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1680009188.8663883,
+            "auxillary_file_paths": [
+                "results\\SelfPlay_Acc_FromPenalizedTime1\\My Behavior\\My Behavior-1500040.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

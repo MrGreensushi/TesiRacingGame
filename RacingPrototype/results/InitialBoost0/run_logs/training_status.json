@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499995,
+                "file_path": "results\\InitialBoost0\\My Behavior\\My Behavior-499995.onnx",
+                "reward": null,
+                "creation_time": 1669727319.6096456,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost0\\My Behavior\\My Behavior-499995.pt"
+                ]
+            },
+            {
+                "steps": 999968,
+                "file_path": "results\\InitialBoost0\\My Behavior\\My Behavior-999968.onnx",
+                "reward": 12.7950000166893,
+                "creation_time": 1669727674.6775753,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost0\\My Behavior\\My Behavior-999968.pt"
+                ]
+            },
+            {
+                "steps": 1499986,
+                "file_path": "results\\InitialBoost0\\My Behavior\\My Behavior-1499986.onnx",
+                "reward": 7.697500021196902,
+                "creation_time": 1669728061.4022932,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost0\\My Behavior\\My Behavior-1499986.pt"
+                ]
+            },
+            {
+                "steps": 1500050,
+                "file_path": "results\\InitialBoost0\\My Behavior\\My Behavior-1500050.onnx",
+                "reward": 7.697500021196902,
+                "creation_time": 1669728061.4536855,
+                "auxillary_file_paths": [
+                    "results\\InitialBoost0\\My Behavior\\My Behavior-1500050.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500050,
+            "file_path": "results\\InitialBoost0\\My Behavior.onnx",
+            "reward": 7.697500021196902,
+            "creation_time": 1669728061.4536855,
+            "auxillary_file_paths": [
+                "results\\InitialBoost0\\My Behavior\\My Behavior-1500050.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

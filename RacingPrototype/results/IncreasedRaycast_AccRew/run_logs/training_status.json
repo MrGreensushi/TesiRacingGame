@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499945,
+                "file_path": "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-499945.onnx",
+                "reward": null,
+                "creation_time": 1669810024.6917796,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-499945.pt"
+                ]
+            },
+            {
+                "steps": 999992,
+                "file_path": "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-999992.onnx",
+                "reward": null,
+                "creation_time": 1669810416.5602055,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-999992.pt"
+                ]
+            },
+            {
+                "steps": 1499962,
+                "file_path": "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-1499962.onnx",
+                "reward": 24.969377026427537,
+                "creation_time": 1669810806.3320913,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-1499962.pt"
+                ]
+            },
+            {
+                "steps": 1500026,
+                "file_path": "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-1500026.onnx",
+                "reward": 24.969377026427537,
+                "creation_time": 1669810806.3831682,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-1500026.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500026,
+            "file_path": "results\\IncreasedRaycast_AccRew\\My Behavior.onnx",
+            "reward": 24.969377026427537,
+            "creation_time": 1669810806.3831682,
+            "auxillary_file_paths": [
+                "results\\IncreasedRaycast_AccRew\\My Behavior\\My Behavior-1500026.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

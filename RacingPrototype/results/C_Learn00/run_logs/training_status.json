@@ -1,0 +1,41 @@
+{
+    "config_num": {
+        "lesson_num": 1
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499968,
+                "file_path": "results\\C_Learn00\\My Behavior\\My Behavior-499968.onnx",
+                "reward": null,
+                "creation_time": 1669658202.253124,
+                "auxillary_file_paths": [
+                    "results\\C_Learn00\\My Behavior\\My Behavior-499968.pt"
+                ]
+            },
+            {
+                "steps": 648960,
+                "file_path": "results\\C_Learn00\\My Behavior\\My Behavior-648960.onnx",
+                "reward": null,
+                "creation_time": 1669658398.0043225,
+                "auxillary_file_paths": [
+                    "results\\C_Learn00\\My Behavior\\My Behavior-648960.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 648960,
+            "file_path": "results\\C_Learn00\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1669658398.0043225,
+            "auxillary_file_paths": [
+                "results\\C_Learn00\\My Behavior\\My Behavior-648960.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

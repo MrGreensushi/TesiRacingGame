@@ -1,0 +1,50 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499987,
+                "file_path": "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-499987.onnx",
+                "reward": null,
+                "creation_time": 1669814576.6610246,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-499987.pt"
+                ]
+            },
+            {
+                "steps": 999975,
+                "file_path": "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-999975.onnx",
+                "reward": 1.370000029914081,
+                "creation_time": 1669814993.231503,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-999975.pt"
+                ]
+            },
+            {
+                "steps": 1207326,
+                "file_path": "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-1207326.onnx",
+                "reward": 2.56642862928233,
+                "creation_time": 1669815254.9927042,
+                "auxillary_file_paths": [
+                    "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-1207326.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1207326,
+            "file_path": "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior.onnx",
+            "reward": 2.56642862928233,
+            "creation_time": 1669815254.9927042,
+            "auxillary_file_paths": [
+                "results\\IncreasedRaycast_NoAdditionalRew\\My Behavior\\My Behavior-1207326.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

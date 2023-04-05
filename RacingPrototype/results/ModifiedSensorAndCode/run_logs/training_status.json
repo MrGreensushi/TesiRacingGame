@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499964,
+                "file_path": "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-499964.onnx",
+                "reward": 114.30313286185265,
+                "creation_time": 1671709965.1364145,
+                "auxillary_file_paths": [
+                    "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-499964.pt"
+                ]
+            },
+            {
+                "steps": 999998,
+                "file_path": "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-999998.onnx",
+                "reward": 15.731163293123245,
+                "creation_time": 1671710595.826434,
+                "auxillary_file_paths": [
+                    "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-999998.pt"
+                ]
+            },
+            {
+                "steps": 1499954,
+                "file_path": "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-1499954.onnx",
+                "reward": null,
+                "creation_time": 1671711221.0968978,
+                "auxillary_file_paths": [
+                    "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-1499954.pt"
+                ]
+            },
+            {
+                "steps": 1500018,
+                "file_path": "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-1500018.onnx",
+                "reward": null,
+                "creation_time": 1671711221.2006018,
+                "auxillary_file_paths": [
+                    "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-1500018.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500018,
+            "file_path": "results\\ModifiedSensorAndCode\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1671711221.2006018,
+            "auxillary_file_paths": [
+                "results\\ModifiedSensorAndCode\\My Behavior\\My Behavior-1500018.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
