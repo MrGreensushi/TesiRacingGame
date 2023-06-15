@@ -24,9 +24,14 @@ public class OfflineCar : MonoBehaviour
     public float breakForce = 30;
     public int initial_boost = 15;
     public float boost_duration = 0.1f;
+    float maxSpeed = 40;
 
     public bool giocatore;
     Rigidbody _rigidbody;
+
+    //acceleration
+    private Vector3 lastVelocity = new Vector3();
+    private Vector3 acceleration = new Vector3();
 
     //ML Agent
     public Offline_MLcar agent;
@@ -42,10 +47,56 @@ public class OfflineCar : MonoBehaviour
     }
     public string Position { get { var v = transform.localPosition; return v.x.ToString() + ';' + v.z.ToString(); } }
     public string Rotation { get { var v = transform.localRotation.eulerAngles; return v.y.ToString(); } }
+
+    public string Acceleration { get { return acceleration.x.ToString() + ';' + acceleration.z.ToString(); } }
     public int[] LastAction { get => agent.lastAction; }
-    // Start is called before the first frame update
+
+    public float[] lastInfo;
+    public float[] PhysicInfos
+    {
+        get
+        {
+            var v = _rigidbody.velocity;
+            var lp = transform.localPosition;
+            var r = transform.rotation.eulerAngles;
+            float[] info = new float[]  {
+                lp.x,
+                lp.z,
+                v.x,
+                v.z,
+                r.y
+            };
+
+
+            return info;
+        }
+    }
+
+    public (float[], float[]) DispatcherInfos()
+    {
+        var info = PhysicInfos;
+        float[] delta = new float[5];
+        for (int i = 2; i < 5; i++)
+        {
+            delta[i] = info[i] - lastInfo[i];
+        }
+        delta[0] = info[0];
+        delta[1] = info[1];
+
+        for (int i = 0; i < 5; i++)
+        {
+            delta[i] = info[i] - lastInfo[i];
+        }
+        delta[4] = (delta[4] + 180) % 360 - 180;
+
+
+        return (delta, info);
+    }
+
+
     void Start()
     {
+        lastInfo = new float[5] { 0, 0, 0, 0, 0 };
         //Set up camera
         if (giocatore)
         {
@@ -106,6 +157,11 @@ public class OfflineCar : MonoBehaviour
 
         //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
         UpdateWheelPoses();
+
+        if (_rigidbody.velocity.magnitude > maxSpeed)
+        {
+            _rigidbody.velocity = _rigidbody.velocity.normalized * maxSpeed;
+        }
     }
 
 
@@ -135,6 +191,13 @@ public class OfflineCar : MonoBehaviour
         var slipLong = wheelData.forwardSlip * 1000;
         var forceValue = wheelData.force - 1562.595;
         //Debug.Log((int)slipLong + "  " + (int)slipLat);
+
+    }
+    private void FixedUpdate()
+    {
+        acceleration = (_rigidbody.velocity - lastVelocity) / Time.fixedDeltaTime;
+        lastVelocity = _rigidbody.velocity;
+
 
     }
 
