@@ -48,6 +48,7 @@ public class OfflineCar : MonoBehaviour
     public string Position { get { var v = transform.localPosition; return v.x.ToString() + ';' + v.z.ToString(); } }
     public string Rotation { get { var v = transform.localRotation.eulerAngles; return v.y.ToString(); } }
 
+    public string AngularVelString { get => _rigidbody.angularVelocity.y.ToString(); }
     public string Acceleration { get { return acceleration.x.ToString() + ';' + acceleration.z.ToString(); } }
     public int[] LastAction { get => agent.lastAction; }
 
@@ -72,26 +73,160 @@ public class OfflineCar : MonoBehaviour
         }
     }
 
-    public (float[], float[]) DispatcherInfos()
+   //public (float[], float[]) DispatcherInfos()
+   //{
+   //    //var info = PhysicInfos;
+   //    //float[] delta = new float[5];
+   //    //for (int i = 2; i < 5; i++)
+   //    //{
+   //    //    delta[i] = info[i] - lastInfo[i];
+   //    //}
+   //    //delta[0] = info[0];
+   //    //delta[1] = info[1];
+   //    //
+   //    //// for (int i = 0; i < 5; i++)
+   //    //// {
+   //    ////     delta[i] = info[i] - lastInfo[i];
+   //    //// }
+   //    //delta[4] = (delta[4] + 180) % 360 - 180;
+   //    //return (delta, info);
+   //}
+
+
+    public float[] DispatcherInfos()
     {
-        var info = PhysicInfos;
-        float[] delta = new float[5];
-        for (int i = 2; i < 5; i++)
-        {
-            delta[i] = info[i] - lastInfo[i];
-        }
-        delta[0] = info[0];
-        delta[1] = info[1];
-
-        for (int i = 0; i < 5; i++)
-        {
-            delta[i] = info[i] - lastInfo[i];
-        }
-        delta[4] = (delta[4] + 180) % 360 - 180;
-
-
-        return (delta, info);
+        //VEL ANG_VEL TILE TILE_IND X_R Z_R
+        var vel = _rigidbody.velocity;
+        var ang = _rigidbody.angularVelocity.y;
+        var tile = ReturnInfoTileFloat();
+        float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
+        return toRet;
     }
+
+
+    public float[] ReturnInfoTileFloat()
+    {
+        var hits = Physics.RaycastAll(centerOfMass.position + Vector3.up, Vector3.down, 10);
+        foreach (var item in hits)
+        {
+            var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+            if (ind != -1)
+            {
+                return RetrieveInfoFromHitFloat(item.collider, ind);
+
+            }
+        }
+
+        //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
+        //quindi provo a spostare il raggio poco più avanti
+        hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
+        foreach (var item in hits)
+        {
+            var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+            if (ind != -1)
+            {
+                return RetrieveInfoFromHitFloat(item.collider, ind);
+
+            }
+        }
+
+        float[] zeros = { 0f, 0f, 0f, 0f };
+        return zeros;
+
+    }
+
+
+    private float[] RetrieveInfoFromHitFloat(Collider c, int ind)
+    {
+
+        var tag = c.tag;
+        var value = TagManager.tags[ind].Value;
+        var sibling = c.transform.GetSiblingIndex();
+
+        var pos_onBox = transform.position - c.transform.position;
+        var x_b = c.bounds.size.x;
+        var z_b = c.bounds.size.z;
+
+        //se x_b e z_b sono diversi allora in base alla rotazione dell'oggetto bisogna invertirli
+        var rot = c.transform.rotation.eulerAngles.y;
+
+
+        if (rot == 90 || rot == 270 || rot == -90)
+        {
+            var t = x_b;
+            x_b = z_b;
+            z_b = t;
+        }
+
+        pos_onBox = new Vector3(pos_onBox.x / x_b, 0, pos_onBox.z / z_b);
+
+        float[] toRet = { value, sibling, pos_onBox.x, pos_onBox.z };
+        return toRet;
+    }
+
+    public string ReturnInfoTile()
+    {
+        var hits=Physics.RaycastAll(centerOfMass.position+Vector3.up, Vector3.down, 10);
+        foreach (var item in hits)
+        {
+            var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+            if (ind!=-1)
+            {
+                return RetrieveInfoFromHit(item.collider,ind);
+                
+            }
+        }
+
+        //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
+        //quindi provo a spostare il raggio poco più avanti
+        hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward*0.1f, Vector3.down, 10);
+        foreach (var item in hits)
+        {
+            var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+            if (ind != -1)
+            {
+                return RetrieveInfoFromHit(item.collider, ind);
+
+            }
+        }
+
+        return ";;;";
+
+    }
+
+
+    private string RetrieveInfoFromHit(Collider c,int ind)
+    {
+
+        var tag = c.tag;
+        var value = TagManager.tags[ind].Value;
+        var sibling = c.transform.GetSiblingIndex();
+        Debug.Log(sibling);
+
+        var pos_onBox = transform.position - c.transform.position;
+        var x_b = c.bounds.size.x;
+        var z_b = c.bounds.size.z;
+
+        //se x_b e z_b sono diversi allora in base alla rotazione dell'oggetto bisogna invertirli
+        var rot = c.transform.rotation.eulerAngles.y;
+
+
+        if (rot == 90 || rot == 270 || rot == -90)
+        {
+            var t = x_b;
+            x_b = z_b;
+            z_b = t;
+        }
+
+        pos_onBox = new Vector3(pos_onBox.x / x_b, 0, pos_onBox.z / z_b);
+        Debug.Log(pos_onBox);
+
+
+        string toRet = value.ToString() + ';' + sibling.ToString() + ';' + pos_onBox.x.ToString()
+            + ';' + pos_onBox.z.ToString();
+        return toRet;
+    }
+
 
 
     void Start()

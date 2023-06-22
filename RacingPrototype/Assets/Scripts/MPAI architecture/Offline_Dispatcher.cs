@@ -15,32 +15,61 @@ public class Offline_Dispatcher : MonoBehaviour
     public bool UpdateSelf { set { updateSelf = value; } }
 
 
+    //public void Routine()
+    //{
+    //
+    //    var (delta, infos) = PhysicInfos();
+    //    var (delta_T, infos_T) = TruePhysicInfos();
+    //    car.lastInfo = infos;
+    //    carTrue.lastInfo = infos_T;
+    //
+    //    if (updateSelf)
+    //        pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
+    //
+    //    else
+    //        pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
+    //
+    //
+    //
+    //
+    //}
+    //
+    //(float[], float[]) PhysicInfos()
+    //{
+    //    return car.PhysicInfos();
+    //
+    //}
+    //
+    //(float[], float[]) TruePhysicInfos()
+    //{
+    //    return carTrue.DispatcherInfos();
+    //
+    //}
+
     public void Routine()
     {
 
-        var (delta, infos) = PhysicInfos();
-        var (delta_T, infos_T) = TruePhysicInfos();
-        car.lastInfo = infos;
-        carTrue.lastInfo = infos_T;
-
+        var  infos = PhysicInfos();
+        var infos_t = TruePhysicInfos();
+       
         if (updateSelf)
-            pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
+            pe.UpdateMatrix(infos, timesteps, featuresNumber);
 
         else
-            pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
+            pe.UpdateMatrix(infos_t, timesteps, featuresNumber);
 
 
 
 
     }
 
-    (float[], float[]) PhysicInfos()
+    float[] PhysicInfos()
     {
         return car.PhysicInfos();
 
     }
 
-    (float[], float[]) TruePhysicInfos()
+    float[] TruePhysicInfos()
     {
         return carTrue.DispatcherInfos();
 

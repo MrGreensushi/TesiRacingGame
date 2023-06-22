@@ -19,7 +19,7 @@ public class Offline_Physic_Engine : MonoBehaviour
     private void Start()
     {
         model = ModelLoader.Load(nnModel);
-        worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
+        worker = WorkerFactory.CreateWorker(WorkerFactory.Type.Compute, model);
         predictionDone = false;
         matrix = new Queue<float[]>();
 
@@ -27,7 +27,51 @@ public class Offline_Physic_Engine : MonoBehaviour
 
 
 
-    public IEnumerator MakePrediction(int timesteps, int featuresNumber, float[] lastInfo)
+    //public IEnumerator MakePrediction(int timesteps, int featuresNumber, float[] lastInfo)
+    //{
+    //    if (matrix.Count == timesteps)
+    //    {
+    //        Tensor input = new Tensor(1, 1, featuresNumber, timesteps, matrix.ToArray());
+    //
+    //        Tensor output = worker.Execute(input).PeekOutput();
+    //
+    //        //Wait  for the prediction completion
+    //        yield return new WaitForCompletion(output);
+    //
+    //        input.Dispose();
+    //        prediction = output.AsFloats();
+    //       
+    //
+    //       for (int i = 0; i < 3; i++)
+    //       {
+    //           prediction[i] += lastInfo[2 + i];
+    //       }
+    //       // for (int i = 0; i < 5; i++)
+    //       // {
+    //       //     prediction[i] += lastInfo[i];
+    //       // }
+    //        output.Dispose();
+    //
+    //    }
+    //
+    //    predictionDone = true;
+    //
+    //
+    //}
+    //
+    //public void UpdateMatrix(float[] input, int timesteps, int featuresNumber, float[] lastInfo)
+    //{
+    //
+    //    if (matrix.Count == timesteps)
+    //        matrix.Dequeue();
+    //    matrix.Enqueue(input);
+    //    if (!usePrediction) return;
+    //    StartCoroutine(MakePrediction(timesteps, featuresNumber, lastInfo));
+    //
+    //
+    //}
+
+    public IEnumerator MakePrediction(int timesteps, int featuresNumber)
     {
         if (matrix.Count == timesteps)
         {
@@ -40,18 +84,6 @@ public class Offline_Physic_Engine : MonoBehaviour
 
             input.Dispose();
             prediction = output.AsFloats();
-            if (prediction[2] < -1.4f) movex = 1;
-            else if (prediction[2] > 1.4f) movex = -1;
-            else movex = 0;
-
-            for (int i = 0; i < 3; i++)
-            {
-                prediction[i] += lastInfo[2 + i];
-            }
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    prediction[i] += lastInfo[i];
-            //}
             output.Dispose();
 
         }
@@ -61,14 +93,14 @@ public class Offline_Physic_Engine : MonoBehaviour
 
     }
 
-    public void UpdateMatrix(float[] input, int timesteps, int featuresNumber, float[] lastInfo)
+    public void UpdateMatrix(float[] input, int timesteps, int featuresNumber)
     {
 
         if (matrix.Count == timesteps)
             matrix.Dequeue();
         matrix.Enqueue(input);
         if (!usePrediction) return;
-        StartCoroutine(MakePrediction(timesteps, featuresNumber, lastInfo));
+        StartCoroutine(MakePrediction(timesteps, featuresNumber));
 
 
     }

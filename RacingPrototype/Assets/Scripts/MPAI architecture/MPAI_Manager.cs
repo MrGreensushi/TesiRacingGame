@@ -41,7 +41,7 @@ public class MPAI_Manager : MonoBehaviour
 
     private IEnumerator Prediction()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         if (!first)
         {
             //aspetta che finisce la predizione
@@ -52,7 +52,7 @@ public class MPAI_Manager : MonoBehaviour
 
             cl.CollectPrediction();
         }
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
 
     }
 
