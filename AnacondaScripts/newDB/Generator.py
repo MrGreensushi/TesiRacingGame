@@ -96,10 +96,10 @@ def batch_generator(df):
     
     #crea un nuovo dataframe con sequence_length elementi per un numero di volte pari al batch
     dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ROT"],axis=1).reset_index(drop=True)
-    #target_df=dropped_df.drop(["X","Z"],axis=1).reset_index(drop=True)
+    target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
-        targets=dropped_df.iloc[SEQUENCE_LENGTH+i,:].values
+        targets=target_df.iloc[SEQUENCE_LENGTH+i,:].values
         yield inputs,targets  
 
 def Generator(df):
