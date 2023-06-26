@@ -47,7 +47,7 @@ def single_care_dataframe(path):
 
 def subtraction_columns(df):
     df_copy=df.shift(1,fill_value=0)
-    cols = df.columns.difference(['RACE','GROUP',"X","Z"])
+    cols = df.columns.difference(['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"])
     df[cols] = df[cols].sub(df_copy[cols])
     df["ROT"]=(df["ROT"]+180)%360-180
     df.iloc[0,:-1]=0
@@ -95,7 +95,8 @@ def recreate_dataframe(series):
 def batch_generator(df):
     
     #crea un nuovo dataframe con sequence_length elementi per un numero di volte pari al batch
-    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ROT"],axis=1).reset_index(drop=True)
+    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ANG_VEL_Y"],axis=1).reset_index(drop=True)
+    #dropped_df["ROT"]=dropped_df["ROT"]/360.0;
     target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
