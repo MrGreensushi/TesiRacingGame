@@ -157,7 +157,7 @@ public class Offline_GhostCar : MonoBehaviour
 
         pos_onBox = new Vector3(pos_onBox.x / x_b, 0, pos_onBox.z / z_b);
 
-        float[] toRet = { value, sibling, pos_onBox.x, pos_onBox.z};
+        float[] toRet = { value, sibling, pos_onBox.x, pos_onBox.z };
         return toRet;
     }
 
@@ -198,19 +198,19 @@ public class Offline_GhostCar : MonoBehaviour
     {
         if (onlyPosition)
         {
-           //mybody.isKinematic = true;
-           //mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
-           //mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-           //return;
+            //mybody.isKinematic = true;
+            //mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
+            //mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
+            //return;
         }
         else if (onlyVelocity)
         {
             mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-            mybody.angularVelocity = new Vector3(0, infos[2], 0);
+            mybody.angularVelocity = new Vector3(mybody.angularVelocity.x, infos[2], mybody.angularVelocity.z);
             return;
         }
 
-      
+
         //mybody.velocity = new Vector3(infos[0], 0, infos[1]);
         //mybody.angularVelocity = new Vector3(0, infos[2], 0);
         //

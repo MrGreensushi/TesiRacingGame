@@ -75,7 +75,26 @@ public class Offline_Physic_Engine : MonoBehaviour
     {
         if (matrix.Count == timesteps)
         {
-            Tensor input = new Tensor(1, 1, featuresNumber, timesteps, matrix.ToArray());
+            //Tensor input = new Tensor(1, 1, featuresNumber, timesteps, matrix.ToArray());
+            Tensor input = new Tensor(1, 1, featuresNumber, timesteps);
+            var array=matrix.ToArray();
+
+            for (int i = 0; i < timesteps; i++)
+            {
+                for (int j = 0; j < featuresNumber; j++)
+                {
+                    input[0, 0, j, i] = array[i][j];
+                }
+               
+            }
+
+           //foreach (var t in input.AsFloats())
+           //{
+           //    //var s = t[0] + ";" + t[1] + ";" + t[2] + ";" + t[3] + ";" + t[4] + ";" + t[5] + ";" + t[6];
+           //    Debug.Log(t);
+           //}
+           //Debug.Log("TOSTRING: "+input.ToString());
+
 
             Tensor output = worker.Execute(input).PeekOutput();
 
