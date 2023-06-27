@@ -73,36 +73,53 @@ public class OfflineCar : MonoBehaviour
         }
     }
 
-   //public (float[], float[]) DispatcherInfos()
-   //{
-   //    //var info = PhysicInfos;
-   //    //float[] delta = new float[5];
-   //    //for (int i = 2; i < 5; i++)
-   //    //{
-   //    //    delta[i] = info[i] - lastInfo[i];
-   //    //}
-   //    //delta[0] = info[0];
-   //    //delta[1] = info[1];
-   //    //
-   //    //// for (int i = 0; i < 5; i++)
-   //    //// {
-   //    ////     delta[i] = info[i] - lastInfo[i];
-   //    //// }
-   //    //delta[4] = (delta[4] + 180) % 360 - 180;
-   //    //return (delta, info);
-   //}
+    //DELTA
 
+    //public (float[], float[]) DispatcherInfos()
+    //{
+    //    //var info = PhysicInfos;
+    //    //float[] delta = new float[5];
+    //    //for (int i = 2; i < 5; i++)
+    //    //{
+    //    //    delta[i] = info[i] - lastInfo[i];
+    //    //}
+    //    //delta[0] = info[0];
+    //    //delta[1] = info[1];
+    //    //
+    //    //// for (int i = 0; i < 5; i++)
+    //    //// {
+    //    ////     delta[i] = info[i] - lastInfo[i];
+    //    //// }
+    //    //delta[4] = (delta[4] + 180) % 360 - 180;
+    //    //return (delta, info);
+    //}
 
-    public float[] DispatcherInfos()
+    //REAL
+    //public float[] DispatcherInfos()
+    //{
+    //    var vel = _rigidbody.velocity;
+    //    var ang = _rigidbody.rotation.eulerAngles.y / 360f; //Normalizzo la rotazione
+    //    var tile = ReturnInfoTileFloat();
+    //    float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
+    //    return toRet;
+    //}
+
+    //DELTA W/ TILE
+    public (float[], float[]) DispatcherInfos()
     {
         //VEL ANG_VEL TILE TILE_IND X_R Z_R
-        var vel = _rigidbody.velocity;
-        var ang = _rigidbody.angularVelocity.y;
+        var info = PhysicInfos;
         var tile = ReturnInfoTileFloat();
-        float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
-        return toRet;
-    }
+        float[] delta = new float[3];
+        for (int i = 0; i < 3; i++)
+        {
+            delta[i] = info[i + 2] - lastInfo[i + 2];
+        }
+        delta[2] = (delta[2] + 180) % 360 - 180;
+        float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3] };
 
+        return (toRet, info);
+    }
 
     public float[] ReturnInfoTileFloat()
     {
@@ -166,20 +183,20 @@ public class OfflineCar : MonoBehaviour
 
     public string ReturnInfoTile()
     {
-        var hits=Physics.RaycastAll(centerOfMass.position+Vector3.up, Vector3.down, 10);
+        var hits = Physics.RaycastAll(centerOfMass.position + Vector3.up, Vector3.down, 10);
         foreach (var item in hits)
         {
             var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
-            if (ind!=-1)
+            if (ind != -1)
             {
-                return RetrieveInfoFromHit(item.collider,ind);
-                
+                return RetrieveInfoFromHit(item.collider, ind);
+
             }
         }
 
         //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
         //quindi provo a spostare il raggio poco più avanti
-        hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward*0.1f, Vector3.down, 10);
+        hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
         foreach (var item in hits)
         {
             var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
@@ -195,7 +212,7 @@ public class OfflineCar : MonoBehaviour
     }
 
 
-    private string RetrieveInfoFromHit(Collider c,int ind)
+    private string RetrieveInfoFromHit(Collider c, int ind)
     {
 
         var tag = c.tag;

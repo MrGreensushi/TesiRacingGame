@@ -56,6 +56,7 @@ public class Offline_GhostCar : MonoBehaviour
 
     }
 
+    //DELTA
 
     // public (float[], float[]) PhysicInfos()
     // {
@@ -89,14 +90,43 @@ public class Offline_GhostCar : MonoBehaviour
     //
     // }
 
-    public float[] PhysicInfos()
+    //REAL
+
+    //public float[] PhysicInfos()
+    //{
+    //    //VEL ANG_VEL TILE TILE_IND X_R Z_R
+    //    var vel = mybody.velocity;
+    //    var ang = mybody.rotation.eulerAngles.y / 360f; //Normalizzo la rotazione
+    //    var tile = ReturnInfoTileFloat();
+    //    float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
+    //    return toRet;
+    //}
+
+    //DELTA W/ TILE
+    public (float[], float[]) PhysicInfos()
     {
         //VEL ANG_VEL TILE TILE_IND X_R Z_R
+
+
         var vel = mybody.velocity;
-        var ang = mybody.angularVelocity.y;
+        var ang = mybody.rotation.eulerAngles.y;
+        var lp = transform.localPosition;
+        float[] info = new float[]  {
+            lp.x,
+            lp.z,
+            vel.x,
+            vel.z,
+            ang
+        };
         var tile = ReturnInfoTileFloat();
-        float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
-        return toRet;
+        float[] delta = new float[5];
+        for (int i = 0; i < 3; i++)
+        {
+            delta[i] = info[i + 2] - lastInfo[i + 2];
+        }
+        delta[2] = (delta[2] + 180) % 360 - 180;
+        float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3] };
+        return (toRet, info);
     }
 
 
@@ -206,7 +236,8 @@ public class Offline_GhostCar : MonoBehaviour
         else if (onlyVelocity)
         {
             mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-            mybody.angularVelocity = new Vector3(mybody.angularVelocity.x, infos[2], mybody.angularVelocity.z);
+            //mybody.angularVelocity = new Vector3(mybody.angularVelocity.x, infos[2], mybody.angularVelocity.z);
+            mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
             return;
         }
 

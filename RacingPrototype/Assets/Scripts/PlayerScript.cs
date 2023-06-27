@@ -30,11 +30,33 @@ namespace QuickStart
         public float breakForce = 30;
         public int initial_boost = 15;
         public float boost_duration = 0.1f;
-
+        float maxSpeed = 40;
         //ML Agent
         public ML_Car agent;
 
         Rigidbody _rigidbody;
+
+
+        public float[] lastInfo;
+        public float[] PhysicInfos
+        {
+            get
+            {
+                var v = _rigidbody.velocity;
+                var lp = transform.localPosition;
+                var r = transform.rotation.eulerAngles;
+                float[] info = new float[]  {
+                lp.x,
+                lp.z,
+                v.x,
+                v.z,
+                r.y
+            };
+
+
+                return info;
+            }
+        }
 
 
         public float Velocity
@@ -249,6 +271,11 @@ namespace QuickStart
 
             //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
             UpdateWheelPoses();
+
+            if (_rigidbody.velocity.magnitude > maxSpeed)
+            {
+                _rigidbody.velocity = _rigidbody.velocity.normalized * maxSpeed;
+            }
         }
 
         [TargetRpc]
@@ -291,5 +318,85 @@ namespace QuickStart
             if (_rigidbody != null)
                 _rigidbody.velocity = Vector3.zero;
         }
+
+
+        //DELTA W/ TILE
+        public (float[], float[]) DispatcherInfos()
+        {
+            //VEL ANG_VEL TILE TILE_IND X_R Z_R
+            var info = PhysicInfos;
+            var tile = ReturnInfoTileFloat();
+            float[] delta = new float[3];
+            for (int i = 0; i < 3; i++)
+            {
+                delta[i] = info[i + 2] - lastInfo[i + 2];
+            }
+            delta[2] = (delta[2] + 180) % 360 - 180;
+            float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3] };
+
+            return (toRet, info);
+        }
+
+        public float[] ReturnInfoTileFloat()
+        {
+            var hits = Physics.RaycastAll(centerOfMass.position + Vector3.up, Vector3.down, 10);
+            foreach (var item in hits)
+            {
+                var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+                if (ind != -1)
+                {
+                    return RetrieveInfoFromHitFloat(item.collider, ind);
+
+                }
+            }
+
+            //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
+            //quindi provo a spostare il raggio poco più avanti
+            hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
+            foreach (var item in hits)
+            {
+                var ind = TagManager.tags.FindIndex(t => t.Name.Equals(item.collider.tag));
+                if (ind != -1)
+                {
+                    return RetrieveInfoFromHitFloat(item.collider, ind);
+
+                }
+            }
+
+            float[] zeros = { 0f, 0f, 0f, 0f };
+            return zeros;
+
+        }
+
+
+        private float[] RetrieveInfoFromHitFloat(Collider c, int ind)
+        {
+
+            var tag = c.tag;
+            var value = TagManager.tags[ind].Value;
+            var sibling = c.transform.GetSiblingIndex();
+
+            var pos_onBox = transform.position - c.transform.position;
+            var x_b = c.bounds.size.x;
+            var z_b = c.bounds.size.z;
+
+            //se x_b e z_b sono diversi allora in base alla rotazione dell'oggetto bisogna invertirli
+            var rot = c.transform.rotation.eulerAngles.y;
+
+
+            if (rot == 90 || rot == 270 || rot == -90)
+            {
+                var t = x_b;
+                x_b = z_b;
+                z_b = t;
+            }
+
+            pos_onBox = new Vector3(pos_onBox.x / x_b, 0, pos_onBox.z / z_b);
+
+            float[] toRet = { value, sibling, pos_onBox.x, pos_onBox.z };
+            return toRet;
+        }
+
+
     }
 }

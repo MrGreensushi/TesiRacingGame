@@ -14,66 +14,64 @@ public class Offline_Dispatcher : MonoBehaviour
 
     public bool UpdateSelf { set { updateSelf = value; } }
 
-
-    //public void Routine()
-    //{
-    //
-    //    var (delta, infos) = PhysicInfos();
-    //    var (delta_T, infos_T) = TruePhysicInfos();
-    //    car.lastInfo = infos;
-    //    carTrue.lastInfo = infos_T;
-    //
-    //    if (updateSelf)
-    //        pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
-    //
-    //    else
-    //        pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
-    //
-    //
-    //
-    //
-    //}
-    //
-    //(float[], float[]) PhysicInfos()
-    //{
-    //    return car.PhysicInfos();
-    //
-    //}
-    //
-    //(float[], float[]) TruePhysicInfos()
-    //{
-    //    return carTrue.DispatcherInfos();
-    //
-    //}
-
+    //DELTA VERSION
     public void Routine()
     {
 
-        var  infos = PhysicInfos();
-        var infos_t = TruePhysicInfos();
-       
+        var (delta, infos) = PhysicInfos();
+        var (delta_T, infos_T) = TruePhysicInfos();
+        car.lastInfo = infos;
+        carTrue.lastInfo = infos_T;
+
         if (updateSelf)
-            pe.UpdateMatrix(infos, timesteps, featuresNumber);
+            pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
 
         else
-            pe.UpdateMatrix(infos_t, timesteps, featuresNumber);
+            pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
 
 
 
 
     }
 
-    float[] PhysicInfos()
+    (float[], float[]) PhysicInfos()
     {
         return car.PhysicInfos();
 
     }
 
-    float[] TruePhysicInfos()
+    (float[], float[]) TruePhysicInfos()
     {
         return carTrue.DispatcherInfos();
 
     }
+
+    //REAL
+
+    //public void Routine()
+    //{
+
+    //    var infos = PhysicInfos();
+    //    var infos_t = TruePhysicInfos();
+
+    //    if (updateSelf)
+    //        pe.UpdateMatrix(infos, timesteps, featuresNumber);
+
+    //    else
+    //        pe.UpdateMatrix(infos_t, timesteps, featuresNumber);
+    //}
+
+    //float[] PhysicInfos()
+    //{
+    //    return car.PhysicInfos();
+
+    //}
+
+    //float[] TruePhysicInfos()
+    //{
+    //    return carTrue.DispatcherInfos();
+
+    //}
 
     float[] RuleInfos()
     {

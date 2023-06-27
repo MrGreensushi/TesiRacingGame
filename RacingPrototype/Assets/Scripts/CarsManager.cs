@@ -104,7 +104,38 @@ namespace QuickStart
 
             cars[index].Ui.Udpate(velocity, laps, rank, time);
         }
+
+        public void EndEpisodeForAll()
+        {
+            //stop the writing to file
+            var writer = GetComponent<RecordWriter>();
+            if (writer != null)
+            {
+                writer.newRace = true;
+            }
+
+            List<ML_Car> agents = new List<ML_Car>();
+            foreach (var item in cars)
+            {
+                agents.Add(item.Player.agent);
+                //reward all cars based on their rank
+                RewardsBasedOnPosition(item);
+            }
+            foreach (var item in agents)
+                item.EndEpisode();
+
+        }
+
+        public void RewardsBasedOnPosition(CarInfos item)
+        {
+
+            float posReward = cars.Count - 1 - item.Car.Rank;
+            item.Player.agent.AddReward(posReward);
+
+
+        }
     }
+
 }
 
 

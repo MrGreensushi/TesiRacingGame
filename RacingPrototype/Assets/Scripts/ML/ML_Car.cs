@@ -23,6 +23,8 @@ public class ML_Car : Agent
     public bool accelerationRew = false, directionRew = true, breakingRew = false;
     float directionSensor;
     [SerializeField] float checkpointReward, lapReward, directionReward, wrongCheckReward, wallCollisionReward, carCollisionReward;
+    [SerializeField] bool completeRace = false;
+    [HideInInspector] public int changedRank = 0;
 
     public int[] lastAction = new int[3];
     private async void Start()
@@ -119,6 +121,7 @@ public class ML_Car : Agent
             //ho colpito un muro
             startCollision = true;
             stillCollision = true;
+            collisionDuration = Time.time;
         }
         if (collision.gameObject.TryGetComponent(out OfflineCar car))
         {
@@ -131,7 +134,19 @@ public class ML_Car : Agent
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out Wall wall) ||
+
+        if (completeRace && collision.gameObject.TryGetComponent(out Wall wall))
+        {
+            //Se la collisione dura da più di 2 secondi allora fine episodio
+            if ((Time.time - collisionDuration) >= 5f)
+            {
+                CarsManager.instance.EndEpisodeForAll();
+                return;
+            }
+
+        }
+
+        if (collision.gameObject.TryGetComponent(out Wall wall1) ||
             collision.gameObject.TryGetComponent(out OfflineCar car))
         {
             //Se la collisione dura da più di 2 secondi allora fine episodio
@@ -161,30 +176,7 @@ public class ML_Car : Agent
 
     private void Rewards(int moveZ, int breaking)
     {
-        //Premio l'agente in base alla direzione della macchina rispetto al prossimo checkpoint
-        if (directionRew && moveZ == 1)
-        {
-            //lerp tra i due prossimi checkpoint
-            float newDirectioSensor = LIDirectionGates();
-            AddReward(directionReward * newDirectioSensor);
-
-        }
-
-        //Premio l'agente in base a quanto preme l'acceleratore
-        if (accelerationRew)
-            if (moveZ == 1 && breaking == 0)
-            {
-                AddReward(0.005f);
-                additionalRew += 0.005f;
-            }
-
-        //penalizzo l'agente se frena 
-        if (breakingRew)
-        {
-            AddReward(-breaking * 0.005f);
-            additionalRew -= breaking * 0.005f;
-        }
-
+        AddReward(-0.001f);
 
         if (checkpoint > 0)
         {
@@ -193,23 +185,17 @@ public class ML_Car : Agent
             checkpoint = 0;
         }
 
+
         if (wrongCheck > 0)
         {
             AddReward(-wrongCheckReward * wrongCheck);
             Debug.Log($"Reward {-wrongCheckReward * wrongCheck}for wrong checkpoint");
             wrongCheck = 0;
-            EndEpisode();
-        }
 
-        if (lap)
-        {
-            lap = false;
-            AddReward(lapReward);
-            Debug.Log($"Reward {lapReward} for completing a lap");
-
-            lapsDone++;
-            if (lapsDone >= lapsEpisode)
+            if (!completeRace)
                 EndEpisode();
+            else
+                CarsManager.instance.EndEpisodeForAll();
         }
 
         //Se rimango contro un muro penalizzo l'agent
@@ -241,6 +227,64 @@ public class ML_Car : Agent
             carCollision = false;
             Debug.Log($"Reward {-carCollisionReward} for starting a collision with a car");
         }
+
+        //Premio l'agente in base alla direzione della macchina rispetto al prossimo checkpoint
+        if (directionRew && moveZ == 1)
+        {
+            //lerp tra i due prossimi checkpoint
+            float newDirectioSensor = LIDirectionGates();
+            AddReward(directionReward * newDirectioSensor);
+
+        }
+
+        //Premio l'agente in base a quanto preme l'acceleratore
+        if (accelerationRew)
+            if (moveZ == 1 && breaking == 0)
+            {
+                AddReward(0.005f);
+                additionalRew += 0.005f;
+            }
+
+        //penalizzo l'agente se frena 
+        if (breakingRew)
+        {
+            AddReward(-breaking * 0.005f);
+            additionalRew -= breaking * 0.005f;
+        }
+
+        if (completeRace)
+        {
+            //reward if the car surpass another one
+            AddReward(changedRank);
+            changedRank = 0;
+            if (lap)
+            {
+
+                lap = false;
+                lapsDone++;
+                //EndEpisodForAll also reward each car based on thier rank
+                if (lapsDone >= lapsEpisode)
+                    CarsManager.instance.EndEpisodeForAll();
+                else
+                    AddReward(lapReward);
+            }
+            return;
+
+        }
+
+
+        if (lap)
+        {
+            lap = false;
+            AddReward(lapReward);
+            Debug.Log($"Reward {lapReward} for completing a lap");
+
+            lapsDone++;
+            if (lapsDone >= lapsEpisode)
+                EndEpisode();
+        }
+
+
 
 
     }
