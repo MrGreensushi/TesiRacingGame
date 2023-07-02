@@ -7,7 +7,7 @@ SEQUENCE_LENGTH=20
 ONLY_ONE_CAR=True
 CARS=4
 FEATURES=5
-DISCARD=2
+DISCARD=10
 COLUMNS=["Player", "X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME"]
 C_NoPLayer=["X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME","RACE","GROUP"]
 
@@ -98,6 +98,7 @@ def batch_generator(df):
     dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ANG_VEL_Y"],axis=1).reset_index(drop=True)
     #dropped_df["ROT"]=dropped_df["ROT"]/360.0;
     target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
+    #dropped_df=dropped_df.drop([ "VEL_X","VEL_Z","ROT"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
         targets=target_df.iloc[SEQUENCE_LENGTH+i,:].values
@@ -138,7 +139,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         return tensor_x,tensor_y
     
     def __len__(self):
-        value=int(self.df_length/self.batch_size)-1
+        value=int(self.df_length/self.batch_size)-50
         if value>self.max_batch:
             value=self.max_batch
         return value

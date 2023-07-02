@@ -693,7 +693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3414ec9da12894d86399f75c8147d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nnModel: {fileID: 5022602860645237092, guid: c196a2e33f316d24ea8d98c0223ba72b, type: 3}
+  nnModel: {fileID: 5022602860645237092, guid: 72740445aebb25a4e92e56ebbc9e3d08, type: 3}
   prediction: []
   movex: 0
   predictionDone: 0
