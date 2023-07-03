@@ -1,6 +1,8 @@
 using Mirror;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace QuickStart
@@ -136,11 +138,20 @@ namespace QuickStart
 
             //send infos to the server
             CmdSetupPlayer(name, color);
+
+
         }
 
         [Command]
         public void CmdSetupPlayer(string _name, Color _col)
         {
+            //Set up camera
+            Camera.main.transform.SetParent(transform);
+            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
+            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            Camera.main.orthographicSize = 55;
+
+
             //Player info sent to server, then server updates sync vars which handles it on all clients
             playerName = _name;
             playerColor = _col;
@@ -153,7 +164,7 @@ namespace QuickStart
             trilRenderer.startColor = _col;
             trilRenderer.endColor = _col;
 
-            NetworkConnectionToClient conn = null;
+            NetworkConnectionToClient conn = GetComponent<NetworkIdentity>().connectionToClient;
             //recupera tutte le altre ui
 
             //recupera id di tutte le macchine
@@ -164,8 +175,8 @@ namespace QuickStart
                 names.Add(item.Car.Id);
                 colors.Add(item.Player.playerColor);
             }
-            if (names.Count > 0)
-                TargetInstantiatePreviousUis(conn, names.ToArray(), colors.ToArray());
+
+
             //Aggiungo UI nel Manager del server
             GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
             CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), _name, _col);
@@ -173,17 +184,30 @@ namespace QuickStart
             //chiedo ad ogni client di stampare la UI della nuova macchina
             InstantiateUI(_name, _col);
 
-            agent.enabled = true;
+            //star position
+            var starting = StartingPointsManager.instance.StartingPoint(transform);
+
+            //aggiungi macchina al sistema MPAI
+            Manager_MPAI.instance.AddCar(this);
+
+            //lastInfo seto to zero
+            lastInfo = new float[5] { 0, 0, 0, 0, 0 };
+
+            TargetInstantiatePreviousUis(conn, starting, names.ToArray(), colors.ToArray());
         }
 
         [TargetRpc]
-        public void TargetInstantiatePreviousUis(NetworkConnection target, string[] names, Color[] colors)
+        public void TargetInstantiatePreviousUis(NetworkConnection target, Vector3 start, string[] names, Color[] colors)
         {
+            agent.enabled = true;
+            transform.localPosition = start;
+
             for (int i = 0; i < names.Length; i++)
             {
                 GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
                 CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
             }
+
         }
 
         [ClientRpc]
@@ -214,33 +238,33 @@ namespace QuickStart
             _transform.rotation = _quat;
         }
 
-        /* private void FixedUpdate()
-         {
-             if (!isLocalPlayer)
-                 return;
-             float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
-             frontDriverW.steerAngle = moveX;
-             frontPassengerW.steerAngle = moveX;
+        /*  private void FixedUpdate()
+          {
+              if (!isLocalPlayer)
+                  return;
+              float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
+              frontDriverW.steerAngle = moveX;
+              frontPassengerW.steerAngle = moveX;
 
-             float moveZ = Input.GetAxis("Vertical") * motorForce;
-             frontPassengerW.motorTorque = moveZ;
-             frontDriverW.motorTorque = moveZ;
+              float moveZ = Input.GetAxis("Vertical") * motorForce;
+              frontPassengerW.motorTorque = moveZ;
+              frontDriverW.motorTorque = moveZ;
 
-             int breaking = Input.GetButton("Fire2") ? 1 : 0;
-             frontDriverW.brakeTorque = breakForce * breaking;
-             frontPassengerW.brakeTorque = breakForce * breaking;
+              int breaking = Input.GetButton("Fire2") ? 1 : 0;
+              frontDriverW.brakeTorque = breakForce * breaking;
+              frontPassengerW.brakeTorque = breakForce * breaking;
 
-             Color _col = breaking == 1 ? Color.white : Color.clear;
-             if (_col != render.materials[1].GetColor("_EmissionColor"))
-             {
-                 CmdBrakeLights(_col);
-             }
+              Color _col = breaking == 1 ? Color.white : Color.clear;
+              if (_col != render.materials[1].GetColor("_EmissionColor"))
+              {
+                  CmdBrakeLights(_col);
+              }
 
-             //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
-             UpdateWheelPoses();
+              //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
+              UpdateWheelPoses();
 
 
-         }*/
+          }*/
 
         public void UseInput(float movex, float movez, int breaking)
         {
@@ -278,8 +302,8 @@ namespace QuickStart
             }
         }
 
-        [TargetRpc]
-        public void TargetRpcUseInput(float movex, float movez, int breaking)
+        [Command]
+        public void CmdUseInput(float movex, float movez, int breaking)
         {
             UseInput(movex, movez, breaking);
         }
@@ -304,10 +328,21 @@ namespace QuickStart
 
         public override void OnStopLocalPlayer()
         {
-            Camera.main.transform.SetParent(null);
+            agent.enabled = false;
+            ResetCamera();
             CarsManager.instance.RemoveCar(playerName);
             base.OnStopLocalPlayer();
         }
+
+        public void ResetCamera()
+        {
+            Camera.main.transform.SetParent(null);
+            Camera.main.transform.position = new Vector3(197, 369, 91);
+            Camera.main.transform.rotation = Quaternion.Euler(90, 90, 0);
+            Camera.main.orthographic = true;
+            Camera.main.orthographicSize = 321;
+        }
+
         public void StopCar()
         {
             /*frontDriverW.brakeTorque = Mathf.Infinity;
@@ -397,6 +432,13 @@ namespace QuickStart
             return toRet;
         }
 
+
+        [TargetRpc]
+        public void UpdateRealCar(NetworkConnection target, Vector3 vel, Quaternion rot)
+        {
+            _rigidbody.velocity = vel;
+            _rigidbody.rotation = rot;
+        }
 
     }
 }

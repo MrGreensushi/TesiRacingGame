@@ -8,6 +8,7 @@ using Unity.MLAgents.Sensors;
 using Unity.Barracuda;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using Mirror;
 
 public class ML_Car : Agent
 {
@@ -52,9 +53,10 @@ public class ML_Car : Agent
 
         Debug.LogWarning($"Additional rew: {additionalRew}");
         additionalRew = 0;
-        transform.localPosition = StartingPointsManager.instance.StartingPoint(transform);
+        //transform.localPosition = StartingPointsManager.instance.StartingPoint(transform);
 
     }
+
 
     public override void OnActionReceived(ActionBuffers actions)
     {
@@ -62,7 +64,7 @@ public class ML_Car : Agent
         int moveZ = GetDiscrete(actions.DiscreteActions[1]); //Accellerare o retromarcia
         int breaking = actions.DiscreteActions[2]; //frenare o meno
         lastAction = new int[3] { moveX, moveZ, breaking };
-        _playerCar.TargetRpcUseInput(moveX, moveZ, breaking);
+        _playerCar.UseInput(moveX, moveZ, breaking);
         Rewards(moveZ, breaking);
     }
 

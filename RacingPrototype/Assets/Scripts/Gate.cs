@@ -11,10 +11,12 @@ namespace QuickStart
 
         LapsManager _lapsManager;
 
-        private void Awake()
+        private void Start()
         {
             _lapsManager = GameObject.FindObjectOfType<LapsManager>();
         }
+
+        [ServerCallback]
         private void OnTriggerEnter(Collider other)
         {
             var car = other.transform.parent.GetComponent<PlayerScript>();
