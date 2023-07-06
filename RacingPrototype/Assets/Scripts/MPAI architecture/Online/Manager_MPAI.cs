@@ -1,5 +1,6 @@
 using Mirror;
 using QuickStart;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +16,11 @@ namespace QuickStart
         [SerializeField] Ghost_Car car;
         [SerializeField] Physic_Engine pe;
 
-        [SerializeField] GameObject ghostObject;
+        [SerializeField] GameObject ghostObject, infoObject;
+        [SerializeField] Transform UI_transform;
         private bool first, predicting;
+
+        public List<Player_Ghost> ghosts = new List<Player_Ghost>();
 
 
         private void Awake()
@@ -131,6 +135,31 @@ namespace QuickStart
             cl.trueCar = c_t;
             cl.car = g_c;
             car = g_c;
+
+
+            var ui_o = Instantiate(infoObject, UI_transform);
+            var ui = ui_o.GetComponent<MPAI_Info>();
+            ui.Nome(c_t.playerName, c_t.playerColor);
+            ghosts.Add(new Player_Ghost(c_t, g_c, ui));
         }
     }
 }
+
+
+
+public struct Player_Ghost
+{
+    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z)
+    {
+        Ghost = y;
+        Player = x;
+        Info = z;
+    }
+
+    public Ghost_Car Ghost { get; }
+    public PlayerScript Player { get; }
+
+    public MPAI_Info Info { get; }
+
+
+};
