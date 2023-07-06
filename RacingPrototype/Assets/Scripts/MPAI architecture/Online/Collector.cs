@@ -19,17 +19,17 @@ namespace QuickStart
             //controllo se la predizione è simile al dato riscontrato
             prediction = pe.prediction;
 
-            if (ConfrontPrediction())//real data è diverso dalla predizione quindi uso la predizione
-            {
-                car.UpdateBody(prediction);
-
-                Debug.Log("USATO PREDIZIONE");
-            }
-            else//uso i dati reali
-            {
-
-                car.CopyFromTrue();
-            }
+          // if (ConfrontPrediction())//real data è diverso dalla predizione quindi uso la predizione
+          // {
+          //     car.UpdateBody(prediction);
+          //
+          //     Debug.Log("USATO PREDIZIONE");
+          // }
+          // else//uso i dati reali
+          // {
+          //
+          //     car.CopyFromTrue();
+          // }
 
             pe.predictionDone = false;
         }
