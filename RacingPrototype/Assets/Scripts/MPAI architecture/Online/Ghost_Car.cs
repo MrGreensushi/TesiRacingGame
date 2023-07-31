@@ -1,4 +1,5 @@
 using Mirror;
+using Mirror.Experimental;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ public class Ghost_Car : MonoBehaviour
     private PlayerScript player;
 
 
+
     public float maxSteerAngle = 30;
 
     public Vector3 InfoToCompare { get => new Vector3(toCopyBody.velocity.x, toCopyBody.velocity.z, toCopyBody.rotation.eulerAngles.y); }
@@ -34,7 +36,6 @@ public class Ghost_Car : MonoBehaviour
         mybody = GetComponent<Rigidbody>();
         lastInfo = new float[5] { 0, 0, 0, 0, 0 };
         mybody.centerOfMass = centerOfMass.localPosition;
-
     }
 
 
@@ -148,21 +149,31 @@ public class Ghost_Car : MonoBehaviour
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
         mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
 
-        NetworkConnectionToClient conn = player.GetComponent<NetworkIdentity>().connectionToClient;
+        player.clientAuthority = false; //cambio autorità sul client
+        player.ChangeAuthority(false); //cambio autorità sul selrver
 
-        player.UpdateRealCar(conn, new Vector3(infos[0], 0, infos[1]), Quaternion.Euler(new Vector3(0, infos[2], 0)));
 
+        player.UpdateRealCar(new Vector3(infos[0], 0, infos[1]), infos[2]);
     }
-
 
     public void CopyFromTrue()
     {
         bodyRenderer.enabled = false;
         trailRenderer.Clear();
         trailRenderer.enabled = false;
+
         mybody.velocity = toCopyBody.velocity;
         mybody.angularVelocity = toCopyBody.angularVelocity;
+
+
         mybody.position = toCopyBody.position;
         mybody.rotation = toCopyBody.rotation;
+
+
+
+        player.ChangeAuthority(true); //cambio autorità sul selrver
+        player.clientAuthority = true; //cambio autorità sul client
+
+
     }
 }

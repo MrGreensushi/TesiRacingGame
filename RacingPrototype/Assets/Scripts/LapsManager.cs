@@ -22,7 +22,7 @@ namespace QuickStart
             {
                 instance = this;
                 Initialize();
-                Debug.Log("MAX COUNTS: " + maxGates);
+                //Debug.Log("MAX COUNTS: " + maxGates);
             }
             else
             {

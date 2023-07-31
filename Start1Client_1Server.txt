@@ -1,0 +1,4 @@
+@ECHO off
+cd /D D:\Github\TesiRacingGame
+call launchmove.bat 0 0 .\Builds\Build\RacingPrototype.exe -screen-width 800 -screen-height 570 -client
+call launchmove.bat 300 50 .\Builds\Build\RacingPrototype.exe -screen-width 800 -screen-height 570 -server

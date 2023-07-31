@@ -1,7 +1,10 @@
+using Google.Protobuf.WellKnownTypes;
 using Mirror;
+using Mirror.Experimental;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.MLAgents.Policies;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -35,8 +38,15 @@ namespace QuickStart
         float maxSpeed = 40;
         //ML Agent
         public ML_Car agent;
+        private BehaviorParameters agent_type;
 
         Rigidbody _rigidbody;
+
+        //Network
+        private NetworkTransformChild[] net_TransformChilds;
+        private NetworkTransform net_Transform;
+        NetworkRigidbody net_Rigidbody;
+        NetworkIdentity net_Identity;
 
 
         public float[] lastInfo;
@@ -84,6 +94,25 @@ namespace QuickStart
         [SyncVar(hook = nameof(OnLightsChanged))]
         public Color ligthsColor = Color.clear;
 
+        [SyncVar(hook = nameof(OnBotChanged))]
+        public bool bot = false;
+
+        public void OnBotChanged(bool _Old, bool _New)
+        {
+            bot = _New;
+            if (bot)
+            {
+                agent_type.BehaviorType = BehaviorType.InferenceOnly;
+            }
+            else
+            {
+                agent_type.BehaviorType = BehaviorType.HeuristicOnly;
+            }
+
+        }
+
+
+
         void OnNameChanged(string _Old, string _New)
         {
             playerNameText.text = playerName;
@@ -100,6 +129,31 @@ namespace QuickStart
             lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
             render.materials[1] = lightsMaterialClone;
             render.materials[1].SetColor("_EmissionColor", _New); //modifica copia materiale
+        }
+
+
+        [SyncVar(hook = nameof(OnAuthorityChanged))]
+        public bool clientAuthority = true;
+
+        void OnAuthorityChanged(bool _Old, bool _New)
+        {
+            ChangeAuthority(_New);
+
+        }
+
+        public void ChangeAuthority(bool value)
+        {
+            if (net_Transform == null || net_Rigidbody == null) return;
+            net_Transform.clientAuthority = value;
+            net_Rigidbody.clientAuthority = value;
+            foreach (var t in net_TransformChilds)
+                t.clientAuthority = value;
+        }
+
+
+        private void Awake()
+        {
+            agent_type = GetComponent<BehaviorParameters>();
         }
 
         public override void OnStartLocalPlayer()
@@ -135,6 +189,12 @@ namespace QuickStart
             //Aggiorna nome player in basso a sinistra
             CarsManager.instance.PlayerNameUI = name;
             CarsManager.instance.playerNameText.color = color;
+
+            //ritrova le informazioni del network
+            net_Identity = GetComponent<NetworkIdentity>();
+            net_Transform = GetComponent<NetworkTransform>();
+            net_Rigidbody = GetComponent<NetworkRigidbody>();
+            net_TransformChilds = GetComponents<NetworkTransformChild>();
 
             //send infos to the server
             CmdSetupPlayer(name, color);
@@ -193,21 +253,29 @@ namespace QuickStart
             //lastInfo seto to zero
             lastInfo = new float[5] { 0, 0, 0, 0, 0 };
 
+            //ritrova le informazioni del network
+            net_Identity = GetComponent<NetworkIdentity>();
+            net_Transform = GetComponent<NetworkTransform>();
+            net_Rigidbody = GetComponent<NetworkRigidbody>();
+            net_TransformChilds = GetComponents<NetworkTransformChild>();
+
+            clientAuthority = true;
+
             TargetInstantiatePreviousUis(conn, starting, names.ToArray(), colors.ToArray());
         }
 
         [TargetRpc]
         public void TargetInstantiatePreviousUis(NetworkConnection target, Vector3 start, string[] names, Color[] colors)
         {
-            agent.enabled = true;
+
             transform.localPosition = start;
 
-            for (int i = 0; i < names.Length; i++)
+            for (int i = 0; i < names.Length - 1; i++)
             {
                 GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
                 CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
             }
-
+            agent.enabled = true;
         }
 
         [ClientRpc]
@@ -268,6 +336,8 @@ namespace QuickStart
 
         public void UseInput(float movex, float movez, int breaking)
         {
+            if (!clientAuthority) return;
+
             float moveX = movex * maxSteerAngle;
             frontDriverW.steerAngle = moveX;
             frontPassengerW.steerAngle = moveX;
@@ -323,7 +393,6 @@ namespace QuickStart
                 floatingInfo.transform.LookAt(Camera.main.transform);
                 return;
             }
-
         }
 
         public override void OnStopLocalPlayer()
@@ -432,13 +501,38 @@ namespace QuickStart
             return toRet;
         }
 
-
-        [TargetRpc]
-        public void UpdateRealCar(NetworkConnection target, Vector3 vel, Quaternion rot)
+        [Server]
+        public void UpdateRealCar(Vector3 vel, float rot)
         {
             _rigidbody.velocity = vel;
-            _rigidbody.rotation = rot;
+            var v_rot = _rigidbody.rotation.eulerAngles;
+            //_rigidbody.rotation = Quaternion.Euler(v_rot.x, rot, v_rot.z);
+            _rigidbody.rotation = Quaternion.Euler(0, rot, 0);
+
+
+
+
+            //var diff = Vector3.Angle(vel.normalized, transform.rotation.eulerAngles.normalized);
+            //float moveX = 0f;
+            //
+            //if (Mathf.Abs(diff) > 1f)
+            //    moveX = 1f;
+            //else if (Mathf.Abs(diff) < 1f)
+            //    moveX = -1f;
+            //
+            //
+            //moveX = moveX * maxSteerAngle;
+            //frontDriverW.steerAngle = moveX;
+            //frontPassengerW.steerAngle = moveX;
+            //
+            //UpdateWheelPoses();
         }
+
+        //private void FixedUpdate()
+        //{
+        //    var ang = transform.rotation.eulerAngles;
+        //    transform.rotation = Quaternion.Euler(0, ang.y, 0);
+        //}
 
     }
 }

@@ -690,6 +690,8 @@ MonoBehaviour:
   playerName: 
   playerColor: {r: 1, g: 1, b: 1, a: 1}
   ligthsColor: {r: 0, g: 0, b: 0, a: 0}
+  bot: 0
+  clientAuthority: 0
 --- !u!114 &7556275839328094316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,7 +868,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: dd3c5afb144a5294c9be3e72bfeea7b8, type: 3}
   m_InferenceDevice: 3
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: My Behavior
   TeamId: 0
   m_UseChildSensors: 1
