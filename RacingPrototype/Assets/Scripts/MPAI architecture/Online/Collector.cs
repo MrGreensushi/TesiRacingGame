@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,36 +11,36 @@ namespace QuickStart
     public class Collector : MonoBehaviour
     {
         [SerializeField] Physic_Engine pe;
-        public Ghost_Car car;
-        public PlayerScript trueCar;
-
         public bool usePrediction = false;
-        float[] prediction;
 
-        public void CollectPrediction()
+
+        public void CollectPrediction(Player_Ghost pg)
         {
             //controllo se la predizione è simile al dato riscontrato
-            prediction = pe.prediction;
-            var player_ = Manager_MPAI.instance.ghosts.Find(x => x.Ghost == car);
-            if (ConfrontPrediction())//real data è diverso dalla predizione quindi uso la predizione
+            var conn = pg.player.netIdentity.connectionToClient;
+            if (ConfrontPrediction(pg.min, pg.max))//real data è diverso dalla predizione quindi uso la predizione
             {
 
-                player_.Info.Info(true);
-                car.UpdateBody(prediction);
+                CarsManager.instance.UIPrediction(conn, true);
+                pg.info.Info(true);
+                pg.ghost.UpdateBody(pg.prediction);
 
-                Debug.Log("USATO PREDIZIONE");
+                //pg.prediction.Dispose();
+                //Debug.Log("USATO PREDIZIONE");
             }
             else//uso i dati reali
             {
-                player_.Info.Info(false);
-                car.CopyFromTrue();
+                CarsManager.instance.UIPrediction(conn, false);
+                pg.info.Info(false);
+                pg.ghost.CopyFromTrue();
+                // pg.prediction.Dispose();
             }
 
-            pe.predictionDone = false;
+            //pe.predictionDone = false;
         }
 
 
-        private bool ConfrontPrediction()
+        private bool ConfrontPrediction(int min, int max)
         {
 
             ////Controllo velocità e rotazione, se la differenza è maggiore di 1 allora sbaglia
@@ -54,7 +55,8 @@ namespace QuickStart
             //return diff > 2f;
 
             var time = NetworkTime.time;
-            if ((int)time % 10 >= 6f)
+            var div = (int)time % 11;
+            if (div >= min && div <= max)
             {
                 return true;
             }

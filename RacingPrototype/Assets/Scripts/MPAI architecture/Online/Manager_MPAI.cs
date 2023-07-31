@@ -3,6 +3,8 @@ using QuickStart;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Barracuda;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace QuickStart
@@ -13,15 +15,17 @@ namespace QuickStart
         private int counter;
         [SerializeField] Dispatcher ds;
         [SerializeField] Collector cl;
-        [SerializeField] Ghost_Car car;
         [SerializeField] Physic_Engine pe;
 
         [SerializeField] GameObject ghostObject, infoObject;
         [SerializeField] Transform UI_transform;
+        [SerializeField] NNModel nnModel;
         private bool first, predicting;
 
         public List<Player_Ghost> ghosts = new List<Player_Ghost>();
+        Dictionary<Player_Ghost, JobHandle> jobs;
 
+        public int bot;
 
         private void Awake()
         {
@@ -37,11 +41,12 @@ namespace QuickStart
             predicting = false;
             first = true;
             counter = 0;
+            bot = FindObjectOfType<CommandLinesManager>().bot;
         }
 
         private void FixedUpdate()
         {
-            if (car == null) return;
+            if (ghosts.Count == 0) return;
 
 
             //controllo se la latenza del giocatore è elevata
@@ -51,7 +56,7 @@ namespace QuickStart
 
             counter++;
             if (counter == 2)
-                StartCoroutine(Prediction());
+                Prediction();
             if (counter == 3)
                 Routine();
 
@@ -61,24 +66,38 @@ namespace QuickStart
         {
             counter = 0;
 
-            ds.Routine();
+            foreach (var item in ghosts)
+            {
+                if (!item.canPredict) continue;
+
+                ds.Routine(item);
+
+            }
 
             //if (predicting)
             //    first = false;
         }
 
 
-        private IEnumerator Prediction()
+        private void Prediction()
         {
-            if (pe.Count == ds.timesteps)
-            {
-                while (!pe.predictionDone)
-                {
-                    yield return null;
-                }
 
-                cl.CollectPrediction();
+            foreach (var item in ghosts)
+            {
+                if (!item.canPredict) continue;
+
+                if (item.matrix.Count == ds.timesteps)
+                {
+                    //while (!pe.predictionDone)
+                    //{
+                    //    yield return null;
+                    //}
+
+                    cl.CollectPrediction(item);
+                }
             }
+
+
 
             //Time.timeScale = 0;
             //if (!first)
@@ -91,34 +110,34 @@ namespace QuickStart
         }
 
 
-        public void PredictionCoroutine(bool value)
-        {
-            predicting = value;
-            if (value) PredictionStart();
-            else PredictionStop();
+        //public void PredictionCoroutine(bool value)
+        //{
+        //    predicting = value;
+        //    if (value) PredictionStart();
+        //    else PredictionStop();
 
-        }
+        //}
 
-        public void PredictionStop()
-        {
-            pe.usePrediction = false;
-            car.Predicting = false;
-            cl.usePrediction = false;
-            first = true;
-        }
+        //public void PredictionStop()
+        //{
+        //    pe.usePrediction = false;
+        //    car.Predicting = false;
+        //    cl.usePrediction = false;
+        //    first = true;
+        //}
 
-        public void PredictionStart()
-        {
-            Debug.Break();
-            cl.usePrediction = true;
-            pe.usePrediction = true;
-            pe.predictionDone = false;
-            car.Predicting = true;
-
-
+        //public void PredictionStart()
+        //{
+        //    Debug.Break();
+        //    cl.usePrediction = true;
+        //    pe.usePrediction = true;
+        //    pe.predictionDone = false;
+        //    car.Predicting = true;
 
 
-        }
+
+
+        //}
 
 
         public void AddCar(PlayerScript c_t)
@@ -130,36 +149,19 @@ namespace QuickStart
                 return;
             }
             g_c.toCopyCar = c_t.gameObject;
-            ds.carTrue = c_t;
-            ds.car = g_c;
-            cl.trueCar = c_t;
-            cl.car = g_c;
-            car = g_c;
-
-
             var ui_o = Instantiate(infoObject, UI_transform);
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
-            ghosts.Add(new Player_Ghost(c_t, g_c, ui));
+
+            if (bot > 0)
+            {
+                bot--;
+                c_t.bot = true;
+                //c_t.OnBotChanged(false, true);
+
+            }
+
+            ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, ghosts.Count == 0));
         }
     }
 }
-
-
-
-public struct Player_Ghost
-{
-    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z)
-    {
-        Ghost = y;
-        Player = x;
-        Info = z;
-    }
-
-    public Ghost_Car Ghost { get; }
-    public PlayerScript Player { get; }
-
-    public MPAI_Info Info { get; }
-
-
-};

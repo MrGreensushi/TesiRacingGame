@@ -1,6 +1,10 @@
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace QuickStart
@@ -8,43 +12,33 @@ namespace QuickStart
     public class Dispatcher : MonoBehaviour
     {
         public int timesteps, featuresNumber;
-        public Ghost_Car car;
-        public PlayerScript carTrue;
         [SerializeField] Physic_Engine pe;
         public bool updateSelf = false;
 
         public bool UpdateSelf { set { updateSelf = value; } }
 
         //DELTA VERSION
-        public void Routine()
+        public void Routine(Player_Ghost pg)
         {
 
-            var (delta, infos) = PhysicInfos();
-            var (delta_T, infos_T) = TruePhysicInfos();
-            car.lastInfo = infos;
-            carTrue.lastInfo = infos_T;
+            var (delta, infos) = pg.ghost.PhysicInfos();
+            var (delta_T, infos_T) = pg.player.DispatcherInfos();
+            pg.ghost.lastInfo = infos;
+            pg.player.lastInfo = infos_T;
 
             if (updateSelf)
-                pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
+                UpdateMatrix(delta, infos, pg);
 
             else
-                pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
-
-
-
+                UpdateMatrix(delta_T, infos_T, pg);
 
         }
 
-        (float[], float[]) PhysicInfos()
+
+        void UpdateMatrix(float[] d, float[] i,Player_Ghost pg)
         {
-            return car.PhysicInfos();
-
+            pe.UpdateMatrix(d, timesteps, featuresNumber, i, pg);
         }
 
-        (float[], float[]) TruePhysicInfos()
-        {
-            return carTrue.DispatcherInfos();
-
-        }
     }
 }

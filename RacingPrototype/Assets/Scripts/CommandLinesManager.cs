@@ -1,13 +1,17 @@
 using Mirror;
+using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CommandLinesManager : MonoBehaviour
 {
+
+    public int bot = 0;
     // Start is called before the first frame update
     void Awake()
     {
+        bot = 0;
 
         string[] args = System.Environment.GetCommandLineArgs();
         int widthInput = -1;
@@ -17,7 +21,7 @@ public class CommandLinesManager : MonoBehaviour
         int x = -1, y = -1;
         for (int i = 0; i < args.Length; i++)
         {
-            Debug.Log("ARG " + i + ": " + args[i]);
+            //Debug.Log("ARG " + i + ": " + args[i]);
             if (args[i] == "-screen-width")
             {
                 int.TryParse(args[i + 1], out widthInput);
@@ -41,6 +45,10 @@ public class CommandLinesManager : MonoBehaviour
             else if (args[i] == "-y")
             {
                 int.TryParse(args[i + 1], out y);
+            }
+            else if (args[i] == "-bot")
+            {
+                bot++;
             }
         }
 

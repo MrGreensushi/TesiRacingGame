@@ -149,21 +149,31 @@ public class Ghost_Car : MonoBehaviour
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
         mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
 
-        player.ClientAuthority = false;
+        player.clientAuthority = false; //cambio autorità sul client
+        player.ChangeAuthority(false); //cambio autorità sul selrver
+
 
         player.UpdateRealCar(new Vector3(infos[0], 0, infos[1]), infos[2]);
     }
 
     public void CopyFromTrue()
     {
-        player.ClientAuthority = true;
-
         bodyRenderer.enabled = false;
         trailRenderer.Clear();
         trailRenderer.enabled = false;
+
         mybody.velocity = toCopyBody.velocity;
         mybody.angularVelocity = toCopyBody.angularVelocity;
+
+
         mybody.position = toCopyBody.position;
         mybody.rotation = toCopyBody.rotation;
+
+
+
+        player.ChangeAuthority(true); //cambio autorità sul selrver
+        player.clientAuthority = true; //cambio autorità sul client
+
+
     }
 }

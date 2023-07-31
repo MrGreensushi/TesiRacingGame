@@ -16,6 +16,21 @@ namespace QuickStart
         public List<CarInfos> cars;
         public Transform carInfoUi;
         public TextMeshProUGUI playerNameText;
+        [SerializeField] GameObject predictingUI;
+        bool predictUI = false;
+
+        public void UIPrediction(NetworkConnection target, bool value)
+        {
+            //if (predictUI!=value) 
+            TargetActivePrediction(target, value);
+            //predictUI = value;
+        }
+
+        [TargetRpc]
+        public void TargetActivePrediction(NetworkConnection target, bool value)
+        {
+            predictingUI.SetActive(value);
+        }
 
         public string PlayerNameUI { set => playerNameText.text = value; }
 
