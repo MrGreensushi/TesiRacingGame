@@ -62,12 +62,12 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
                                                     mode='min')
     reduce_lr=tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss',
                                                    factor=0.5,
-                                                   patience=2,
+                                                   patience=10,
                                                    verbose=verbose,
                                                    mode='auto',
                                                    min_delta=0.01,
                                                    cooldown=5,
-                                                   min_lr=1e-6
+                                                   min_lr=1e-12
                                                   )
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=f"./{path}/{name}")
 
