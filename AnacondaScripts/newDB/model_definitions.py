@@ -71,6 +71,14 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
                                                   )
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=f"./{path}/{name}")
 
+    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+        filepath=f"./{path}/{name}/tmp/checkpoint",
+        save_weights_only=True,
+        monitor='val_loss',
+        mode='min',
+        save_best_only=True
+    )
+
 
     model.compile(loss=tf.losses.MeanSquaredError(),
                 optimizer=tf.optimizers.Adam(learning_rate=learning_rate),
@@ -79,7 +87,7 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
     history = model.fit(train, epochs=epochs,
                       validation_data=val,
                       verbose=verbose,
-                      callbacks=[early_stopping,reduce_lr,tensorboard_callback])
+                      callbacks=[early_stopping,reduce_lr,tensorboard_callback,model_checkpoint_callback])
     if(summary):
         model.summary()
     
