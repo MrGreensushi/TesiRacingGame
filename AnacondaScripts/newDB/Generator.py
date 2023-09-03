@@ -8,6 +8,7 @@ ONLY_ONE_CAR=True
 CARS=4
 FEATURES=5
 DISCARD=9
+COMM_PHY=False
 COLUMNS=["Player", "X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME"]
 C_NoPLayer=["X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME","RACE","GROUP"]
 
@@ -57,12 +58,18 @@ def divide_into_groups(df_x):
 
 def subtraction_columns(df):
     df_copy=df.shift(1,fill_value=0)
-    cols = df.columns.difference(['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"])
+    #subtract all columns except the one stored in not_diff
+    if(COMM_PHY):
+        not_diff=['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE",'MOVE_X','MOVE_Z','BREAKING']
+    else:
+        not_diff=['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"]
+    cols = df.columns.difference(not_diff)
     df[cols] = df[cols].sub(df_copy[cols])
     df["ROT"]=(df["ROT"]+180)%360-180
-    df.iloc[0,:-7]=0
-    df.iloc[0,10:12]=0
-    df.iloc[0,-3]=df.iloc[1,-3]
+    df.reset_index(drop=True,inplace=True)
+    df.loc[0,cols]=0
+    #df.iloc[0,10:12]=0
+    df.loc[0,["TIME","GROUP","RACE"]]=df.loc[1,["TIME","GROUP","RACE"]]
     
     return df
 
