@@ -122,13 +122,18 @@ def batch_generator(df):
     #crea un nuovo dataframe con sequence_length elementi per un numero di volte pari al batch
     dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ANG_VEL_Y"],axis=1).reset_index(drop=True)
     #dropped_df["ROT"]=dropped_df["ROT"]/360.0;
-    target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
+    #target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
+    target_df=dropped_df.drop(["TILE"],axis=1).reset_index(drop=True)
     #dropped_df=dropped_df.drop([ "VEL_X","VEL_Z","ROT"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
         targets=target_df.iloc[SEQUENCE_LENGTH+i,:].values
         yield inputs,targets  
 
+        
+def countSize(df):
+    return len(df.reset_index(drop=True))-SEQUENCE_LENGTH
+        
 def Generator(df):
     grouped=df.groupby(["RACE","GROUP"],group_keys=False).apply(batch_generator)
     for group in grouped:
@@ -139,7 +144,8 @@ class DataGenerator(tf.keras.utils.Sequence):
     def __init__(self,batch_size,df,max_batch):
         self.batch_size=batch_size
         self.df=df
-        self.df_length=len(df.index)-(df["RACE"].nunique()*SEQUENCE_LENGTH*CARS)
+        length=df.groupby(["RACE","GROUP"]).apply(countSize)
+        self.df_length=length.sum()
         self.max_batch=max_batch            
         print(f'Length: {len(df.index)} races: {df["RACE"].nunique()} n batches: {self.df_length} / {batch_size}')
         self.on_epoch_end()
@@ -164,7 +170,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         return tensor_x,tensor_y
     
     def __len__(self):
-        value=int(self.df_length/self.batch_size-1)
+        value=int(self.df_length/self.batch_size-2)
         if value>self.max_batch:
             value=self.max_batch
         return value

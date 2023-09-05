@@ -15,7 +15,7 @@ def MLP_Model(units):
                                        layers.Dense(units,activation="linear"),
                                        layers.Dense(feat_pred*cars,activation="linear")])
 
-def LSTM_Model(droupout_rate, cells=3,units=32,normalization=False):
+def LSTM_Model(droupout_rate, cells=3,units=32,normalization=False, mlp_cells=0,mlp_units=32):
     inputs=tf.keras.Input(shape=(sequence_length,cars*features))
     x=(inputs)
     if(normalization):
@@ -25,6 +25,8 @@ def LSTM_Model(droupout_rate, cells=3,units=32,normalization=False):
         x= layers.BatchNormalization()(x)
     x=layers.LSTM(units,dropout=droupout_rate)(x)
     x=layers.Flatten()(x)
+    for i in range(mlp_cells):
+        x=layers.Dense(mlp_units) (x)
     outputs=layers.Dense(feat_pred*cars,activation="linear")(x)
             
     return tf.keras.models.Model(inputs=inputs,outputs=outputs,name=f"LSTM_NN{cells}")
@@ -73,7 +75,7 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
 
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
         filepath=f"./{path}/{name}/tmp/checkpoint",
-        save_weights_only=True,
+        save_weights_only=False,
         monitor='val_loss',
         mode='min',
         save_best_only=True
@@ -102,9 +104,9 @@ def MLP_Train(train,val,learning_rate=0.01,verbose=0,epoch=10,units=32,name="log
     return model,history
 
 def LSTM_Train(train,val,learning_rate=0.01,verbose=0,epoch=10, patience=5,name="logs",path="logs",
-               dropout=0.2, cells=3,units=32, normalization=False):
+               dropout=0.2, cells=3,units=32, normalization=False, mlp_cells=0,mlp_units=32):
     
-    model = LSTM_Model(dropout,cells=cells,units=units, normalization=normalization)
+    model = LSTM_Model(dropout,cells=cells,units=units, normalization=normalization, mlp_cells=mlp_cells,mlp_units=mlp_units)
     history = compile_and_fit(model,train,val,epochs=epoch,learning_rate=learning_rate,verbose=verbose,patience=patience,name=name,path=path)
     
     #Print_Train(history,"LSTM")
