@@ -13,12 +13,16 @@ namespace QuickStart
         [SerializeField] Physic_Engine pe;
         public bool usePrediction = false;
 
+        [Tooltip("Testing: the prediction is applied every 10 seconds \n" +
+            "Real-Case: The prediction is appliead only if it differenties too much")]
+        public OperatingMode operatingMode;
+        public float threshold;
 
         public void CollectPrediction(Player_Ghost pg)
         {
             //controllo se la predizione è simile al dato riscontrato
             var conn = pg.player.netIdentity.connectionToClient;
-            if (ConfrontPrediction(pg.min, pg.max))//real data è diverso dalla predizione quindi uso la predizione
+            if (ConfrontPrediction(pg))//real data è diverso dalla predizione quindi uso la predizione
             {
 
                 CarsManager.instance.UIPrediction(conn, true);
@@ -40,27 +44,34 @@ namespace QuickStart
         }
 
 
-        private bool ConfrontPrediction(int min, int max)
+        private bool ConfrontPrediction(Player_Ghost pg)
         {
 
-            ////Controllo velocità e rotazione, se la differenza è maggiore di 1 allora sbaglia
-            //var diff = 0f;
-            //var toCompare = car.InfoToCompare;
-            //for (int i = 0; i < prediction.Length; i++)
-            //{
-            //    diff += Mathf.Abs(toCompare[i] - prediction[i]);
-            //}
-            //diff /= 3f;
-            ////Debug.Log(diff.ToString());
-            //return diff > 2f;
-
-            var time = NetworkTime.time;
-            var div = (int)time % 11;
-            if (div >= min && div <= max)
+            if (operatingMode == OperatingMode.Testing)
             {
-                return true;
+                var time = NetworkTime.time;
+                var div = (int)time % 11;
+                if (div >= pg.min && div <= pg.max)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            else
+            {
+                //Controllo la predizione, se il MAE è maggiore del treshold allora sbaglia
+                var diff = 0f;
+                var toCompare = pg.player.CompareWithPrediction();
+                var prediction = pg.prediction;
+                for (int i = 0; i < prediction.Length; i++)
+                {
+                    diff += Mathf.Abs(toCompare[i] - prediction[i]);
+                }
+                diff /= (float)prediction.Length;
+                //Debug.Log(diff.ToString());
+                return diff > threshold;
+            }
+
 
 
 

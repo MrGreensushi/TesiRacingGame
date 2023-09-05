@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499957,
+                "file_path": "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-499957.onnx",
+                "reward": null,
+                "creation_time": 1693064720.6796026,
+                "auxillary_file_paths": [
+                    "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-499957.pt"
+                ]
+            },
+            {
+                "steps": 999944,
+                "file_path": "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-999944.onnx",
+                "reward": null,
+                "creation_time": 1693066308.9001627,
+                "auxillary_file_paths": [
+                    "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-999944.pt"
+                ]
+            },
+            {
+                "steps": 1499937,
+                "file_path": "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-1499937.onnx",
+                "reward": null,
+                "creation_time": 1693067881.842672,
+                "auxillary_file_paths": [
+                    "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-1499937.pt"
+                ]
+            },
+            {
+                "steps": 1500001,
+                "file_path": "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-1500001.onnx",
+                "reward": null,
+                "creation_time": 1693067882.00376,
+                "auxillary_file_paths": [
+                    "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-1500001.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500001,
+            "file_path": "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1693067882.00376,
+            "auxillary_file_paths": [
+                "results\\Dumber_laps3_FromDumberAccBreak_1_acc_break_2\\My Behavior\\My Behavior-1500001.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

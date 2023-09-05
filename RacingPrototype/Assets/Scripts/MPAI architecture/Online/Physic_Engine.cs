@@ -90,7 +90,7 @@ namespace QuickStart
 
             if (pg.matrix.Count == timesteps)
             {
-                pg.Prediction(timesteps, featuresNumber, lastInfo);
+                pg.Prediction(timesteps, featuresNumber, lastInfo, this);
             }
 
 

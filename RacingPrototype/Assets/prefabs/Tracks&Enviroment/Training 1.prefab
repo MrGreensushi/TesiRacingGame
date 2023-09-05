@@ -54,8 +54,8 @@ Transform:
   - {fileID: 5588939472130789257}
   - {fileID: 7622501934591895508}
   - {fileID: 9080254760187820156}
-  - {fileID: 8211067359380025607}
   - {fileID: 7802904898464734608}
+  - {fileID: 8211067359380025607}
   m_Father: {fileID: 3889560950757778794}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -487,6 +487,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto15 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
+      objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
       value: 24
@@ -557,9 +561,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto15 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
+      objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
-      value: 27
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_LocalScale.x
@@ -685,9 +693,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto15 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
+      objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_LocalScale.x
@@ -816,6 +828,10 @@ PrefabInstance:
     - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_Name
       value: Corner15 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
+      propertyPath: m_TagString
+      value: C_15_U_R
       objectReference: {fileID: 0}
     - target: {fileID: 727771303255587976, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_RootOrder
@@ -963,6 +979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &4688059028390524582 stripped
@@ -996,6 +1016,10 @@ PrefabInstance:
     - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_Name
       value: Dritto15 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_U_D
       objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
@@ -1067,6 +1091,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto15 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_U_D
+      objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
       value: 16
@@ -1132,6 +1160,10 @@ PrefabInstance:
     - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_Name
       value: Corner15
+      objectReference: {fileID: 0}
+    - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
+      propertyPath: m_TagString
+      value: C_15_R_D
       objectReference: {fileID: 0}
     - target: {fileID: 727771303255587976, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_RootOrder
@@ -1263,6 +1295,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_R_L
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &5507061105092933636 stripped
@@ -1348,6 +1384,10 @@ PrefabInstance:
     - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
       propertyPath: m_Name
       value: Dritto30 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
@@ -1435,6 +1475,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &3908032039061874059 stripped
@@ -1501,6 +1545,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_U_D
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &4024310861804973896 stripped
@@ -1566,6 +1614,10 @@ PrefabInstance:
     - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
       propertyPath: m_Name
       value: Dritto30 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_R_L
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
@@ -1652,6 +1704,10 @@ PrefabInstance:
     - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
       propertyPath: m_Name
       value: Dritto30 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
@@ -1747,6 +1803,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &2542676531380070371 stripped
@@ -1780,6 +1840,10 @@ PrefabInstance:
     - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_Name
       value: Dritto15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_R_L
       objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
@@ -1903,6 +1967,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &2731136812920417714 stripped
@@ -1920,6 +1988,10 @@ PrefabInstance:
     - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_Name
       value: Corner15 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
+      propertyPath: m_TagString
+      value: C_15_U_L
       objectReference: {fileID: 0}
     - target: {fileID: 727771303255587976, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_RootOrder
@@ -2079,6 +2151,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &3359226324385068997 stripped
@@ -2108,6 +2184,10 @@ PrefabInstance:
     - target: {fileID: 4754126005622392347, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
       propertyPath: m_Name
       value: Corner30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754126005622392347, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
+      propertyPath: m_TagString
+      value: C_30_D_L
       objectReference: {fileID: 0}
     - target: {fileID: 5110429419049289480, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
       propertyPath: m_Name
@@ -2239,6 +2319,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_R_L
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &3437215535450122766 stripped
@@ -2325,6 +2409,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_L_R
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &3418690223476335469 stripped
@@ -2358,6 +2446,10 @@ PrefabInstance:
     - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_Name
       value: Dritto15 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036955194745821643, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
+      propertyPath: m_TagString
+      value: S_U_D
       objectReference: {fileID: 0}
     - target: {fileID: 7702168956858680177, guid: 6168f0b039077c14e9f1b68f01bfb2c1, type: 3}
       propertyPath: m_RootOrder
@@ -2477,6 +2569,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dritto30 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_U_D
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
 --- !u!4 &1949065689873739268 stripped
@@ -2542,6 +2638,10 @@ PrefabInstance:
     - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
       propertyPath: m_Name
       value: Dritto30 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775950895527352562, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f414269be2c9d0c45bbdd9503a07e0cc, type: 3}
@@ -2617,6 +2717,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Start
       objectReference: {fileID: 0}
+    - target: {fileID: 8866686748277858921, guid: 92a1d073791039548a964c8fa8280bf2, type: 3}
+      propertyPath: m_TagString
+      value: S_D_U
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92a1d073791039548a964c8fa8280bf2, type: 3}
 --- !u!4 &54241038663385688 stripped
@@ -2634,6 +2738,10 @@ PrefabInstance:
     - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_Name
       value: Corner15 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 95209496648214066, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
+      propertyPath: m_TagString
+      value: C_15_L_U
       objectReference: {fileID: 0}
     - target: {fileID: 727771303255587976, guid: ee88b865bed7c1f47b5bf4b88c0e28de, type: 3}
       propertyPath: m_RootOrder
@@ -2720,6 +2828,10 @@ PrefabInstance:
     - target: {fileID: 4754126005622392347, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
       propertyPath: m_Name
       value: Corner30 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4754126005622392347, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
+      propertyPath: m_TagString
+      value: C_30_R_D
       objectReference: {fileID: 0}
     - target: {fileID: 5110429419049289480, guid: f5e38597e7a06b0489242d0060b54d62, type: 3}
       propertyPath: m_Name

@@ -2,6 +2,7 @@ using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Barracuda;
 using Unity.Collections;
 using Unity.Jobs;
@@ -26,7 +27,7 @@ public class Player_Ghost
         this.info = z;
         this.matrix = new Queue<float[]>();
         var model = ModelLoader.Load(nn);
-        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.Compute, model);
+        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpRef, model);
         this.prediction = new float[3];
         this.canPredict = true;
         this.min = Random.Range(0, 9);
@@ -34,7 +35,7 @@ public class Player_Ghost
         //this.job = new JobHandle();
     }
 
-    public void Prediction(int timesteps, int featuresNumber, float[] lastInfo)
+    public void Prediction(int timesteps, int featuresNumber, float[] lastInfo, MonoBehaviour mb)
     {
         if (matrix.Count == timesteps)
         {
@@ -57,20 +58,38 @@ public class Player_Ghost
             //{
             //    if (++step % stepsPerFrame == 0) yield return null;
             //}
-            var output = worker.Execute(input).PeekOutput();
-            input.Dispose();
-            var pr = output.AsFloats();
-
-            //DELTA
-            for (int i = 0; i < 3; i++)
-            {
-                prediction[i] = pr[i] + lastInfo[2 + i];
-            }
-
-            output.Dispose();
+            mb.StartCoroutine(PredictionRoutine(input, lastInfo));
+            PredictionRoutine(input, lastInfo);
+            //var output = worker.Execute(input).PeekOutput();
+            //input.Dispose();
+            //var pr = output.AsFloats();
+            //
+            ////DELTA
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    prediction[i] = pr[i] + lastInfo[2 + i];
+            //}
+            //
+            //output.Dispose();
 
         }
 
     }
 
+    IEnumerator PredictionRoutine(Tensor input, float[] lastInfo)
+    {
+
+        var output = worker.Execute(input).PeekOutput();
+        yield return new WaitForCompletion(output);
+        input.Dispose();
+        var pr = output.AsFloats();
+        output.Dispose();
+        //DELTA
+        for (int i = 0; i < 3; i++)
+        {
+            prediction[i] = pr[i] + lastInfo[2 + i];
+        }
+
+
+    }
 }

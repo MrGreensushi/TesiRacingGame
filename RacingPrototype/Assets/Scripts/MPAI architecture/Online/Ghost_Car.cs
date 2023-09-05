@@ -20,7 +20,11 @@ public class Ghost_Car : MonoBehaviour
     public TrailRenderer trailRenderer;
     public Transform centerOfMass;
 
+    [Tooltip("Testing: The ghost car is visible on the server but it does not change the player's car\n" +
+        "Real-Case: Ghost car remains invisible but the prediction is applied to the player's car")]
+    public OperatingMode operatingMode;
     private PlayerScript player;
+    private bool copyCar = true;
 
 
 
@@ -36,20 +40,50 @@ public class Ghost_Car : MonoBehaviour
         mybody = GetComponent<Rigidbody>();
         lastInfo = new float[5] { 0, 0, 0, 0, 0 };
         mybody.centerOfMass = centerOfMass.localPosition;
+
+        bodyRenderer.enabled = false;
+        trailRenderer.Clear();
+        trailRenderer.enabled = false;
     }
 
+    private void FixedUpdate()
+    {
+        //if the car is being controlled by the prediction do not copy the player car otherwise yes
+        if (!copyCar) return;
+        if (toCopyBody == null) return;
+        mybody.velocity = toCopyBody.velocity;
+        mybody.angularVelocity = toCopyBody.angularVelocity;
+        mybody.position = toCopyCar.transform.position;
+        mybody.rotation = toCopyCar.transform.rotation;
+
+    }
+
+    public (float[], float[]) CommPhyInfos()
+    {
+        //VEL ANG_VEL TILE TILE_IND X_R Z_R
 
 
-    //private void Update()
-    //{
-    //    if (predicting) return;
-    //    if (toCopyBody == null) return;
-    //    mybody.velocity = toCopyBody.velocity;
-    //    mybody.angularVelocity = toCopyBody.angularVelocity;
-    //    mybody.position = toCopyCar.transform.position;
-    //    mybody.rotation = toCopyCar.transform.rotation;
-    //
-    //}
+        var vel = mybody.velocity;
+        var ang = mybody.rotation.eulerAngles.y;
+        var lp = transform.localPosition;
+        float[] info = new float[]  {
+            lp.x,
+            lp.z,
+            vel.x,
+            vel.z,
+            ang
+        };
+        var tile = ReturnInfoTileFloat();
+        float[] delta = new float[5];
+        for (int i = 0; i < 3; i++)
+        {
+            delta[i] = info[i + 2] - lastInfo[i + 2];
+        }
+        delta[2] = (delta[2] + 180) % 360 - 180;
+        var commands = player.LastAction;
+        float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3], commands[0], commands[1], commands[2] };
+        return (toRet, info);
+    }
 
     public (float[], float[]) PhysicInfos()
     {
@@ -76,8 +110,6 @@ public class Ghost_Car : MonoBehaviour
         float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3] };
         return (toRet, info);
     }
-
-
 
     public float[] ReturnInfoTileFloat()
     {
@@ -110,7 +142,6 @@ public class Ghost_Car : MonoBehaviour
 
     }
 
-
     private float[] RetrieveInfoFromHitFloat(Collider c, int ind)
     {
 
@@ -140,34 +171,55 @@ public class Ghost_Car : MonoBehaviour
     }
 
 
-
     public void UpdateBody(float[] infos)
     {
-        bodyRenderer.enabled = true;
-        trailRenderer.enabled = true;
-        trailRenderer.Clear();
+
+
+        //The ghost is driven by the prediction
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
         mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
 
-        player.clientAuthority = false; //cambio autorità sul client
-        player.ChangeAuthority(false); //cambio autorità sul selrver
+        if (operatingMode == OperatingMode.Testing)
+        {
+            UpdateTestingMode(infos);
+            copyCar = false;
+            return;
+        }
+        copyCar = false;
+        //Takes authority over the player's car both on the client and server
+        player.clientAuthority = false;
+        player.ChangeAuthority(false);
 
-
+        //Updates the real car attributes with the predicted ones
         player.UpdateRealCar(new Vector3(infos[0], 0, infos[1]), infos[2]);
+    }
+
+    private void UpdateTestingMode(float[] infos)
+    {
+        //Car is made visible on the server
+        bodyRenderer.enabled = true;
+        trailRenderer.enabled = true;
+
+        //if copycar is true it means it is the first time it is called only then the trail must be cleared
+        if (copyCar)
+            trailRenderer.Clear();
+
+        //No changes are made on the player's car
     }
 
     public void CopyFromTrue()
     {
+        copyCar = true;
         bodyRenderer.enabled = false;
         trailRenderer.Clear();
         trailRenderer.enabled = false;
 
-        mybody.velocity = toCopyBody.velocity;
-        mybody.angularVelocity = toCopyBody.angularVelocity;
-
-
-        mybody.position = toCopyBody.position;
-        mybody.rotation = toCopyBody.rotation;
+        //mybody.velocity = toCopyBody.velocity;
+        //mybody.angularVelocity = toCopyBody.angularVelocity;
+        //
+        //
+        //mybody.position = toCopyBody.position;
+        //mybody.rotation = toCopyBody.rotation;
 
 
 
@@ -177,3 +229,5 @@ public class Ghost_Car : MonoBehaviour
 
     }
 }
+
+

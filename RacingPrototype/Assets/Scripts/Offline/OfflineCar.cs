@@ -360,6 +360,8 @@ public class OfflineCar : MonoBehaviour
         rearDriverW.brakeTorque = Mathf.Infinity;
         rearDriverW.brakeTorque = Mathf.Infinity;
         */
+        acceleration = Vector3.zero;
+        lastVelocity = Vector3.zero;
         _rigidbody.velocity = Vector3.zero;
     }
 

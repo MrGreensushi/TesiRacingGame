@@ -334,9 +334,11 @@ namespace QuickStart
 
           }*/
 
-        public void UseInput(float movex, float movez, int breaking)
+        public void UseInput(int movex, int movez, int breaking)
         {
             if (!clientAuthority) return;
+
+            Messages.SendInput(movex, movez, breaking, playerName);
 
             float moveX = movex * maxSteerAngle;
             frontDriverW.steerAngle = moveX;
@@ -370,12 +372,6 @@ namespace QuickStart
             {
                 _rigidbody.velocity = _rigidbody.velocity.normalized * maxSpeed;
             }
-        }
-
-        [Command]
-        public void CmdUseInput(float movex, float movez, int breaking)
-        {
-            UseInput(movex, movez, breaking);
         }
 
         [Command]
@@ -440,6 +436,39 @@ namespace QuickStart
 
             return (toRet, info);
         }
+
+        public float[] CompareWithPrediction()
+        {
+            var (toRet, _) = DispatcherInfos();
+            return toRet;
+        }
+
+        public (float[], float[]) CommPhyDispatcherInfos()
+        {
+            //VEL ANG_VEL TILE TILE_IND X_R Z_R
+            var info = PhysicInfos;
+            var tile = ReturnInfoTileFloat();
+            float[] delta = new float[3];
+            for (int i = 0; i < 3; i++)
+            {
+                delta[i] = info[i + 2] - lastInfo[i + 2];
+            }
+            delta[2] = (delta[2] + 180) % 360 - 180;
+            float[] toRet = { delta[0],
+                delta[1],
+                delta[2],
+                tile[0],
+                tile[1],
+                tile[2],
+                tile[3],
+                LastAction[0],
+                LastAction[1],
+                LastAction[2]
+            };
+
+            return (toRet, info);
+        }
+
 
         public float[] ReturnInfoTileFloat()
         {

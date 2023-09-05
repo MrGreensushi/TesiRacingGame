@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499936,
+                "file_path": "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-499936.onnx",
+                "reward": null,
+                "creation_time": 1692959872.9585216,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-499936.pt"
+                ]
+            },
+            {
+                "steps": 999976,
+                "file_path": "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-999976.onnx",
+                "reward": 3.6759998500347137,
+                "creation_time": 1692961045.4400902,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-999976.pt"
+                ]
+            },
+            {
+                "steps": 1499978,
+                "file_path": "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-1499978.onnx",
+                "reward": null,
+                "creation_time": 1692962196.1013458,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-1499978.pt"
+                ]
+            },
+            {
+                "steps": 1500042,
+                "file_path": "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-1500042.onnx",
+                "reward": null,
+                "creation_time": 1692962196.258574,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-1500042.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500042,
+            "file_path": "results\\Dumber_acc_break_0\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1692962196.258574,
+            "auxillary_file_paths": [
+                "results\\Dumber_acc_break_0\\My Behavior\\My Behavior-1500042.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

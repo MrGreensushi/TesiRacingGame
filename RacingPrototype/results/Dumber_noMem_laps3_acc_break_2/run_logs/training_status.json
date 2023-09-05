@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499976,
+                "file_path": "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-499976.onnx",
+                "reward": null,
+                "creation_time": 1693059460.732329,
+                "auxillary_file_paths": [
+                    "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-499976.pt"
+                ]
+            },
+            {
+                "steps": 999947,
+                "file_path": "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-999947.onnx",
+                "reward": 28.259997934103012,
+                "creation_time": 1693060655.730387,
+                "auxillary_file_paths": [
+                    "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-999947.pt"
+                ]
+            },
+            {
+                "steps": 1499941,
+                "file_path": "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-1499941.onnx",
+                "reward": null,
+                "creation_time": 1693061867.263783,
+                "auxillary_file_paths": [
+                    "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-1499941.pt"
+                ]
+            },
+            {
+                "steps": 1500005,
+                "file_path": "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-1500005.onnx",
+                "reward": null,
+                "creation_time": 1693061867.4903464,
+                "auxillary_file_paths": [
+                    "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-1500005.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500005,
+            "file_path": "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1693061867.4903464,
+            "auxillary_file_paths": [
+                "results\\Dumber_noMem_laps3_acc_break_2\\My Behavior\\My Behavior-1500005.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

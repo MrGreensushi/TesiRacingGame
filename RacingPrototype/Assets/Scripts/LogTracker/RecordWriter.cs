@@ -9,9 +9,9 @@ public class RecordWriter : MonoBehaviour
 {
     public bool write;
     private Offline_CarsManager manager;
-    [ShowInInspector] private string baseName_ph = "Physic", baseName_cmd = "Commands", baseName_rl = "Rules";
-    private string physicsFilename, rulesFilename, commandsFilename;
-    public string physicsFolder, rulesFolder, commandsFolder;
+    [ShowInInspector] private string baseName_ph = "Physic", baseName_cmd = "Commands", baseName_rl = "Rules", baseName_cp = "CommPhy";
+    private string physicsFilename, rulesFilename, commandsFilename, commPhyFileName;
+    public string physicsFolder, rulesFolder, commandsFolder, commPhyFolder;
     public int name_index;
     //public float waitTime;
     public bool newRace = false;
@@ -23,20 +23,24 @@ public class RecordWriter : MonoBehaviour
             baseName_ph += " - Copia";
             baseName_cmd += " - Copia";
             baseName_rl += " - Copia";
+            baseName_cp += " - Copia";
         }
         if (name_index > 1)
         {
             baseName_ph += " (" + name_index + ")";
             baseName_cmd += " (" + name_index + ")";
             baseName_rl += " (" + name_index + ")";
+            baseName_cp += " (" + name_index + ")";
         }
         baseName_ph += ".txt";
         baseName_cmd += ".txt";
         baseName_rl += ".txt";
+        baseName_cp += ".txt";
 
         physicsFilename = physicsFolder + baseName_ph;
         rulesFilename = rulesFolder + baseName_rl;
         commandsFilename = commandsFolder + baseName_cmd;
+        commPhyFileName = commPhyFolder + baseName_cp;
     }
 
     public async Task StartWriting(int index)
@@ -52,6 +56,7 @@ public class RecordWriter : MonoBehaviour
         CreateFile(physicsFilename);
         CreateFile(rulesFilename);
         CreateFile(commandsFilename);
+        CreateFile(commPhyFileName);
         while (manager.cars == null)
             await Task.Yield();
         cars = manager.cars;
@@ -97,6 +102,7 @@ public class RecordWriter : MonoBehaviour
             physics += physich + ";";
             rules += rule + ";";
         }
+        string commPhy = physics + commands;
         //remove last ;
         if (commands.Length > 0)
             commands = commands.Remove(commands.Length - 1, 1);
@@ -104,13 +110,17 @@ public class RecordWriter : MonoBehaviour
             physics = physics.Remove(physics.Length - 1, 1);
         if (rules.Length > 0)
             rules = rules.Remove(rules.Length - 1, 1);
+        if (commPhy.Length > 0)
+            commPhy = commPhy.Remove(commPhy.Length - 1, 1);
 
         commands += '\n';
         physics += '\n';
         rules += '\n';
+        commPhy += "\n";
         File.AppendAllText(physicsFilename, physics);
         File.AppendAllText(rulesFilename, rules);
         File.AppendAllText(commandsFilename, commands);
+        File.AppendAllText(commPhyFileName, commPhy);
 
         return Task.CompletedTask;
 

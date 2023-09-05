@@ -1,0 +1,68 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 999956,
+                "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-999956.onnx",
+                "reward": 151.709992736578,
+                "creation_time": 1693157975.370211,
+                "auxillary_file_paths": [
+                    "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-999956.pt"
+                ]
+            },
+            {
+                "steps": 1499983,
+                "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-1499983.onnx",
+                "reward": 70.45832784970601,
+                "creation_time": 1693159690.5973415,
+                "auxillary_file_paths": [
+                    "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-1499983.pt"
+                ]
+            },
+            {
+                "steps": 1999941,
+                "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-1999941.onnx",
+                "reward": null,
+                "creation_time": 1693161424.5390792,
+                "auxillary_file_paths": [
+                    "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-1999941.pt"
+                ]
+            },
+            {
+                "steps": 2499945,
+                "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-2499945.onnx",
+                "reward": 255.62498182058334,
+                "creation_time": 1693163145.6697507,
+                "auxillary_file_paths": [
+                    "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-2499945.pt"
+                ]
+            },
+            {
+                "steps": 2500009,
+                "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-2500009.onnx",
+                "reward": 255.62498182058334,
+                "creation_time": 1693163145.8523326,
+                "auxillary_file_paths": [
+                    "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-2500009.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2500009,
+            "file_path": "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior.onnx",
+            "reward": 255.62498182058334,
+            "creation_time": 1693163145.8523326,
+            "auxillary_file_paths": [
+                "results\\NoMem_increasedCheckSensor_acc_break_2\\My Behavior\\My Behavior-2500009.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -17,16 +17,19 @@ public class Offline_MLcar : Agent
     Offline_LapsManager lapsManager;
     [HideInInspector] public Offline_CarsManager carsManager;
     float collisionDuration = 0f;
-    int lapsDone = 0, lapsEpisode = 10;
+    int lapsDone = 0, lapsEpisode = 1;
     //Curriculum learning
     EnvironmentParameters m_ResetParams;
     float config_number;
-    public bool accelerationRew = false, directionRew = true, breakingRew = false;
+    public bool accelerationRew = false, directionRew = true, breakingRew = false, discourageChanging = false;
     float directionSensor;
     [SerializeField] float checkpointReward, lapReward, directionReward, wrongCheckReward, wallCollisionReward, carCollisionReward;
     [SerializeField] bool completeRace = false;
     [HideInInspector] public int changedRank = 0;
+    public bool alwaysAcc = false;
+    public TestingAgents recorder;
 
+    private int totWrongChecks;
     public int[] lastAction = new int[3];
     public override void Initialize()
     {
@@ -40,10 +43,16 @@ public class Offline_MLcar : Agent
         ConfigCar();
         checkpoint = 0;
         wrongCheck = 0;
+        totWrongChecks = 0;
         lap = false;
         transform.rotation = Quaternion.identity;
         startTime = Time.time;
         lapsDone = 0;
+
+        if (recorder != null)
+        {
+            recorder.StartRace();
+        }
 
         //Debug.LogWarning($"Additional rew: {additionalRew}");
         additionalRew = 0;
@@ -91,6 +100,7 @@ public class Offline_MLcar : Agent
     {
         int moveX = GetDiscrete(actions.DiscreteActions[0]); //Girare a sinisatra o destra
         int moveZ = GetDiscrete(actions.DiscreteActions[1]); //Accellerare o retromarcia
+        if (alwaysAcc) moveZ = 1;
         int breaking = actions.DiscreteActions[2]; //frenare o meno
         lastAction = new int[3] { moveX, moveZ, breaking };
         _offlineCar.UseInput(moveX, moveZ, breaking);
@@ -152,6 +162,9 @@ public class Offline_MLcar : Agent
     //Se sbatto conto un muro penalizzo l'agent
     public void OnCollisionEnter(Collision collision)
     {
+        if (recorder != null)
+            recorder.crashes++;
+
         if (collision.gameObject.TryGetComponent(out Wall wall))
         {
             //ho colpito un muro
@@ -176,6 +189,8 @@ public class Offline_MLcar : Agent
             //Se la collisione dura da più di 2 secondi allora fine episodio
             if ((Time.time - collisionDuration) >= 5f)
             {
+                if (recorder != null)
+                    recorder.EndRace(totWrongChecks, false);
                 carsManager.EndEpisodeForAll();
                 return;
             }
@@ -188,6 +203,8 @@ public class Offline_MLcar : Agent
             //Se la collisione dura da più di 2 secondi allora fine episodio
             if ((Time.time - collisionDuration) >= 1f)
             {
+                if (recorder != null)
+                    recorder.EndRace(totWrongChecks, false);
                 EndEpisode();
             }
 
@@ -213,7 +230,7 @@ public class Offline_MLcar : Agent
     private void Rewards(int moveZ, int breaking, int moveX)
     {
         //to encorurage the agent to finisch the race quickly
-        AddReward(-0.001f);
+        //AddReward(-0.001f);
 
         if (checkpoint > 0)
         {
@@ -231,6 +248,10 @@ public class Offline_MLcar : Agent
             AddReward(-wrongCheckReward * wrongCheck);
             Debug.Log($"Reward {-wrongCheckReward * wrongCheck}for wrong checkpoint");
             wrongCheck = 0;
+            totWrongChecks++;
+
+            if (recorder != null)
+                recorder.EndRace(totWrongChecks, false);
 
             if (!completeRace)
                 EndEpisode();
@@ -269,7 +290,10 @@ public class Offline_MLcar : Agent
             Debug.Log($"Reward {-carCollisionReward} for starting a collision with a car");
         }
 
-
+        //Discourage the agent to turn often
+        if (discourageChanging)
+            if (moveX != 0)
+                AddReward(-0.005f);
 
         //Premio l'agente in base alla direzione della macchina rispetto al prossimo checkpoint
         if (directionRew && moveZ == 1)
@@ -308,7 +332,11 @@ public class Offline_MLcar : Agent
                 lapsDone++;
                 //EndEpisodForAll also reward each car based on thier rank
                 if (lapsDone >= lapsEpisode)
+                {
+                    if (recorder != null)
+                        recorder.EndRace(totWrongChecks, true);
                     carsManager.EndEpisodeForAll();
+                }
                 else
                     AddReward(lapReward);
             }
@@ -326,7 +354,12 @@ public class Offline_MLcar : Agent
             float totTime = Time.time - startTime;
             lapsDone++;
             if (lapsDone >= lapsEpisode)
+            {
+                if (recorder != null)
+                    recorder.EndRace(totWrongChecks, true);
                 EndEpisode();
+            }
+
         }
 
 

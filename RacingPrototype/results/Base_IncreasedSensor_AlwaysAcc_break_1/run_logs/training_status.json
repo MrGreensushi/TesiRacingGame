@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499973,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-499973.onnx",
+                "reward": 106.84499418735504,
+                "creation_time": 1693254745.556134,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-499973.pt"
+                ]
+            },
+            {
+                "steps": 999999,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-999999.onnx",
+                "reward": null,
+                "creation_time": 1693256506.8501074,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-999999.pt"
+                ]
+            },
+            {
+                "steps": 1499984,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-1499984.onnx",
+                "reward": 205.8499869927764,
+                "creation_time": 1693258238.474115,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-1499984.pt"
+                ]
+            },
+            {
+                "steps": 1500048,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-1500048.onnx",
+                "reward": 205.8499869927764,
+                "creation_time": 1693258238.6411035,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-1500048.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500048,
+            "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior.onnx",
+            "reward": 205.8499869927764,
+            "creation_time": 1693258238.6411035,
+            "auxillary_file_paths": [
+                "results\\Base_IncreasedSensor_AlwaysAcc_break_1\\My Behavior\\My Behavior-1500048.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

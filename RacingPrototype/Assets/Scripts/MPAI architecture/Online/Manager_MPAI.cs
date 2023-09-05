@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Unity.Barracuda;
 using Unity.Jobs;
 using UnityEngine;
+using static Messages;
 
 namespace QuickStart
 {
@@ -20,7 +21,12 @@ namespace QuickStart
         [SerializeField] GameObject ghostObject, infoObject;
         [SerializeField] Transform UI_transform;
         [SerializeField] NNModel nnModel;
-        private bool first, predicting;
+        public bool commPhy = false;
+        public int discard;
+
+        [Tooltip("Testing: The ghost car is visible on the server but it does not change the player's car\n" +
+        "Real-Case: Ghost car remains invisible but the prediction is applied to the player's car")]
+        public OperatingMode ghost_OpMode;
 
         public List<Player_Ghost> ghosts = new List<Player_Ghost>();
         Dictionary<Player_Ghost, JobHandle> jobs;
@@ -38,10 +44,11 @@ namespace QuickStart
         }
         private void Start()
         {
-            predicting = false;
-            first = true;
+            ds.commPhy = commPhy;
+
             counter = 0;
             bot = FindObjectOfType<CommandLinesManager>().bot;
+            NetworkServer.RegisterHandler<InputMessage>(OnInputMessage);
         }
 
         private void FixedUpdate()
@@ -55,9 +62,9 @@ namespace QuickStart
 
 
             counter++;
-            if (counter == 2)
+            if (counter == discard)
                 Prediction();
-            if (counter == 3)
+            if (counter == discard + 1)
                 Routine();
 
 
@@ -149,6 +156,7 @@ namespace QuickStart
                 return;
             }
             g_c.toCopyCar = c_t.gameObject;
+            g_c.operatingMode = ghost_OpMode;
             var ui_o = Instantiate(infoObject, UI_transform);
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
@@ -163,5 +171,27 @@ namespace QuickStart
 
             ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, ghosts.Count == 0));
         }
+
+        public void OnInputMessage(NetworkConnectionToClient conn, InputMessage msg)
+        {
+            //check if the input is valid:
+            var moveX = msg.moveX <= 1 && msg.moveX >= -1;
+            var moveY = msg.moveY <= 1 && msg.moveY >= -1;
+            var breaking = msg.breaking == 1 || msg.breaking == 0;
+
+
+            if (moveX && moveY && breaking) return;
+            Debug.Log("WRONG INPUT");
+
+            //one of the three is wrong!
+
+        }
     }
+}
+
+
+public enum OperatingMode : ushort
+{
+    Testing = 0,
+    RealCase = 1
 }

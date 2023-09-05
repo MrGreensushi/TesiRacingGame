@@ -654,7 +654,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 284026570}
+  transport: {fileID: 284026566}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
@@ -2087,7 +2087,8 @@ MonoBehaviour:
   timesteps: 20
   featuresNumber: 7
   pe: {fileID: 1337040907}
-  updateSelf: 0
+  operatingMode: 0
+  commPhy: 0
 --- !u!114 &1337040906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,6 +2103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pe: {fileID: 1337040907}
   usePrediction: 0
+  operatingMode: 0
+  threshold: 0
 --- !u!114 &1337040907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2114,7 +2117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd2ec9836d5b764f8f71460da02afcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nnModel: {fileID: 5022602860645237092, guid: 72740445aebb25a4e92e56ebbc9e3d08, type: 3}
+  nnModel: {fileID: 5022602860645237092, guid: c22e0b59d8da5dd489fb5c6a3c11158d, type: 3}
 --- !u!114 &1337040908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2165,7 +2168,10 @@ MonoBehaviour:
   ghostObject: {fileID: 2300728032009518240, guid: 60b46a7e44a37254d934e4875a921285, type: 3}
   infoObject: {fileID: 1985921342137281338, guid: 5a3bb565269033049aba4d9d7c066766, type: 3}
   UI_transform: {fileID: 71207328}
-  nnModel: {fileID: 5022602860645237092, guid: 72740445aebb25a4e92e56ebbc9e3d08, type: 3}
+  nnModel: {fileID: 5022602860645237092, guid: d1125d7b29a2ecf4e898668a91a2b958, type: 3}
+  commPhy: 1
+  discard: 4
+  ghost_OpMode: 0
   bot: 0
 --- !u!1 &1473527216
 GameObject:

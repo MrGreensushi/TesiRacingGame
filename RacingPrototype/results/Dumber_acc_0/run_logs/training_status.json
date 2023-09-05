@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499994,
+                "file_path": "results\\Dumber_acc_0\\My Behavior\\My Behavior-499994.onnx",
+                "reward": 8.323999091982841,
+                "creation_time": 1692689257.5548573,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_0\\My Behavior\\My Behavior-499994.pt"
+                ]
+            },
+            {
+                "steps": 999949,
+                "file_path": "results\\Dumber_acc_0\\My Behavior\\My Behavior-999949.onnx",
+                "reward": null,
+                "creation_time": 1692690942.9916701,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_0\\My Behavior\\My Behavior-999949.pt"
+                ]
+            },
+            {
+                "steps": 1499988,
+                "file_path": "results\\Dumber_acc_0\\My Behavior\\My Behavior-1499988.onnx",
+                "reward": 63.4789936542511,
+                "creation_time": 1692692709.781616,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_0\\My Behavior\\My Behavior-1499988.pt"
+                ]
+            },
+            {
+                "steps": 1500052,
+                "file_path": "results\\Dumber_acc_0\\My Behavior\\My Behavior-1500052.onnx",
+                "reward": 63.4789936542511,
+                "creation_time": 1692692709.943269,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_0\\My Behavior\\My Behavior-1500052.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500052,
+            "file_path": "results\\Dumber_acc_0\\My Behavior.onnx",
+            "reward": 63.4789936542511,
+            "creation_time": 1692692709.943269,
+            "auxillary_file_paths": [
+                "results\\Dumber_acc_0\\My Behavior\\My Behavior-1500052.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

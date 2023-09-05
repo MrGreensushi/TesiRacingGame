@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499949,
+                "file_path": "results\\FINAL_break_2\\My Behavior\\My Behavior-499949.onnx",
+                "reward": null,
+                "creation_time": 1692213858.9806173,
+                "auxillary_file_paths": [
+                    "results\\FINAL_break_2\\My Behavior\\My Behavior-499949.pt"
+                ]
+            },
+            {
+                "steps": 999942,
+                "file_path": "results\\FINAL_break_2\\My Behavior\\My Behavior-999942.onnx",
+                "reward": null,
+                "creation_time": 1692215606.6282065,
+                "auxillary_file_paths": [
+                    "results\\FINAL_break_2\\My Behavior\\My Behavior-999942.pt"
+                ]
+            },
+            {
+                "steps": 1499954,
+                "file_path": "results\\FINAL_break_2\\My Behavior\\My Behavior-1499954.onnx",
+                "reward": 8.955833745499453,
+                "creation_time": 1692217356.9715831,
+                "auxillary_file_paths": [
+                    "results\\FINAL_break_2\\My Behavior\\My Behavior-1499954.pt"
+                ]
+            },
+            {
+                "steps": 1500018,
+                "file_path": "results\\FINAL_break_2\\My Behavior\\My Behavior-1500018.onnx",
+                "reward": 8.955833745499453,
+                "creation_time": 1692217357.1371524,
+                "auxillary_file_paths": [
+                    "results\\FINAL_break_2\\My Behavior\\My Behavior-1500018.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500018,
+            "file_path": "results\\FINAL_break_2\\My Behavior.onnx",
+            "reward": 8.955833745499453,
+            "creation_time": 1692217357.1371524,
+            "auxillary_file_paths": [
+                "results\\FINAL_break_2\\My Behavior\\My Behavior-1500018.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
