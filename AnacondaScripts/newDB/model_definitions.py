@@ -15,7 +15,14 @@ def MLP_Model(units):
                                        layers.Dense(units,activation="linear"),
                                        layers.Dense(feat_pred*cars,activation="linear")])
 
-def LSTM_Model(droupout_rate, cells=3,units=32,normalization=False, mlp_cells=0,mlp_units=32):
+def LSTM_Model(droupout_rate, 
+               cells=3,
+               units=32,
+               normalization=False, 
+               mlp_cells=0,
+               mlp_units=32
+              ):
+
     inputs=tf.keras.Input(shape=(sequence_length,cars*features))
     x=(inputs)
     if(normalization):
@@ -64,7 +71,7 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
                                                     mode='min')
     reduce_lr=tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss',
                                                    factor=0.5,
-                                                   patience=10,
+                                                   patience=5,
                                                    verbose=verbose,
                                                    mode='auto',
                                                    min_delta=0.01,
@@ -86,7 +93,8 @@ def compile_and_fit(model, train,val, patience=5, epochs=10, learning_rate=0.01,
                 optimizer=tf.optimizers.Adam(learning_rate=learning_rate),
                 metrics=[tf.metrics.MeanAbsoluteError(),tf.keras.metrics.Accuracy()])
     
-    history = model.fit(train, epochs=epochs,
+    history = model.fit(train, 
+                        epochs=epochs,
                       validation_data=val,
                       verbose=verbose,
                       callbacks=[early_stopping,reduce_lr,tensorboard_callback,model_checkpoint_callback])
@@ -103,11 +111,39 @@ def MLP_Train(train,val,learning_rate=0.01,verbose=0,epoch=10,units=32,name="log
     
     return model,history
 
-def LSTM_Train(train,val,learning_rate=0.01,verbose=0,epoch=10, patience=5,name="logs",path="logs",
-               dropout=0.2, cells=3,units=32, normalization=False, mlp_cells=0,mlp_units=32):
+def LSTM_Train(train,
+               val,
+               learning_rate=0.01,
+               verbose=0,
+               epoch=10, 
+               patience=5,
+               name="logs",
+               path="logs",
+               dropout=0.2,
+               cells=3,
+               units=32,
+               normalization=False,
+               mlp_cells=0,
+               mlp_units=32
+              ):
     
-    model = LSTM_Model(dropout,cells=cells,units=units, normalization=normalization, mlp_cells=mlp_cells,mlp_units=mlp_units)
-    history = compile_and_fit(model,train,val,epochs=epoch,learning_rate=learning_rate,verbose=verbose,patience=patience,name=name,path=path)
+    model = LSTM_Model(dropout,
+                       cells=cells,
+                       units=units, 
+                       normalization=normalization, 
+                       mlp_cells=mlp_cells,
+                       mlp_units=mlp_units
+                      )
+    history = compile_and_fit(model,
+                              train,
+                              val,
+                              epochs=epoch,
+                              learning_rate=learning_rate,
+                              verbose=verbose,
+                              patience=patience,
+                              name=name,
+                              path=path
+                             )
     
     #Print_Train(history,"LSTM")
     

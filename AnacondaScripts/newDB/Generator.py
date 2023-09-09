@@ -120,10 +120,13 @@ def recreate_dataframe(series):
 def batch_generator(df):
     
     #crea un nuovo dataframe con sequence_length elementi per un numero di volte pari al batch
-    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ANG_VEL_Y"],axis=1).reset_index(drop=True)
+    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ANG_VEL_Y","ACC_X","ACC_Z"],axis=1).reset_index(drop=True)
     #dropped_df["ROT"]=dropped_df["ROT"]/360.0;
     #target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
     target_df=dropped_df.drop(["TILE"],axis=1).reset_index(drop=True)
+   
+    if(COMM_PHY):
+        target_df=target_df.drop(["MOVE_Z","MOVE_X","BREAKING"],axis=1).reset_index(drop=True)
     #dropped_df=dropped_df.drop([ "VEL_X","VEL_Z","ROT"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
