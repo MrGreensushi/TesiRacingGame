@@ -2085,7 +2085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee529475b5d63c419408ae6b4713b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timesteps: 20
+  timesteps: 50
   featuresNumber: 7
   pe: {fileID: 1337040907}
   operatingMode: 1
@@ -2170,7 +2170,7 @@ MonoBehaviour:
   ghostObject: {fileID: 2300728032009518240, guid: 60b46a7e44a37254d934e4875a921285, type: 3}
   infoObject: {fileID: 1985921342137281338, guid: 5a3bb565269033049aba4d9d7c066766, type: 3}
   UI_transform: {fileID: 71207328}
-  nnModel: {fileID: 5022602860645237092, guid: 3f5d94d6ec82904448afbf172e8a8f12, type: 3}
+  nnModel: {fileID: 5022602860645237092, guid: 39a452a7449437744bd9838816da9ef1, type: 3}
   commPhy: 0
   discard: 9
   ghost_OpMode: 0
