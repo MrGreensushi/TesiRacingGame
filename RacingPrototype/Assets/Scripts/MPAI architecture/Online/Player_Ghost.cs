@@ -1,3 +1,4 @@
+using Google.Protobuf.WellKnownTypes;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,11 +28,13 @@ public class Player_Ghost
         this.info = z;
         this.matrix = new Queue<float[]>();
         var model = ModelLoader.Load(nn);
-        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpRef, model);
+        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
         this.prediction = new float[3];
         this.canPredict = true;
         this.min = Random.Range(0, 9);
         this.max = min + 2;
+
+
         //this.job = new JobHandle();
     }
 
@@ -84,6 +87,13 @@ public class Player_Ghost
         input.Dispose();
         var pr = output.AsFloats();
         output.Dispose();
+
+        //var output = ExecuteInParts(worker, input);
+        //yield return new WaitForCompletion(output);
+        //input.Dispose();
+        //var pr = output.AsFloats();
+        //output.Dispose();
+
         //DELTA
         for (int i = 0; i < 3; i++)
         {
@@ -91,5 +101,25 @@ public class Player_Ghost
         }
 
 
+    }
+
+
+    Tensor ExecuteInParts(IWorker worker, Tensor I, int syncEveryNthLayer = 5)
+    {
+
+        syncEveryNthLayer = 52 / 4;
+        var executor = worker.ExecuteAsync(I);
+        var it = 0;
+        bool hasMoreWork;
+
+        do
+        {
+            hasMoreWork = executor.MoveNext();
+            if (++it % syncEveryNthLayer == 0)
+                worker.WaitForCompletion();
+
+        } while (hasMoreWork);
+
+        return worker.CopyOutput();
     }
 }

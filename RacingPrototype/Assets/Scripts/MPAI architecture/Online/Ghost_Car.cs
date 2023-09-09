@@ -30,6 +30,7 @@ public class Ghost_Car : MonoBehaviour
 
     public float maxSteerAngle = 30;
 
+    public Rigidbody RigidbodyCar { get { return mybody; } }
     public Vector3 InfoToCompare { get => new Vector3(toCopyBody.velocity.x, toCopyBody.velocity.z, toCopyBody.rotation.eulerAngles.y); }
     public bool Predicting { set { predicting = value; bodyRenderer.enabled = value; if (!value) trailRenderer.Clear(); trailRenderer.enabled = value; } }
     private void Start()

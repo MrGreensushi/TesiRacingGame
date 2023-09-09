@@ -70,7 +70,7 @@ namespace QuickStart
             }
         }
 
-
+        public Rigidbody RigidbodyCar { get { return _rigidbody; } }
         public float Velocity
         {
             get

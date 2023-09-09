@@ -2065,6 +2065,7 @@ GameObject:
   - component: {fileID: 1337040906}
   - component: {fileID: 1337040905}
   - component: {fileID: 1337040910}
+  - component: {fileID: 1337040911}
   m_Layer: 0
   m_Name: MPAI
   m_TagString: Untagged
@@ -2087,7 +2088,7 @@ MonoBehaviour:
   timesteps: 20
   featuresNumber: 7
   pe: {fileID: 1337040907}
-  operatingMode: 0
+  operatingMode: 1
   commPhy: 0
 --- !u!114 &1337040906
 MonoBehaviour:
@@ -2105,6 +2106,7 @@ MonoBehaviour:
   usePrediction: 0
   operatingMode: 0
   threshold: 0
+  evaluator: {fileID: 1337040911}
 --- !u!114 &1337040907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2168,11 +2170,28 @@ MonoBehaviour:
   ghostObject: {fileID: 2300728032009518240, guid: 60b46a7e44a37254d934e4875a921285, type: 3}
   infoObject: {fileID: 1985921342137281338, guid: 5a3bb565269033049aba4d9d7c066766, type: 3}
   UI_transform: {fileID: 71207328}
-  nnModel: {fileID: 5022602860645237092, guid: d1125d7b29a2ecf4e898668a91a2b958, type: 3}
-  commPhy: 1
-  discard: 4
+  nnModel: {fileID: 5022602860645237092, guid: 3f5d94d6ec82904448afbf172e8a8f12, type: 3}
+  commPhy: 0
+  discard: 9
   ghost_OpMode: 0
   bot: 0
+--- !u!114 &1337040911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337040904}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a587041ebec900c44b167dea48948fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: D:\Github\TesiRacingGame\MPAI_Evaluations\CommPhy_Discard9_LSTM_1_64_MLP_2_64
+  fileName: RealCase.txt
+  evaluating: 0
+  trueRB: {fileID: 0}
+  ghostRB: {fileID: 0}
 --- !u!1 &1473527216
 GameObject:
   m_ObjectHideFlags: 0

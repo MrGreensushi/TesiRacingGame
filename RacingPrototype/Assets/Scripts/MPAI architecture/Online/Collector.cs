@@ -18,12 +18,17 @@ namespace QuickStart
         public OperatingMode operatingMode;
         public float threshold;
 
+        public EvaluateMPAI evaluator;
+
         public void CollectPrediction(Player_Ghost pg)
         {
             //controllo se la predizione è simile al dato riscontrato
             var conn = pg.player.netIdentity.connectionToClient;
             if (ConfrontPrediction(pg))//real data è diverso dalla predizione quindi uso la predizione
             {
+                //Scrivi su file esterno la differenza tra ghost cat e player car
+                if (evaluator != null)
+                    evaluator.Writing(pg.player.RigidbodyCar, pg.ghost.RigidbodyCar);
 
                 CarsManager.instance.UIPrediction(conn, true);
                 pg.info.Info(true);
@@ -34,6 +39,9 @@ namespace QuickStart
             }
             else//uso i dati reali
             {
+                if (evaluator != null)
+                    evaluator.StopWriting();
+
                 CarsManager.instance.UIPrediction(conn, false);
                 pg.info.Info(false);
                 pg.ghost.CopyFromTrue();
