@@ -7,7 +7,8 @@ SEQUENCE_LENGTH=20
 ONLY_ONE_CAR=True
 CARS=4
 FEATURES=5
-DISCARD=10
+DISCARD=9
+COMM_PHY=False
 COLUMNS=["Player", "X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME"]
 C_NoPLayer=["X", "Z", "VEL_X","VEL_Z","ROT","ANG_VEL_Y","ACC_X","ACC_Z","TILE","TILE_IND","X_RELATIVE","Z_RELATIVE","TIME","RACE","GROUP"]
 
@@ -32,25 +33,44 @@ def single_care_dataframe(path):
     #Create new column Length wich specifiens the total length of a race
     df_gara["LENGTH"]=df_gara.groupby("RACE")["Player"].transform("count")
     #if race is lewer then a minimum then it is discarded
-    df_races=df_gara.query(f"LENGTH > {SEQUENCE_LENGTH/0.25}").reset_index(drop=True)
+    df_races=df_gara.query(f"LENGTH > {SEQUENCE_LENGTH*DISCARD+1}").reset_index(drop=True)
     df_races.drop(["Player","LENGTH"],axis=1,inplace=True)
 
-    #Since
+    train,val,test = split_train_validation_test(
+        df_races,
+        "RACE"
+    ) 
+    df_train= divide_into_groups(train)
+    df_val= divide_into_groups(val)
+    df_test= divide_into_groups(test)
+
+    return df_train, df_val,df_test
+
+def divide_into_groups(df_x):
+    df=df_x.copy()
     dfs=[]
     for i in range(DISCARD+1):
-        df_races["GROUP"]=i
-        temp=df_races.iloc[i::DISCARD+1]
+        df["GROUP"]=i
+        temp=df.iloc[i::DISCARD+1]
         temp.reset_index(drop=True,inplace=True)
         dfs.append(temp)
-    
     return dfs
 
 def subtraction_columns(df):
     df_copy=df.shift(1,fill_value=0)
-    cols = df.columns.difference(['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"])
+    #subtract all columns except the one stored in not_diff
+    if(COMM_PHY):
+        not_diff=['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE",'MOVE_X','MOVE_Z','BREAKING']
+    else:
+        not_diff=['RACE','GROUP',"TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"]
+    cols = df.columns.difference(not_diff)
     df[cols] = df[cols].sub(df_copy[cols])
     df["ROT"]=(df["ROT"]+180)%360-180
-    df.iloc[0,:-1]=0
+    df.reset_index(drop=True,inplace=True)
+    df.loc[0,cols]=0
+    #df.iloc[0,10:12]=0
+    df.loc[0,["TIME","GROUP","RACE"]]=df.loc[1,["TIME","GROUP","RACE"]]
+    
     return df
 
 def get_split(x,first,second):
@@ -65,18 +85,23 @@ def split_train_validation_test(df,group_col,train_split=0.5,val_split=0.25,test
         raise ValueError(
             f"Train + Validation split cannot be higher tan 1 given {val_split}"
         )
-     
+
+    races=df["RACE"].max()+1
+    df_train=df.loc[df['RACE'] < races*train_split]
+    df_val=df.loc[(df['RACE'] >= races*train_split) & (df['RACE'] < races*val_split)]
+    df_test=df.loc[df['RACE'] >= races*val_split]
+    
     #group by race (and player name for single car) and create a new array containing foreach race a dataset
-    df_train= df.groupby(group_col,group_keys=False).apply(get_split, first = 0, second= train_split)
-    df_val= df.groupby(group_col,group_keys=False).apply(get_split, first = train_split, second= val_split)
-    df_test= df.groupby(group_col,group_keys=False).apply(get_split, first = val_split, second= 1)
-    
-    
-    #since each race was plittend into train,val and test the result of previous operation is an array containing the data 
-    #foreach race, therefore to have the end dataframe we must concatenate each element
-    df_train=recreate_dataframe(df_train)
-    df_val=recreate_dataframe(df_val)
-    df_test=recreate_dataframe(df_test)
+    #df_train= df.groupby(group_col,group_keys=False).apply(get_split, first = 0, second= train_split)
+    #df_val= df.groupby(group_col,group_keys=False).apply(get_split, first = train_split, second= val_split)
+    #df_test= df.groupby(group_col,group_keys=False).apply(get_split, first = val_split, second= 1)
+    #
+    #
+    ##since each race was plittend into train,val and test the result of previous operation is an array containing the data 
+    ##foreach race, therefore to have the end dataframe we must concatenate each element
+    #df_train=recreate_dataframe(df_train)
+    #df_val=recreate_dataframe(df_val)
+    #df_test=recreate_dataframe(df_test)
     
     return df_train, df_val,df_test
 
@@ -95,15 +120,23 @@ def recreate_dataframe(series):
 def batch_generator(df):
     
     #crea un nuovo dataframe con sequence_length elementi per un numero di volte pari al batch
-    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ACC_X","ACC_Z","ANG_VEL_Y"],axis=1).reset_index(drop=True)
+    dropped_df=df.drop(["TIME","RACE","GROUP","X","Z","ANG_VEL_Y","ACC_X","ACC_Z"],axis=1).reset_index(drop=True)
     #dropped_df["ROT"]=dropped_df["ROT"]/360.0;
-    target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
+    #target_df=dropped_df.drop(["TILE","TILE_IND","X_RELATIVE","Z_RELATIVE"],axis=1).reset_index(drop=True)
+    target_df=dropped_df.drop(["TILE"],axis=1).reset_index(drop=True)
+   
+    if(COMM_PHY):
+        target_df=target_df.drop(["MOVE_Z","MOVE_X","BREAKING"],axis=1).reset_index(drop=True)
     #dropped_df=dropped_df.drop([ "VEL_X","VEL_Z","ROT"],axis=1).reset_index(drop=True)
     for i in range(len(dropped_df)-SEQUENCE_LENGTH):
         inputs=np.array(dropped_df.loc[i:SEQUENCE_LENGTH-1+i,:].values)
         targets=target_df.iloc[SEQUENCE_LENGTH+i,:].values
         yield inputs,targets  
 
+        
+def countSize(df):
+    return len(df.reset_index(drop=True))-SEQUENCE_LENGTH
+        
 def Generator(df):
     grouped=df.groupby(["RACE","GROUP"],group_keys=False).apply(batch_generator)
     for group in grouped:
@@ -114,7 +147,8 @@ class DataGenerator(tf.keras.utils.Sequence):
     def __init__(self,batch_size,df,max_batch):
         self.batch_size=batch_size
         self.df=df
-        self.df_length=len(df.index)-(df["RACE"].nunique()*SEQUENCE_LENGTH*CARS)
+        length=df.groupby(["RACE","GROUP"]).apply(countSize)
+        self.df_length=length.sum()
         self.max_batch=max_batch            
         print(f'Length: {len(df.index)} races: {df["RACE"].nunique()} n batches: {self.df_length} / {batch_size}')
         self.on_epoch_end()
@@ -139,7 +173,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         return tensor_x,tensor_y
     
     def __len__(self):
-        value=int(self.df_length/self.batch_size)-50
+        value=int(self.df_length/self.batch_size-2)
         if value>self.max_batch:
             value=self.max_batch
         return value
