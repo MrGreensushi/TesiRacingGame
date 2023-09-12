@@ -17,7 +17,7 @@ public class Offline_MLcar : Agent
     Offline_LapsManager lapsManager;
     [HideInInspector] public Offline_CarsManager carsManager;
     float collisionDuration = 0f;
-    int lapsDone = 0, lapsEpisode = 1;
+    int lapsDone = 0, lapsEpisode = 100;
     //Curriculum learning
     EnvironmentParameters m_ResetParams;
     float config_number;

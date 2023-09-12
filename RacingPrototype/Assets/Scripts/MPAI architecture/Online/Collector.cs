@@ -30,7 +30,11 @@ namespace QuickStart
                 if (evaluator != null)
                     evaluator.Writing(pg.player.RigidbodyCar, pg.ghost.RigidbodyCar);
 
-                CarsManager.instance.UIPrediction(conn, true);
+                //Visibile sullo schermo del giocatore solo in fase di testing
+                if (operatingMode == OperatingMode.Testing)
+                    CarsManager.instance.UIPrediction(conn, true);
+
+
                 pg.info.Info(true);
                 pg.ghost.UpdateBody(pg.prediction);
 

@@ -62,7 +62,7 @@ public class Player_Ghost
             //    if (++step % stepsPerFrame == 0) yield return null;
             //}
             mb.StartCoroutine(PredictionRoutine(input, lastInfo));
-            PredictionRoutine(input, lastInfo);
+            //PredictionRoutine(input, lastInfo);
             //var output = worker.Execute(input).PeekOutput();
             //input.Dispose();
             //var pr = output.AsFloats();

@@ -177,6 +177,7 @@ MonoBehaviour:
   bodyRenderer: {fileID: 4182836498989601914}
   trailRenderer: {fileID: 1882752464945536098}
   centerOfMass: {fileID: 1635179430744457087}
+  operatingMode: 0
   maxSteerAngle: 30
 --- !u!1 &2644348135200696099
 GameObject:
@@ -539,7 +540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3953638917654808688
 Transform:
   m_ObjectHideFlags: 0

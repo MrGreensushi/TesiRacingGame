@@ -39,7 +39,7 @@ namespace QuickStart
             pg.ghost.lastInfo = infos;
             pg.player.lastInfo = infos_T;
 
-            if (operatingMode == OperatingMode.Testing)
+            if (operatingMode != OperatingMode.Testing)
                 UpdateMatrix(delta, infos, pg);
 
             else

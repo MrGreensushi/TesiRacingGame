@@ -8,7 +8,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/OnlineGame.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/OnlineTesting.unity
     guid: 755f2c03d4045344093ffd7db64ba4e9
+  - enabled: 1
+    path: Assets/Scenes/end/offline.unity
+    guid: b031d7412f624c141bcfeab1a5134b90
+  - enabled: 1
+    path: Assets/Scenes/end/Room.unity
+    guid: 7de994d30f36ef744a49ba0ac971be52
+  - enabled: 1
+    path: Assets/Scenes/end/Player Testing.unity
+    guid: 7bb1915aeb41b024eb193c180376d557
   m_configObjects: {}

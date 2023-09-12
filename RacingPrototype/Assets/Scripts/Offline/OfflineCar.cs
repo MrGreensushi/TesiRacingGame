@@ -33,6 +33,10 @@ public class OfflineCar : MonoBehaviour
     private Vector3 lastVelocity = new Vector3();
     private Vector3 acceleration = new Vector3();
 
+
+    //Can Drive
+    public bool canDrive = true;
+
     //ML Agent
     public Offline_MLcar agent;
     public float Velocity { get => _rigidbody.velocity.magnitude; }
@@ -72,6 +76,8 @@ public class OfflineCar : MonoBehaviour
             return info;
         }
     }
+
+    public Rigidbody RigidbodyCar { get { return _rigidbody; } }
 
     //DELTA
 
@@ -244,7 +250,15 @@ public class OfflineCar : MonoBehaviour
         return toRet;
     }
 
-
+    public float[] CompareWithPrediction()
+    {
+        var (toRet, _) = DispatcherInfos();
+        for (int i = 0; i < 3; i++)
+        {
+            toRet[i] += lastInfo[i + 2];
+        }
+        return toRet;
+    }
 
     void Start()
     {
@@ -252,12 +266,16 @@ public class OfflineCar : MonoBehaviour
         //Set up camera
         if (giocatore)
         {
-            Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.localPosition = new Vector3(0, 4, -6);
+            //Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
+            //Camera.main.orthographic = false;
+            //Camera.main.fieldOfView = 60;
 
-            Camera.main.transform.localPosition = new Vector3(0, 4, -6);
-            Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
-            Camera.main.orthographic = false;
-            Camera.main.fieldOfView = 60;
+            Camera.main.transform.SetParent(transform);
+            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
+            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            Camera.main.orthographicSize = 55;
 
         }
 
@@ -283,6 +301,10 @@ public class OfflineCar : MonoBehaviour
 
     public void UseInput(float movex, float movez, int breaking)
     {
+
+        if (!canDrive) return;
+
+
         float moveX = movex * maxSteerAngle;
         frontDriverW.steerAngle = moveX;
         frontPassengerW.steerAngle = moveX;
@@ -365,4 +387,17 @@ public class OfflineCar : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
     }
 
+
+    public void UpdateRealCar(Vector3 vel, float rot)
+    {
+        //reset wheel rotations
+        frontDriverW.steerAngle = 0;
+        frontPassengerW.steerAngle = 0;
+        UpdateWheelPoses();
+
+        _rigidbody.velocity = vel;
+        _rigidbody.rotation = Quaternion.Euler(0, rot, 0);
+        //StartCoroutine(InterpolateRotation(rot, 4));
+
+    }
 }

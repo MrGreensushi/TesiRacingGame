@@ -6,11 +6,16 @@ using UnityEngine;
 
 public class CommandLinesManager : MonoBehaviour
 {
-
+    public static CommandLinesManager instance;
     public int bot = 0;
     // Start is called before the first frame update
     void Awake()
     {
+        if (instance != null)
+            Destroy(this);
+        else
+            instance = this;
+
         bot = 0;
 
         string[] args = System.Environment.GetCommandLineArgs();
@@ -52,10 +57,13 @@ public class CommandLinesManager : MonoBehaviour
             }
         }
 
-        var manager = GetComponent<NetworkManager>();
+
+        var manager = GetComponent<NetworkRoomManager>();
 
         if (startClient)
+        {
             manager.StartClient();
+        }
         else if (startServer)
             manager.StartServer();
 

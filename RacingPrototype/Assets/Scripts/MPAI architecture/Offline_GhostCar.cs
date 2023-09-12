@@ -1,3 +1,4 @@
+using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -18,91 +19,47 @@ public class Offline_GhostCar : MonoBehaviour
     public TrailRenderer trailRenderer;
     public Transform centerOfMass;
 
-    private bool onlyPosition, onlyVelocity;
+
+
+    private OfflineCar player;
+    [Tooltip("Testing: The ghost car is visible on the server but it does not change the player's car\n" +
+        "Real-Case: Ghost car remains invisible but the prediction is applied to the player's car")]
+    public OperatingMode operatingMode;
+
+    private bool copyCar = true;
 
     public float maxSteerAngle = 30;
+    public Rigidbody RigidbodyCar { get { return mybody; } }
+    public Vector3 InfoToCompare { get => new Vector3(toCopyBody.velocity.x, toCopyBody.velocity.z, toCopyBody.rotation.eulerAngles.y); }
 
-    public bool OnlyPosition
-    {
-        set
-        {
-            mybody.isKinematic = value;
-            onlyPosition = value;
-        }
-    }
-
-    public bool OnlyVelocity { set => onlyVelocity = value; }
-    public bool Predicting { set { predicting = value; bodyRenderer.enabled = value; if (!value) trailRenderer.Clear(); trailRenderer.enabled = value; } }
     private void Start()
     {
         predicting = false;
         toCopyBody = toCopyCar.GetComponent<Rigidbody>();
         mybody = GetComponent<Rigidbody>();
+        player = toCopyCar.GetComponent<OfflineCar>();
         lastInfo = new float[5] { 0, 0, 0, 0, 0 };
         mybody.centerOfMass = centerOfMass.localPosition;
 
+        bodyRenderer.enabled = false;
+        trailRenderer.Clear();
+        trailRenderer.enabled = false;
     }
 
 
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (predicting) return;
+        //if the car is being controlled by the prediction do not copy the player car otherwise yes
+        if (!copyCar) return;
+        if (toCopyBody == null) return;
         mybody.velocity = toCopyBody.velocity;
         mybody.angularVelocity = toCopyBody.angularVelocity;
         mybody.position = toCopyCar.transform.position;
         mybody.rotation = toCopyCar.transform.rotation;
-        UpdateWheelPoses();
 
     }
 
-    //DELTA
-
-    // public (float[], float[]) PhysicInfos()
-    // {
-    //     var v = mybody.velocity;
-    //     var lp = transform.localPosition;
-    //     var r = transform.rotation.eulerAngles;
-    //     float[] info = new float[]  {
-    //             lp.x,
-    //             lp.z,
-    //             v.x,
-    //             v.z,
-    //             r.y
-    //         };
-    //
-    //     float[] delta = new float[5];
-    //     for (int i = 2; i < 5; i++)
-    //     {
-    //         delta[i] = info[i] - lastInfo[i];
-    //     }
-    //     delta[0] = info[0];
-    //     delta[1] = info[1];
-    //
-    //     //for (int i = 0; i < 5; i++)
-    //     //{
-    //     //    delta[i] = info[i] - lastInfo[i];
-    //     //}
-    //
-    //     delta[4] = (delta[4] + 180) % 360 - 180;
-    //
-    //     return (delta, info);
-    //
-    // }
-
-    //REAL
-
-    //public float[] PhysicInfos()
-    //{
-    //    //VEL ANG_VEL TILE TILE_IND X_R Z_R
-    //    var vel = mybody.velocity;
-    //    var ang = mybody.rotation.eulerAngles.y / 360f; //Normalizzo la rotazione
-    //    var tile = ReturnInfoTileFloat();
-    //    float[] toRet = { vel.x, vel.z, ang, tile[0], tile[1], tile[2], tile[3] };
-    //    return toRet;
-    //}
-
-    //DELTA W/ TILE
     public (float[], float[]) PhysicInfos()
     {
         //VEL ANG_VEL TILE TILE_IND X_R Z_R
@@ -128,8 +85,6 @@ public class Offline_GhostCar : MonoBehaviour
         float[] toRet = { delta[0], delta[1], delta[2], tile[0], tile[1], tile[2], tile[3] };
         return (toRet, info);
     }
-
-
 
     public float[] ReturnInfoTileFloat()
     {
@@ -162,7 +117,6 @@ public class Offline_GhostCar : MonoBehaviour
 
     }
 
-
     private float[] RetrieveInfoFromHitFloat(Collider c, int ind)
     {
 
@@ -192,68 +146,51 @@ public class Offline_GhostCar : MonoBehaviour
     }
 
 
-    //public void UpdateBody(float[] infos, int movex)
-    //{
-    //
-    //    float moveX = movex * maxSteerAngle;
-    //    frontDriverW.steerAngle = moveX;
-    //    frontPassengerW.steerAngle = moveX;
-    //
-    //    var x = mybody.rotation.eulerAngles.x;
-    //    var z = mybody.rotation.eulerAngles.z;
-    //    if (onlyPosition)
-    //    {
-    //        mybody.isKinematic = true;
-    //        mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
-    //        mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-    //        return;
-    //    }
-    //    else if (onlyVelocity)
-    //    {
-    //        mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-    //        mybody.rotation = Quaternion.Euler(new Vector3(x, infos[2], z));
-    //        //mybody.velocity = new Vector3(infos[2], mybody.velocity.y, infos[3]);
-    //        //mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-    //        //UpdateWheelPoses();
-    //        return;
-    //    }
-    //
-    //    mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
-    //    mybody.velocity = new Vector3(infos[2], mybody.velocity.y, infos[3]);
-    //    mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-    //    UpdateWheelPoses();
-    //
-    //}
-    public void UpdateBody(float[] infos, int movex)
+    public void UpdateBody(float[] infos)
     {
-        if (onlyPosition)
+
+        //The ghost is driven by the prediction
+        mybody.velocity = new Vector3(infos[0], 0, infos[1]);
+        mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
+        //StartCoroutine(InterpolateRotation(infos[2], 4));
+
+        UpdateWheelPoses();
+        if (operatingMode == OperatingMode.Testing)
         {
-            //mybody.isKinematic = true;
-            //mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
-            //mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-            //return;
-        }
-        else if (onlyVelocity)
-        {
-            mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-            //mybody.angularVelocity = new Vector3(mybody.angularVelocity.x, infos[2], mybody.angularVelocity.z);
-            mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
+            UpdateTestingMode();
+            copyCar = false;
             return;
         }
+        copyCar = false;
 
+        player.canDrive = false;
 
-        //mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-        //mybody.angularVelocity = new Vector3(0, infos[2], 0);
-        //
-        //
-        //
-        //
-        //mybody.position = new Vector3(infos[0], transform.position.y, infos[1]);
-        //mybody.rotation = Quaternion.Euler(new Vector3(x, infos[4], z));
-        //UpdateWheelPoses();
+        //Updates the real car attributes with the predicted ones
+        player.UpdateRealCar(new Vector3(infos[0], 0, infos[1]), infos[2]);
+    }
+    private void UpdateTestingMode()
+    {
+        //Car is made visible on the server
+        bodyRenderer.enabled = true;
+        trailRenderer.enabled = true;
 
+        //if copycar is true it means it is the first time it is called only then the trail must be cleared
+        if (copyCar)
+            trailRenderer.Clear();
+
+        //No changes are made on the player's car
     }
 
+    public void CopyFromTrue()
+    {
+        copyCar = true;
+        bodyRenderer.enabled = false;
+        trailRenderer.Clear();
+        trailRenderer.enabled = false;
+
+        player.canDrive = true;
+
+    }
     private void UpdateWheelPose(WheelCollider _collider, Transform _transform)
     {
         Vector3 _pos = _transform.position;

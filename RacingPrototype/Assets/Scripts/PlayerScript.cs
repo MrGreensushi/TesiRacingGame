@@ -1,6 +1,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Mirror;
 using Mirror.Experimental;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -95,23 +96,24 @@ namespace QuickStart
         public Color ligthsColor = Color.clear;
 
         [SyncVar(hook = nameof(OnBotChanged))]
-        public bool bot = false;
+        public bool bot = true;
 
-        public void OnBotChanged(bool _Old, bool _New)
+        void OnBotChanged(bool _Old, bool _New)
         {
             bot = _New;
             if (bot)
             {
                 agent_type.BehaviorType = BehaviorType.InferenceOnly;
+                maxSpeed = 40;
+
             }
             else
             {
                 agent_type.BehaviorType = BehaviorType.HeuristicOnly;
+                maxSpeed -= 10;
             }
 
         }
-
-
 
         void OnNameChanged(string _Old, string _New)
         {
@@ -154,6 +156,7 @@ namespace QuickStart
         private void Awake()
         {
             agent_type = GetComponent<BehaviorParameters>();
+            bot = true;
         }
 
         public override void OnStartLocalPlayer()
@@ -196,14 +199,17 @@ namespace QuickStart
             net_Rigidbody = GetComponent<NetworkRigidbody>();
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
+            //vedo se il giocatore è un bot o meno
+            var beBot = CommandLinesManager.instance.bot != 0;
+
             //send infos to the server
-            CmdSetupPlayer(name, color);
+            CmdSetupPlayer(name, color, beBot);
 
 
         }
 
         [Command]
-        public void CmdSetupPlayer(string _name, Color _col)
+        public void CmdSetupPlayer(string _name, Color _col, bool _bot)
         {
             //Set up camera
             Camera.main.transform.SetParent(transform);
@@ -216,6 +222,9 @@ namespace QuickStart
             playerName = _name;
             playerColor = _col;
             OnColorChanged(Color.black, _col);
+
+            bot = _bot; //cambio sul client
+            OnBotChanged(true, _bot); //cambio sul server
 
             _rigidbody = GetComponent<Rigidbody>();
 
@@ -338,7 +347,7 @@ namespace QuickStart
         {
             if (!clientAuthority) return;
 
-            Messages.SendInput(movex, movez, breaking, playerName);
+            //Messages.SendInput(movex, movez, breaking, playerName);
 
             float moveX = movex * maxSteerAngle;
             frontDriverW.steerAngle = moveX;
@@ -440,6 +449,10 @@ namespace QuickStart
         public float[] CompareWithPrediction()
         {
             var (toRet, _) = DispatcherInfos();
+            for (int i = 0; i < 3; i++)
+            {
+                toRet[i] += lastInfo[i + 2];
+            }
             return toRet;
         }
 
@@ -533,11 +546,15 @@ namespace QuickStart
         [Server]
         public void UpdateRealCar(Vector3 vel, float rot)
         {
-            _rigidbody.velocity = vel;
-            var v_rot = _rigidbody.rotation.eulerAngles;
-            //_rigidbody.rotation = Quaternion.Euler(v_rot.x, rot, v_rot.z);
-            _rigidbody.rotation = Quaternion.Euler(0, rot, 0);
+            //reset wheel rotations
+            frontDriverW.steerAngle = 0;
+            frontPassengerW.steerAngle = 0;
+            UpdateWheelPoses();
 
+            _rigidbody.velocity = vel;
+            //_rigidbody.rotation = Quaternion.Euler(v_rot.x, rot, v_rot.z);
+            //_rigidbody.rotation = Quaternion.Euler(0, rot, 0);
+            StartCoroutine(InterpolateRotation(rot, 4));
 
 
 
@@ -555,6 +572,37 @@ namespace QuickStart
             //frontPassengerW.steerAngle = moveX;
             //
             //UpdateWheelPoses();
+        }
+
+
+        [Server]
+
+
+        public IEnumerator InterpolateRotation(float rot, int iterations)
+        {
+
+            var diffRot = rot - _rigidbody.rotation.eulerAngles.y;
+            diffRot = (diffRot + 180) % 360 - 180;
+            float angVel = diffRot / (iterations * 0.02f);
+
+            Vector3 EulerAngelVel = new Vector3(0, angVel, 0);
+
+            if (diffRot < 0f)
+                EulerAngelVel *= -1;
+            var deltaRot = Quaternion.Euler(EulerAngelVel * Time.fixedDeltaTime);
+
+            int counter = 0;
+
+
+
+            while (counter < iterations)
+            {
+
+                _rigidbody.MoveRotation(_rigidbody.rotation * deltaRot);
+                counter++;
+                yield return new WaitForFixedUpdate();
+            }
+            _rigidbody.rotation = Quaternion.Euler(0, rot, 0);
         }
 
         //private void FixedUpdate()

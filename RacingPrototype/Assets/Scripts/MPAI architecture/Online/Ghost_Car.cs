@@ -3,6 +3,7 @@ using Mirror.Experimental;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 
 public class Ghost_Car : MonoBehaviour
@@ -20,13 +21,29 @@ public class Ghost_Car : MonoBehaviour
     public TrailRenderer trailRenderer;
     public Transform centerOfMass;
 
+
     [Tooltip("Testing: The ghost car is visible on the server but it does not change the player's car\n" +
         "Real-Case: Ghost car remains invisible but the prediction is applied to the player's car")]
     public OperatingMode operatingMode;
     private PlayerScript player;
     private bool copyCar = true;
 
+    public bool Heuristic
+    {
+        set
+        {
+            if (!toCopyCar.TryGetComponent(out BehaviorParameters bp))
+            {
+                Debug.LogError("Non ha componente Behavior Parameters!");
+                return;
+            }
+            if (value)
+                bp.BehaviorType = BehaviorType.HeuristicOnly;
+            else
+                bp.BehaviorType = BehaviorType.Default;
 
+        }
+    }
 
     public float maxSteerAngle = 30;
 
@@ -174,15 +191,16 @@ public class Ghost_Car : MonoBehaviour
 
     public void UpdateBody(float[] infos)
     {
-
+        UpdateTestingMode();
 
         //The ghost is driven by the prediction
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-        mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
+        //mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
+        StartCoroutine(InterpolateRotation(infos[2], 4));
 
         if (operatingMode == OperatingMode.Testing)
         {
-            UpdateTestingMode(infos);
+            UpdateTestingMode();
             copyCar = false;
             return;
         }
@@ -195,7 +213,7 @@ public class Ghost_Car : MonoBehaviour
         player.UpdateRealCar(new Vector3(infos[0], 0, infos[1]), infos[2]);
     }
 
-    private void UpdateTestingMode(float[] infos)
+    private void UpdateTestingMode()
     {
         //Car is made visible on the server
         bodyRenderer.enabled = true;
@@ -229,6 +247,33 @@ public class Ghost_Car : MonoBehaviour
 
 
     }
+    public IEnumerator InterpolateRotation(float rot, int iterations)
+    {
+
+        var diffRot = rot - mybody.rotation.eulerAngles.y;
+        diffRot = (diffRot + 180) % 360 - 180;
+        float angVel = diffRot / (iterations * 0.02f);
+
+        Vector3 EulerAngelVel = new Vector3(0, angVel, 0);
+
+        if (diffRot < 0f)
+            EulerAngelVel *= -1;
+        var deltaRot = Quaternion.Euler(EulerAngelVel * Time.fixedDeltaTime);
+
+        int counter = 0;
+
+
+
+        while (counter < iterations)
+        {
+
+            mybody.MoveRotation(mybody.rotation * deltaRot);
+            counter++;
+            yield return new WaitForFixedUpdate();
+        }
+        mybody.rotation = Quaternion.Euler(0, rot, 0);
+    }
+
 }
 
 

@@ -21,6 +21,7 @@ namespace QuickStart
         [SerializeField] GameObject ghostObject, infoObject;
         [SerializeField] Transform UI_transform;
         [SerializeField] NNModel nnModel;
+        [SerializeField] bool firstPlayerHeuristic;
         public bool commPhy = false;
         public int discard;
 
@@ -47,7 +48,8 @@ namespace QuickStart
             ds.commPhy = commPhy;
 
             counter = 0;
-            bot = FindObjectOfType<CommandLinesManager>().bot;
+
+            bot = CommandLinesManager.instance.bot;
             NetworkServer.RegisterHandler<InputMessage>(OnInputMessage);
         }
 
@@ -157,19 +159,22 @@ namespace QuickStart
             }
             g_c.toCopyCar = c_t.gameObject;
             g_c.operatingMode = ghost_OpMode;
+            //g_c.Heuristic = firstPlayerHeuristic;
             var ui_o = Instantiate(infoObject, UI_transform);
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
 
-            if (bot > 0)
-            {
-                bot--;
-                c_t.bot = true;
-                //c_t.OnBotChanged(false, true);
+            //if (bot == 0)
+            //{
+            //    bot--;
+            //    c_t.bot = false;
+            //    c_t.OnBotChanged(true, false);
 
-            }
+            //}
 
             ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, ghosts.Count == 0));
+
+            firstPlayerHeuristic = false; //only the first player is heuristic
         }
 
         public void OnInputMessage(NetworkConnectionToClient conn, InputMessage msg)

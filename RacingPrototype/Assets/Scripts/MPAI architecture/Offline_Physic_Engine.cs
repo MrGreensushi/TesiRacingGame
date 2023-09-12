@@ -9,16 +9,13 @@ public class Offline_Physic_Engine : MonoBehaviour
     Model model;
     IWorker worker;
     public float[] prediction;
-    public int movex;
-    public bool predictionDone;
     Queue<float[]> matrix;
-    public bool usePrediction = false;
 
+    public int Count { get => matrix.Count; }
     private void Start()
     {
         model = ModelLoader.Load(nnModel);
-        worker = WorkerFactory.CreateWorker(WorkerFactory.Type.Compute, model);
-        predictionDone = false;
+        worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
         matrix = new Queue<float[]>();
 
     }
@@ -32,7 +29,6 @@ public class Offline_Physic_Engine : MonoBehaviour
         {
             Tensor input = new Tensor(1, 1, featuresNumber, timesteps);
             var array = matrix.ToArray();
-
             for (int i = 0; i < timesteps; i++)
             {
                 for (int j = 0; j < featuresNumber; j++)
@@ -43,26 +39,19 @@ public class Offline_Physic_Engine : MonoBehaviour
             }
 
 
-            Tensor output = worker.Execute(input).PeekOutput();
-
-            //Wait  for the prediction completion
+            var output = worker.Execute(input).PeekOutput();
             yield return new WaitForCompletion(output);
-
             input.Dispose();
-            prediction = output.AsFloats();
+            var pr = output.AsFloats();
+            output.Dispose();
 
             //DELTA
             for (int i = 0; i < 3; i++)
             {
-                prediction[i] += lastInfo[2 + i];
+                prediction[i] = pr[i] + lastInfo[2 + i];
             }
 
-            output.Dispose();
-
         }
-
-        predictionDone = true;
-
 
     }
 
@@ -72,8 +61,9 @@ public class Offline_Physic_Engine : MonoBehaviour
         if (matrix.Count == timesteps)
             matrix.Dequeue();
         matrix.Enqueue(input);
-        if (!usePrediction) return;
-        StartCoroutine(MakePrediction(timesteps, featuresNumber, lastInfo));
+
+        if (matrix.Count == timesteps)
+            StartCoroutine(MakePrediction(timesteps, featuresNumber, lastInfo));
 
 
     }
