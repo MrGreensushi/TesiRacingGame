@@ -16,23 +16,46 @@ namespace QuickStart
         [Tooltip("Testing: the prediction is applied every 10 seconds \n" +
             "Real-Case: The prediction is appliead only if it differenties too much")]
         public OperatingMode operatingMode;
+
+        public LatencyLevel level;
+        private Latency lat;
+        private double lastActivation;
+        private int randomAddedLatency;
+        private bool newActivation;
+
         public float threshold;
 
         public EvaluateMPAI evaluator;
+
+
+        public void Start()
+        {
+            newActivation = true;
+            if (CommandLinesManager.instance != null)
+            {
+                if (CommandLinesManager.instance.level != LatencyLevel.None)
+                    level = CommandLinesManager.instance.level;
+            }
+            lat = new Latency(level);
+            lastActivation = 0;
+            randomAddedLatency = 0;
+        }
 
         public void CollectPrediction(Player_Ghost pg)
         {
             //controllo se la predizione è simile al dato riscontrato
             var conn = pg.player.netIdentity.connectionToClient;
-            if (ConfrontPrediction(pg))//real data è diverso dalla predizione quindi uso la predizione
+            //if (ConfrontPrediction(pg))//real data è diverso dalla predizione quindi uso la predizione
+
+            if (pg.predicting)//Se stavo predicendo
             {
                 //Scrivi su file esterno la differenza tra ghost cat e player car
                 if (evaluator != null)
                     evaluator.Writing(pg.player.RigidbodyCar, pg.ghost.RigidbodyCar);
 
                 //Visibile sullo schermo del giocatore solo in fase di testing
-                if (operatingMode == OperatingMode.Testing)
-                    CarsManager.instance.UIPrediction(conn, true);
+                //if (operatingMode == OperatingMode.Testing)
+                CarsManager.instance.UIPrediction(conn, true);
 
 
                 pg.info.Info(true);
@@ -56,7 +79,7 @@ namespace QuickStart
         }
 
 
-        private bool ConfrontPrediction(Player_Ghost pg)
+        public bool ConfrontPrediction(Player_Ghost pg)
         {
 
             if (operatingMode == OperatingMode.Testing)
@@ -71,17 +94,20 @@ namespace QuickStart
             }
             else
             {
-                //Controllo la predizione, se il MAE è maggiore del treshold allora sbaglia
-                var diff = 0f;
-                var toCompare = pg.player.CompareWithPrediction();
-                var prediction = pg.prediction;
-                for (int i = 0; i < prediction.Length; i++)
-                {
-                    diff += Mathf.Abs(toCompare[i] - prediction[i]);
-                }
-                diff /= (float)prediction.Length;
-                //Debug.Log(diff.ToString());
-                return diff > threshold;
+                ////Controllo la predizione, se il MAE è maggiore del treshold allora sbaglia
+                //var diff = 0f;
+                //var toCompare = pg.player.CompareWithPrediction();
+                //var prediction = pg.prediction;
+                //for (int i = 0; i < prediction.Length; i++)
+                //{
+                //    diff += Mathf.Abs(toCompare[i] - prediction[i]);
+                //}
+                //diff /= (float)prediction.Length;
+                ////Debug.Log(diff.ToString());
+                //return diff > threshold;
+
+                return pg.CheckLatencyActivation();
+
             }
 
 
@@ -91,3 +117,4 @@ namespace QuickStart
         }
     }
 }
+

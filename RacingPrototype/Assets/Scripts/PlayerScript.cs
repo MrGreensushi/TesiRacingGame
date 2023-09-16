@@ -162,11 +162,16 @@ namespace QuickStart
         public override void OnStartLocalPlayer()
         {
             //Set up camera
+            //Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.localPosition = new Vector3(0, 4, -6);
+            //Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
+            //Camera.main.orthographic = false;
+            //Camera.main.fieldOfView = 60;
             Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0, 4, -6);
-            Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
-            Camera.main.orthographic = false;
-            Camera.main.fieldOfView = 60;
+            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
+            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            Camera.main.orthographicSize = 55;
+
 
 
             //Setup player infos
@@ -202,20 +207,31 @@ namespace QuickStart
             //vedo se il giocatore è un bot o meno
             var beBot = CommandLinesManager.instance.bot != 0;
 
+            //ritrovo le informazioni riguardate la latenza fittizia
+            var cl = CommandLinesManager.instance;
+            var level = LatencyLevel.None;
+            var doNotMPAI = false;
+
+            if (cl != null)
+            {
+                level = cl.level;
+                doNotMPAI = cl.doNotMPAI;
+            }
+
             //send infos to the server
-            CmdSetupPlayer(name, color, beBot);
+            CmdSetupPlayer(name, color, beBot, doNotMPAI, level);
 
 
         }
 
         [Command]
-        public void CmdSetupPlayer(string _name, Color _col, bool _bot)
+        public void CmdSetupPlayer(string _name, Color _col, bool _bot, bool doNotMPAI, LatencyLevel level)
         {
-            //Set up camera
-            Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
-            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            Camera.main.orthographicSize = 55;
+            ////Set up camera
+            //Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.localPosition = new Vector3(0, 50, 0);
+            //Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            //Camera.main.orthographicSize = 55;
 
 
             //Player info sent to server, then server updates sync vars which handles it on all clients
@@ -228,10 +244,7 @@ namespace QuickStart
 
             _rigidbody = GetComponent<Rigidbody>();
 
-            //colore del giocatore corrisponde anche al colore della scia
-            trilRenderer.enabled = true;
-            trilRenderer.startColor = _col;
-            trilRenderer.endColor = _col;
+
 
             NetworkConnectionToClient conn = GetComponent<NetworkIdentity>().connectionToClient;
             //recupera tutte le altre ui
@@ -254,10 +267,10 @@ namespace QuickStart
             InstantiateUI(_name, _col);
 
             //star position
-            var starting = StartingPointsManager.instance.StartingPoint(transform);
+            //var starting = StartingPointsManager.instance.StartingPoint(transform);
 
             //aggiungi macchina al sistema MPAI
-            Manager_MPAI.instance.AddCar(this);
+            Manager_MPAI.instance.AddCar(this, doNotMPAI, level);
 
             //lastInfo seto to zero
             lastInfo = new float[5] { 0, 0, 0, 0, 0 };
@@ -268,16 +281,22 @@ namespace QuickStart
             net_Rigidbody = GetComponent<NetworkRigidbody>();
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
-            clientAuthority = true;
+            //colore del giocatore corrisponde anche al colore della scia
+            trilRenderer.enabled = true;
+            trilRenderer.startColor = _col;
+            trilRenderer.endColor = _col;
 
-            TargetInstantiatePreviousUis(conn, starting, names.ToArray(), colors.ToArray());
+            clientAuthority = true;
+            OnAuthorityChanged(false, true);
+
+            TargetInstantiatePreviousUis(conn, Vector3.zero, names.ToArray(), colors.ToArray());
         }
 
         [TargetRpc]
         public void TargetInstantiatePreviousUis(NetworkConnection target, Vector3 start, string[] names, Color[] colors)
         {
 
-            transform.localPosition = start;
+            //transform.localPosition = start;
 
             for (int i = 0; i < names.Length - 1; i++)
             {
@@ -285,6 +304,18 @@ namespace QuickStart
                 CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
             }
             agent.enabled = true;
+        }
+
+
+        [TargetRpc]
+        public void TargetTeleportCar(NetworkConnection target, Vector3 pos, Quaternion rot, Vector3 vel)
+        {
+            _rigidbody.velocity = vel;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.rotation = rot;
+            _rigidbody.position = pos;
+
+
         }
 
         [ClientRpc]
@@ -552,26 +583,10 @@ namespace QuickStart
             UpdateWheelPoses();
 
             _rigidbody.velocity = vel;
-            //_rigidbody.rotation = Quaternion.Euler(v_rot.x, rot, v_rot.z);
-            //_rigidbody.rotation = Quaternion.Euler(0, rot, 0);
-            StartCoroutine(InterpolateRotation(rot, 4));
+            _rigidbody.rotation = Quaternion.Euler(0, rot, 0);
 
+            //StartCoroutine(InterpolateRotation(rot, 4));
 
-
-            //var diff = Vector3.Angle(vel.normalized, transform.rotation.eulerAngles.normalized);
-            //float moveX = 0f;
-            //
-            //if (Mathf.Abs(diff) > 1f)
-            //    moveX = 1f;
-            //else if (Mathf.Abs(diff) < 1f)
-            //    moveX = -1f;
-            //
-            //
-            //moveX = moveX * maxSteerAngle;
-            //frontDriverW.steerAngle = moveX;
-            //frontPassengerW.steerAngle = moveX;
-            //
-            //UpdateWheelPoses();
         }
 
 

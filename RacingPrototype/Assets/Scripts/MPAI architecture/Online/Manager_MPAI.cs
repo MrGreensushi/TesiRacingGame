@@ -79,6 +79,9 @@ namespace QuickStart
             {
                 if (!item.canPredict) continue;
 
+                if (item.doNotMPAI) continue;
+
+                item.predicting = cl.ConfrontPrediction(item);
                 ds.Routine(item);
 
             }
@@ -94,6 +97,8 @@ namespace QuickStart
             foreach (var item in ghosts)
             {
                 if (!item.canPredict) continue;
+
+                if (item.doNotMPAI) continue;
 
                 if (item.matrix.Count == ds.timesteps)
                 {
@@ -149,7 +154,7 @@ namespace QuickStart
         //}
 
 
-        public void AddCar(PlayerScript c_t)
+        public void AddCar(PlayerScript c_t, bool doNotMPAI, LatencyLevel level)
         {
             var ghost = Instantiate(ghostObject);
             if (!ghost.TryGetComponent(out Ghost_Car g_c))
@@ -164,15 +169,9 @@ namespace QuickStart
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
 
-            //if (bot == 0)
-            //{
-            //    bot--;
-            //    c_t.bot = false;
-            //    c_t.OnBotChanged(true, false);
 
-            //}
 
-            ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, ghosts.Count == 0));
+            ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, doNotMPAI, level));
 
             firstPlayerHeuristic = false; //only the first player is heuristic
         }

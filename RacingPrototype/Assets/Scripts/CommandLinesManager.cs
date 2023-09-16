@@ -8,6 +8,8 @@ public class CommandLinesManager : MonoBehaviour
 {
     public static CommandLinesManager instance;
     public int bot = 0;
+    public LatencyLevel level;
+    public bool doNotMPAI;
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,6 +19,8 @@ public class CommandLinesManager : MonoBehaviour
             instance = this;
 
         bot = 0;
+        level = LatencyLevel.None;
+        doNotMPAI = false;
 
         string[] args = System.Environment.GetCommandLineArgs();
         int widthInput = -1;
@@ -55,6 +59,23 @@ public class CommandLinesManager : MonoBehaviour
             {
                 bot++;
             }
+            else if (args[i] == "-l1")
+            {
+                level = LatencyLevel.L1;
+            }
+            else if (args[i] == "-l2")
+            {
+                level = LatencyLevel.L2;
+            }
+            else if (args[i] == "-l3")
+            {
+                level = LatencyLevel.L3;
+            }
+            else if (args[i] == "-dont")
+            {
+                doNotMPAI = true;
+            }
+
         }
 
 
@@ -74,7 +95,6 @@ public class CommandLinesManager : MonoBehaviour
         var disp = Screen.mainWindowDisplayInfo;
         if (x != -1 && y != -1)
             Screen.MoveMainWindowTo(disp, new Vector2Int(x, y));
-
     }
 
 

@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 435397483}
   - component: {fileID: 435397482}
   - component: {fileID: 435397486}
+  - component: {fileID: 435397487}
+  - component: {fileID: 435397488}
   m_Layer: 0
   m_Name: RoomManager
   m_TagString: Untagged
@@ -248,6 +250,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bot: 0
+  level: 0
+--- !u!114 &435397487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435397481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wrap: {fileID: 435397483}
+  jitter: 0
+  jitterSpeed: 1
+  reliableLatency: 0
+  unreliableLoss: 0
+  unreliableLatency: 0
+  unreliableScramble: 0
+--- !u!114 &435397488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435397481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37686dd98dfea5841a5857d65a7bdb70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  durationL1: 500
+  durationL2: 1000
+  durationL3: 2000
+  frequencyL1: 10000
+  frequencyL2: 8000
+  frequencyL3: 4000
 --- !u!1 &511487887
 GameObject:
   m_ObjectHideFlags: 0

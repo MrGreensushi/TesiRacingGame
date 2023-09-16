@@ -3,6 +3,7 @@ using Mirror.Experimental;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.MLAgents.Policies;
 using UnityEngine;
 
@@ -191,12 +192,10 @@ public class Ghost_Car : MonoBehaviour
 
     public void UpdateBody(float[] infos)
     {
-        UpdateTestingMode();
-
         //The ghost is driven by the prediction
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
-        //mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
-        StartCoroutine(InterpolateRotation(infos[2], 4));
+        mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
+        //StartCoroutine(InterpolateRotation(infos[2], 4));
 
         if (operatingMode == OperatingMode.Testing)
         {
@@ -206,7 +205,7 @@ public class Ghost_Car : MonoBehaviour
         }
         copyCar = false;
         //Takes authority over the player's car both on the client and server
-        player.clientAuthority = false;
+        //player.clientAuthority = false;
         player.ChangeAuthority(false);
 
         //Updates the real car attributes with the predicted ones
@@ -228,23 +227,31 @@ public class Ghost_Car : MonoBehaviour
 
     public void CopyFromTrue()
     {
+        if (!copyCar)// se è appena finito SPG allora copycar è falso, per assicurarsi che il client posizioni la macchina rispetto al server tardo la consegna dell'autorità di un frame
+            AwaitToReturnControll();
+
+
+
         copyCar = true;
         bodyRenderer.enabled = false;
         trailRenderer.Clear();
         trailRenderer.enabled = false;
 
-        //mybody.velocity = toCopyBody.velocity;
-        //mybody.angularVelocity = toCopyBody.angularVelocity;
-        //
-        //
-        //mybody.position = toCopyBody.position;
-        //mybody.rotation = toCopyBody.rotation;
+    }
 
 
+    private async void AwaitToReturnControll()
+    {
+        if (operatingMode == OperatingMode.RealCase)
+            player.TargetTeleportCar(
+                player.netIdentity.connectionToClient,
+                mybody.position,
+                mybody.rotation,
+                mybody.velocity
+                );
 
+        await Task.Delay(150);
         player.ChangeAuthority(true); //cambio autorità sul selrver
-        player.clientAuthority = true; //cambio autorità sul client
-
 
     }
     public IEnumerator InterpolateRotation(float rot, int iterations)

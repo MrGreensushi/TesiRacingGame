@@ -1,4 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
+using Mirror;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,11 +18,16 @@ public class Player_Ghost
     public MPAI_Info info;
     public float[] prediction;
     public IWorker worker;
-    public bool canPredict;
+    public bool canPredict, doNotMPAI, predicting;
     public int min, max;
 
+    public LatencyLevel level;
+    private Latency lat;
+    private double lastActivation;
+    private int randomAddedLatency;
+    private bool newActivation;
 
-    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z, NNModel nn, bool canPredict)
+    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z, NNModel nn, bool doNotMPAI, LatencyLevel level)
     {
         this.ghost = y;
         this.player = x;
@@ -33,49 +39,63 @@ public class Player_Ghost
         this.canPredict = true;
         this.min = Random.Range(0, 9);
         this.max = min + 2;
+        this.predicting = false;
 
+        this.doNotMPAI = doNotMPAI;
+        this.level = level;
+        if (level == LatencyLevel.None)
+        {
+            this.lat = new Latency(LatencyLevel.L1);
+        }
+        else
+        {
+            this.lat = new Latency(level);
+        }
+        this.lastActivation = 0;
+        this.randomAddedLatency = 0;
+        this.newActivation = true;
 
         //this.job = new JobHandle();
     }
 
     public void Prediction(int timesteps, int featuresNumber, float[] lastInfo, MonoBehaviour mb)
     {
-        if (matrix.Count == timesteps)
-        {
-            Tensor input = new Tensor(1, 1, featuresNumber, timesteps);
-            var array = matrix.ToArray();
-            for (int i = 0; i < timesteps; i++)
-            {
-                for (int j = 0; j < featuresNumber; j++)
-                {
-                    input[0, 0, j, i] = array[i][j];
-                }
+        if (matrix.Count != timesteps) return;
 
+        Tensor input = new Tensor(1, 1, featuresNumber, timesteps);
+        var array = matrix.ToArray();
+        for (int i = 0; i < timesteps; i++)
+        {
+            for (int j = 0; j < featuresNumber; j++)
+            {
+                input[0, 0, j, i] = array[i][j];
             }
 
-
-            //int stepsPerFrame = 5;
-            //var enumerator = worker.StartManualSchedule(input);
-            //int step = 0;
-            //while (enumerator.MoveNext())
-            //{
-            //    if (++step % stepsPerFrame == 0) yield return null;
-            //}
-            mb.StartCoroutine(PredictionRoutine(input, lastInfo));
-            //PredictionRoutine(input, lastInfo);
-            //var output = worker.Execute(input).PeekOutput();
-            //input.Dispose();
-            //var pr = output.AsFloats();
-            //
-            ////DELTA
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    prediction[i] = pr[i] + lastInfo[2 + i];
-            //}
-            //
-            //output.Dispose();
-
         }
+
+
+        //int stepsPerFrame = 5;
+        //var enumerator = worker.StartManualSchedule(input);
+        //int step = 0;
+        //while (enumerator.MoveNext())
+        //{
+        //    if (++step % stepsPerFrame == 0) yield return null;
+        //}
+        mb.StartCoroutine(PredictionRoutine(input, lastInfo));
+        //PredictionRoutine(input, lastInfo);
+        //var output = worker.Execute(input).PeekOutput();
+        //input.Dispose();
+        //var pr = output.AsFloats();
+        //
+        ////DELTA
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    prediction[i] = pr[i] + lastInfo[2 + i];
+        //}
+        //
+        //output.Dispose();
+
+
 
     }
 
@@ -121,5 +141,26 @@ public class Player_Ghost
         } while (hasMoreWork);
 
         return worker.CopyOutput();
+    }
+
+
+    public bool CheckLatencyActivation()
+    {
+        var time = NetworkTime.time;
+        //time in second lo trasformo in millisecodi
+        var sub = (time - lastActivation) * 1000;
+
+        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration + randomAddedLatency)
+        {
+            if (newActivation)
+            {
+                randomAddedLatency = Random.Range(0, 4) * 1000; //aggiungo da 0 a 3 secondi 
+                lastActivation = time;
+            }
+            newActivation = false;
+            return true;
+        }
+        newActivation = true;
+        return false;
     }
 }

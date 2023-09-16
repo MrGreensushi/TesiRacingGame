@@ -88,10 +88,12 @@ namespace QuickStart
                 pg.matrix.Dequeue();
             pg.matrix.Enqueue(input);
 
-            if (pg.matrix.Count == timesteps)
-            {
+            if (pg.matrix.Count != timesteps) return;
+
+            if (!pg.predicting) return;
+            
                 pg.Prediction(timesteps, featuresNumber, lastInfo, this);
-            }
+            
 
 
         }
