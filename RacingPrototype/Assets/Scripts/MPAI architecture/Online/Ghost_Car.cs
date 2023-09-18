@@ -27,7 +27,7 @@ public class Ghost_Car : MonoBehaviour
         "Real-Case: Ghost car remains invisible but the prediction is applied to the player's car")]
     public OperatingMode operatingMode;
     private PlayerScript player;
-    private bool copyCar = true;
+    private bool copyCar = true, teleportCar=false;
 
     public bool Heuristic
     {
@@ -228,7 +228,7 @@ public class Ghost_Car : MonoBehaviour
     public void CopyFromTrue()
     {
         if (!copyCar)// se è appena finito SPG allora copycar è falso, per assicurarsi che il client posizioni la macchina rispetto al server tardo la consegna dell'autorità di un frame
-            AwaitToReturnControll();
+            teleportCar=true;
 
 
 
@@ -239,9 +239,10 @@ public class Ghost_Car : MonoBehaviour
 
     }
 
-
-    private async void AwaitToReturnControll()
+    private void LateUpdate()
     {
+        if (!teleportCar) return;
+        
         if (operatingMode == OperatingMode.RealCase)
             player.TargetTeleportCar(
                 player.netIdentity.connectionToClient,
@@ -250,10 +251,13 @@ public class Ghost_Car : MonoBehaviour
                 mybody.velocity
                 );
 
-        await Task.Delay(150);
+        
         player.ChangeAuthority(true); //cambio autorità sul selrver
-
+        teleportCar = false;
     }
+
+
+    
     public IEnumerator InterpolateRotation(float rot, int iterations)
     {
 

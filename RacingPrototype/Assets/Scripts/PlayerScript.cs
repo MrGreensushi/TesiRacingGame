@@ -102,17 +102,10 @@ namespace QuickStart
         {
             bot = _New;
             if (bot)
-            {
                 agent_type.BehaviorType = BehaviorType.InferenceOnly;
-                maxSpeed = 40;
-
-            }
-            else
-            {
+  
+            else            
                 agent_type.BehaviorType = BehaviorType.HeuristicOnly;
-                maxSpeed -= 10;
-            }
-
         }
 
         void OnNameChanged(string _Old, string _New)
@@ -346,34 +339,7 @@ namespace QuickStart
             _transform.rotation = _quat;
         }
 
-        /*  private void FixedUpdate()
-          {
-              if (!isLocalPlayer)
-                  return;
-              float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
-              frontDriverW.steerAngle = moveX;
-              frontPassengerW.steerAngle = moveX;
-
-              float moveZ = Input.GetAxis("Vertical") * motorForce;
-              frontPassengerW.motorTorque = moveZ;
-              frontDriverW.motorTorque = moveZ;
-
-              int breaking = Input.GetButton("Fire2") ? 1 : 0;
-              frontDriverW.brakeTorque = breakForce * breaking;
-              frontPassengerW.brakeTorque = breakForce * breaking;
-
-              Color _col = breaking == 1 ? Color.white : Color.clear;
-              if (_col != render.materials[1].GetColor("_EmissionColor"))
-              {
-                  CmdBrakeLights(_col);
-              }
-
-              //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
-              UpdateWheelPoses();
-
-
-          }*/
-
+        [Client]
         public void UseInput(int movex, int movez, int breaking)
         {
             if (!clientAuthority) return;
@@ -397,21 +363,21 @@ namespace QuickStart
             frontDriverW.brakeTorque = breakForce * breaking;
             frontPassengerW.brakeTorque = breakForce * breaking;
 
-            Color _col = breaking == 1 ? Color.white : Color.clear;
-            if (_col != render.materials[1].GetColor("_EmissionColor"))
-            {
-                lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
-                render.materials[1] = lightsMaterialClone;
-                render.materials[1].SetColor("_EmissionColor", _col); //modifica copia materiale
-            }
-
-            //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
-            UpdateWheelPoses();
+            //Color _col = breaking == 1 ? Color.white : Color.clear;
+            //if (_col != render.materials[1].GetColor("_EmissionColor"))
+            //{
+            //    lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
+            //    render.materials[1] = lightsMaterialClone;
+            //    render.materials[1].SetColor("_EmissionColor", _col); //modifica copia materiale
+            //}
 
             if (_rigidbody.velocity.magnitude > maxSpeed)
             {
                 _rigidbody.velocity = _rigidbody.velocity.normalized * maxSpeed;
             }
+
+            //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
+            UpdateWheelPoses();
         }
 
         [Command]
@@ -450,11 +416,6 @@ namespace QuickStart
 
         public void StopCar()
         {
-            /*frontDriverW.brakeTorque = Mathf.Infinity;
-            frontPassengerW.brakeTorque = Mathf.Infinity;
-            rearDriverW.brakeTorque = Mathf.Infinity;
-            rearDriverW.brakeTorque = Mathf.Infinity;
-            */
             if (_rigidbody != null)
                 _rigidbody.velocity = Vector3.zero;
         }

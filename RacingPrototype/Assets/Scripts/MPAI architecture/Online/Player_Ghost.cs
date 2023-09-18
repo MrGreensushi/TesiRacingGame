@@ -33,8 +33,7 @@ public class Player_Ghost
         this.player = x;
         this.info = z;
         this.matrix = new Queue<float[]>();
-        var model = ModelLoader.Load(nn);
-        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
+       
         this.prediction = new float[3];
         this.canPredict = true;
         this.min = Random.Range(0, 9);
@@ -55,6 +54,10 @@ public class Player_Ghost
         this.randomAddedLatency = 0;
         this.newActivation = true;
 
+        if (doNotMPAI) return;
+
+        var model = ModelLoader.Load(nn);
+        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
         //this.job = new JobHandle();
     }
 

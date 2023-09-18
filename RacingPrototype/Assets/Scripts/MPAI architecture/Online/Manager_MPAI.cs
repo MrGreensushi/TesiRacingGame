@@ -124,36 +124,6 @@ namespace QuickStart
         }
 
 
-        //public void PredictionCoroutine(bool value)
-        //{
-        //    predicting = value;
-        //    if (value) PredictionStart();
-        //    else PredictionStop();
-
-        //}
-
-        //public void PredictionStop()
-        //{
-        //    pe.usePrediction = false;
-        //    car.Predicting = false;
-        //    cl.usePrediction = false;
-        //    first = true;
-        //}
-
-        //public void PredictionStart()
-        //{
-        //    Debug.Break();
-        //    cl.usePrediction = true;
-        //    pe.usePrediction = true;
-        //    pe.predictionDone = false;
-        //    car.Predicting = true;
-
-
-
-
-        //}
-
-
         public void AddCar(PlayerScript c_t, bool doNotMPAI, LatencyLevel level)
         {
             var ghost = Instantiate(ghostObject);
