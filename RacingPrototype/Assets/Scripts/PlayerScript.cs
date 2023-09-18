@@ -45,7 +45,7 @@ namespace QuickStart
 
         //Network
         private NetworkTransformChild[] net_TransformChilds;
-        private NetworkTransform net_Transform;
+        private TransformSync net_Transform;
         NetworkRigidbody net_Rigidbody;
         NetworkIdentity net_Identity;
 
@@ -146,7 +146,7 @@ namespace QuickStart
         public void ChangeAuthority(bool value)
         {
             if (net_Transform == null || net_Rigidbody == null) return;
-            net_Transform.clientAuthority = value;
+            net_Transform.discardClientPosition = !value;
             net_Rigidbody.clientAuthority = value;
             foreach (var t in net_TransformChilds)
                 t.clientAuthority = value;
@@ -200,7 +200,7 @@ namespace QuickStart
 
             //ritrova le informazioni del network
             net_Identity = GetComponent<NetworkIdentity>();
-            net_Transform = GetComponent<NetworkTransform>();
+            net_Transform = GetComponent<TransformSync>();
             net_Rigidbody = GetComponent<NetworkRigidbody>();
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
@@ -277,7 +277,7 @@ namespace QuickStart
 
             //ritrova le informazioni del network
             net_Identity = GetComponent<NetworkIdentity>();
-            net_Transform = GetComponent<NetworkTransform>();
+            net_Transform = GetComponent<TransformSync>();
             net_Rigidbody = GetComponent<NetworkRigidbody>();
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
@@ -346,34 +346,17 @@ namespace QuickStart
             _transform.rotation = _quat;
         }
 
-        /*  private void FixedUpdate()
-          {
-              if (!isLocalPlayer)
-                  return;
-              float moveX = Input.GetAxis("Horizontal") * maxSteerAngle;
-              frontDriverW.steerAngle = moveX;
-              frontPassengerW.steerAngle = moveX;
-
-              float moveZ = Input.GetAxis("Vertical") * motorForce;
-              frontPassengerW.motorTorque = moveZ;
-              frontDriverW.motorTorque = moveZ;
-
-              int breaking = Input.GetButton("Fire2") ? 1 : 0;
-              frontDriverW.brakeTorque = breakForce * breaking;
-              frontPassengerW.brakeTorque = breakForce * breaking;
-
-              Color _col = breaking == 1 ? Color.white : Color.clear;
-              if (_col != render.materials[1].GetColor("_EmissionColor"))
-              {
-                  CmdBrakeLights(_col);
-              }
-
-              //Update transform and rotation of the wheels (wheel collider is not attached to the mesh transform of the wheels)
-              UpdateWheelPoses();
+        private void FixedUpdate()
+        {
 
 
-          }*/
 
+        }
+        [Command]
+        private void SendPositionInformation()
+        {
+
+        }
         public void UseInput(int movex, int movez, int breaking)
         {
             if (!clientAuthority) return;

@@ -28,7 +28,7 @@ public class Ghost_Car : MonoBehaviour
     public OperatingMode operatingMode;
     private PlayerScript player;
     private bool copyCar = true;
-
+    private bool teleportCar = false;
     public bool Heuristic
     {
         set
@@ -228,7 +228,7 @@ public class Ghost_Car : MonoBehaviour
     public void CopyFromTrue()
     {
         if (!copyCar)// se è appena finito SPG allora copycar è falso, per assicurarsi che il client posizioni la macchina rispetto al server tardo la consegna dell'autorità di un frame
-            AwaitToReturnControll();
+            teleportCar = true;
 
 
 
@@ -239,21 +239,25 @@ public class Ghost_Car : MonoBehaviour
 
     }
 
-
-    private async void AwaitToReturnControll()
+    private void LateUpdate()
     {
-        if (operatingMode == OperatingMode.RealCase)
-            player.TargetTeleportCar(
-                player.netIdentity.connectionToClient,
-                mybody.position,
-                mybody.rotation,
-                mybody.velocity
-                );
+        if (teleportCar)
+        {
+            if (operatingMode == OperatingMode.RealCase)
+                player.TargetTeleportCar(
+                    player.netIdentity.connectionToClient,
+                    mybody.position,
+                    mybody.rotation,
+                    mybody.velocity
+                    );
 
-        await Task.Delay(150);
-        player.ChangeAuthority(true); //cambio autorità sul selrver
 
+            player.ChangeAuthority(true); //cambio autorità sul selrver
+        }
+        teleportCar = false;
     }
+
+
     public IEnumerator InterpolateRotation(float rot, int iterations)
     {
 

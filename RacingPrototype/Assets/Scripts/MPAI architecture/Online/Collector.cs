@@ -17,29 +17,13 @@ namespace QuickStart
             "Real-Case: The prediction is appliead only if it differenties too much")]
         public OperatingMode operatingMode;
 
-        public LatencyLevel level;
-        private Latency lat;
-        private double lastActivation;
-        private int randomAddedLatency;
-        private bool newActivation;
-
         public float threshold;
 
         public EvaluateMPAI evaluator;
 
 
-        public void Start()
-        {
-            newActivation = true;
-            if (CommandLinesManager.instance != null)
-            {
-                if (CommandLinesManager.instance.level != LatencyLevel.None)
-                    level = CommandLinesManager.instance.level;
-            }
-            lat = new Latency(level);
-            lastActivation = 0;
-            randomAddedLatency = 0;
-        }
+
+
 
         public void CollectPrediction(Player_Ghost pg)
         {
