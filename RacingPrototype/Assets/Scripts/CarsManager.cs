@@ -149,6 +149,14 @@ namespace QuickStart
 
 
         }
+
+
+        public bool CheckCarIsPresent(string name)
+        {
+            var pos=cars.FindIndex(element => element.Car.Id.Equals(name));
+
+            return pos >= 0;
+        }
     }
 
 }
@@ -180,48 +188,6 @@ public struct CarInfos : IComparable<CarInfos>
     {
         return Player.name + ": " + Car.ToString();
     }
-
-    public Dictionary<string, List<float>> PhisicInfos()
-    {
-        List<float> infos = new List<float>();
-        infos.Add(Player.VectorizedVelocity.x);
-        infos.Add(Player.VectorizedVelocity.y);
-        infos.Add(Player.VectorizedVelocity.z);
-
-        infos.Add(Player.transform.position.x);
-        infos.Add(Player.transform.position.y);
-        infos.Add(Player.transform.position.z);
-
-        infos.Add(Player.transform.rotation.x);
-        infos.Add(Player.transform.rotation.y);
-        infos.Add(Player.transform.rotation.z);
-        infos.Add(Player.transform.rotation.w);
-
-        Dictionary<string, List<float>> result = new Dictionary<string, List<float>>();
-        result.Add(Player.playerName, infos);
-        return result;
-    }
-    public Dictionary<string, List<float>> RuleInfos()
-    {
-        List<float> infos = new List<float>();
-        infos.Add(Car.Laps);
-        infos.Add(Car.Rank);
-        Dictionary<string, List<float>> result = new Dictionary<string, List<float>>();
-        result.Add(Player.playerName, infos);
-        return result;
-    }
-
-
-    public Dictionary<string, List<float>> CommandInfos()
-    {
-        List<float> infos = new List<float>();
-        infos.AddRange(Player.LastAction);
-        Dictionary<string, List<float>> result = new Dictionary<string, List<float>>();
-
-        result.Add(Player.playerName, infos);
-        return result;
-    }
-
 
 
 };

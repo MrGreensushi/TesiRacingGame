@@ -24,7 +24,7 @@ public class OfflineCar : MonoBehaviour
     public float breakForce = 30;
     public int initial_boost = 15;
     public float boost_duration = 0.1f;
-    float maxSpeed = 40;
+    public float maxSpeed = 40;
 
     public bool giocatore;
     Rigidbody _rigidbody;
@@ -272,10 +272,15 @@ public class OfflineCar : MonoBehaviour
             //Camera.main.orthographic = false;
             //Camera.main.fieldOfView = 60;
 
-            Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
-            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            Camera.main.orthographicSize = 55;
+           var foll=FindObjectOfType<FollowCamera>();
+            foll.StartFollowing(gameObject);
+            
+
+
+            //Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.localPosition = new Vector3(0, 50, 0);
+            //Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            //Camera.main.orthographicSize = 55;
 
         }
 

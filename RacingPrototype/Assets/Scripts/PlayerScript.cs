@@ -1,6 +1,8 @@
-using Google.Protobuf.WellKnownTypes;
+#define MPAI
+
 using Mirror;
 using Mirror.Experimental;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +10,13 @@ using TMPro;
 using Unity.MLAgents.Policies;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace QuickStart
 {
     public class PlayerScript : NetworkBehaviour
     {
+        
         public TextMeshPro playerNameText;
         public GameObject floatingInfo;
         public Renderer render;
@@ -24,12 +28,15 @@ namespace QuickStart
         //Trail only for server
         [SerializeField] TrailRenderer trilRenderer;
 
+#region Wheels
         //Wheels
         public WheelCollider frontDriverW, frontPassengerW;
         public WheelCollider rearDriverW, rearPassengerW;
         public Transform frontDriverT, frontPassengerT;
         public Transform rearDriverT, rearPassengerT;
-
+#endregion
+        
+#region Motor
         //Driving
         public float maxSteerAngle = 30;
         public float motorForce = 50;
@@ -37,18 +44,24 @@ namespace QuickStart
         public int initial_boost = 15;
         public float boost_duration = 0.1f;
         float maxSpeed = 40;
+#endregion
+
+#region ML
         //ML Agent
         public ML_Car agent;
         private BehaviorParameters agent_type;
-
+ #endregion
         Rigidbody _rigidbody;
-
-        //Network
+        Vector3 previousPos;
+#region Network
         private NetworkTransformChild[] net_TransformChilds;
-        private NetworkTransform net_Transform;
+        public NetworkTransform net_Transform;
         NetworkRigidbody net_Rigidbody;
         NetworkIdentity net_Identity;
+#endregion
 
+        private bool inputReady;
+        private int movex, movez, breaking;
 
         public float[] lastInfo;
         public float[] PhysicInfos
@@ -72,20 +85,20 @@ namespace QuickStart
         }
 
         public Rigidbody RigidbodyCar { get { return _rigidbody; } }
+
         public float Velocity
         {
             get
             {
-                if (_rigidbody != null)
-                    return _rigidbody.velocity.magnitude;
-                else return 0;
+
+               return Mathf.Sqrt(velocityZ*velocityZ + velocityX * velocityX);
+
             }
         }
-        public Vector3 VelocityNormal { get => _rigidbody.velocity.normalized; }
-        public Vector3 VectorizedVelocity { get => _rigidbody.velocity; }
+
 
         public int[] LastAction { get => agent.lastAction; }
-
+#region SyncVars
         [SyncVar(hook = nameof(OnNameChanged))]
         public string playerName;
 
@@ -98,14 +111,30 @@ namespace QuickStart
         [SyncVar(hook = nameof(OnBotChanged))]
         public bool bot = true;
 
+        [SyncVar(hook = nameof(OnActChanged))]
+        public bool mpaiActive=false;
+
+        [SyncVar]
+        public float velocityX;
+
+        [SyncVar]
+        public float velocityZ;
+
+        void OnActChanged(bool _Old, bool _New)
+        {
+            mpaiActive = _New;
+        }
+
         void OnBotChanged(bool _Old, bool _New)
         {
             bot = _New;
             if (bot)
                 agent_type.BehaviorType = BehaviorType.InferenceOnly;
   
-            else            
+            else {         
                 agent_type.BehaviorType = BehaviorType.HeuristicOnly;
+                maxSpeed =40- 12;
+            }
         }
 
         void OnNameChanged(string _Old, string _New)
@@ -145,27 +174,22 @@ namespace QuickStart
                 t.clientAuthority = value;
         }
 
-
+#endregion
+       
         private void Awake()
         {
             agent_type = GetComponent<BehaviorParameters>();
             bot = true;
+            mpaiActive = false;
         }
 
         public override void OnStartLocalPlayer()
         {
+            maxSpeed = 40;
+
             //Set up camera
-            //Camera.main.transform.SetParent(transform);
-            //Camera.main.transform.localPosition = new Vector3(0, 4, -6);
-            //Camera.main.transform.localRotation = Quaternion.Euler(16, 0, 0);
-            //Camera.main.orthographic = false;
-            //Camera.main.fieldOfView = 60;
-            Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0, 50, 0);
-            Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            Camera.main.orthographicSize = 55;
-
-
+            var cam=FindObjectOfType<FollowCamera>();
+            cam.StartFollowing(gameObject);
 
             //Setup player infos
             floatingInfo.transform.localPosition = new Vector3(0, -0.3f, 0.6f);
@@ -175,15 +199,24 @@ namespace QuickStart
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.centerOfMass = centerOfMass.localPosition;
 
+            var cl = CommandLinesManager.instance;
+
             //check il nome sia unico
             string name;
-            List<PlayerScript> allCars = new List<PlayerScript>();
-            allCars.AddRange(FindObjectsOfType<PlayerScript>());
-            do
-            {
-                name = "Player " + Random.Range(100, 999);
 
-            } while (allCars.FindIndex(x => x.playerName == name) >= 0);
+            if (cl != null)
+            {
+                if (!string.IsNullOrEmpty(cl.playerName))
+                    name = cl.playerName;
+                else
+                {
+                    name = RandomName();
+                }
+            }
+            else
+            {
+                name = RandomName();
+            }
 
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
 
@@ -201,7 +234,7 @@ namespace QuickStart
             var beBot = CommandLinesManager.instance.bot != 0;
 
             //ritrovo le informazioni riguardate la latenza fittizia
-            var cl = CommandLinesManager.instance;
+          
             var level = LatencyLevel.None;
             var doNotMPAI = false;
 
@@ -211,22 +244,56 @@ namespace QuickStart
                 doNotMPAI = cl.doNotMPAI;
             }
 
+            //Se è il giocatore attacca lo script che controlla la presenza
+            if (!beBot && !string.IsNullOrEmpty( cl.filePath))
+                this.AddComponent<CheckPresence>();
+
+            mpaiActive =false;
+
+            _rigidbody.isKinematic = false;
             //send infos to the server
             CmdSetupPlayer(name, color, beBot, doNotMPAI, level);
 
 
         }
 
+        private string RandomName()
+        {
+            string name = "";
+            List<PlayerScript> allCars = new List<PlayerScript>();
+            allCars.AddRange(FindObjectsOfType<PlayerScript>());
+            do
+            {
+                name = "Player " + Random.Range(100, 999);
+
+            } while (allCars.FindIndex(x => x.playerName == name) >= 0);
+            return name;
+        }
+
+
+        [TargetRpc]
+        public void TargetTeleport(NetworkConnection target, Vector3 destination, Quaternion rotation,Vector3 velocity){
+
+
+
+
+            net_Transform.Teleport(destination, rotation);
+            _rigidbody.velocity = velocity;
+            _rigidbody.angularVelocity = Vector3.zero;
+
+
+            //reset wheel rotations
+            frontDriverW.steerAngle = 0;
+            frontPassengerW.steerAngle = 0;
+            UpdateWheelPoses();
+        }
+
+
         [Command]
         public void CmdSetupPlayer(string _name, Color _col, bool _bot, bool doNotMPAI, LatencyLevel level)
         {
-            ////Set up camera
-            //Camera.main.transform.SetParent(transform);
-            //Camera.main.transform.localPosition = new Vector3(0, 50, 0);
-            //Camera.main.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            //Camera.main.orthographicSize = 55;
-
-
+            
+           
             //Player info sent to server, then server updates sync vars which handles it on all clients
             playerName = _name;
             playerColor = _col;
@@ -236,8 +303,8 @@ namespace QuickStart
             OnBotChanged(true, _bot); //cambio sul server
 
             _rigidbody = GetComponent<Rigidbody>();
-
-
+            mpaiActive = false;
+            _rigidbody.isKinematic = false;
 
             NetworkConnectionToClient conn = GetComponent<NetworkIdentity>().connectionToClient;
             //recupera tutte le altre ui
@@ -261,10 +328,10 @@ namespace QuickStart
 
             //star position
             //var starting = StartingPointsManager.instance.StartingPoint(transform);
-
+#if MPAI
             //aggiungi macchina al sistema MPAI
             Manager_MPAI.instance.AddCar(this, doNotMPAI, level);
-
+#endif
             //lastInfo seto to zero
             lastInfo = new float[5] { 0, 0, 0, 0, 0 };
 
@@ -283,7 +350,9 @@ namespace QuickStart
             OnAuthorityChanged(false, true);
 
             TargetInstantiatePreviousUis(conn, Vector3.zero, names.ToArray(), colors.ToArray());
+
         }
+
 
         [TargetRpc]
         public void TargetInstantiatePreviousUis(NetworkConnection target, Vector3 start, string[] names, Color[] colors)
@@ -291,8 +360,10 @@ namespace QuickStart
 
             //transform.localPosition = start;
 
-            for (int i = 0; i < names.Length - 1; i++)
+            for (int i = 0; i < names.Length; i++)
             {
+                if (CarsManager.instance.CheckCarIsPresent(names[i])) continue;
+
                 GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
                 CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
             }
@@ -300,20 +371,10 @@ namespace QuickStart
         }
 
 
-        [TargetRpc]
-        public void TargetTeleportCar(NetworkConnection target, Vector3 pos, Quaternion rot, Vector3 vel)
-        {
-            _rigidbody.velocity = vel;
-            _rigidbody.angularVelocity = Vector3.zero;
-            _rigidbody.rotation = rot;
-            _rigidbody.position = pos;
-
-
-        }
-
         [ClientRpc]
         void InstantiateUI(string name, Color _col)
         {
+            if (CarsManager.instance.CheckCarIsPresent(name)) return;
 
             //instanzio la UI e aggoingo la macchina al manager
             GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
@@ -342,7 +403,9 @@ namespace QuickStart
         [Client]
         public void UseInput(int movex, int movez, int breaking)
         {
-            if (!clientAuthority) return;
+            if (!clientAuthority || !isLocalPlayer) return;
+
+            inputReady = true;
 
             //Messages.SendInput(movex, movez, breaking, playerName);
 
@@ -363,13 +426,13 @@ namespace QuickStart
             frontDriverW.brakeTorque = breakForce * breaking;
             frontPassengerW.brakeTorque = breakForce * breaking;
 
-            //Color _col = breaking == 1 ? Color.white : Color.clear;
-            //if (_col != render.materials[1].GetColor("_EmissionColor"))
-            //{
-            //    lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
-            //    render.materials[1] = lightsMaterialClone;
-            //    render.materials[1].SetColor("_EmissionColor", _col); //modifica copia materiale
-            //}
+            Color _col = breaking == 1 ? Color.white : Color.clear;
+            if (_col != render.materials[1].GetColor("_EmissionColor"))
+            {
+                lightsMaterialClone = new Material(render.materials[1]); //crea copia materiale altrimenti cambierebbe il materiale a tutti
+                render.materials[1] = lightsMaterialClone;
+                render.materials[1].SetColor("_EmissionColor", _col); //modifica copia materiale
+            }
 
             if (_rigidbody.velocity.magnitude > maxSpeed)
             {
@@ -380,6 +443,7 @@ namespace QuickStart
             UpdateWheelPoses();
         }
 
+
         [Command]
         public void CmdBrakeLights(Color _col)
         {
@@ -389,12 +453,28 @@ namespace QuickStart
 
         void Update()
         {
-            if (!isLocalPlayer)
-            {
-                //non-local player run this
-                floatingInfo.transform.LookAt(Camera.main.transform);
-                return;
-            }
+            //non-local player run this
+            floatingInfo.transform.LookAt(Camera.main.transform);
+            
+            if (!isLocalPlayer) return;
+            var vel = _rigidbody.velocity;
+            velocityX = vel.x;
+            velocityZ = vel.z;
+            CmdUpdateVel(velocityX, velocityZ);
+
+            if (!Input.GetKeyDown(KeyCode.Space)) return;
+                
+            var cam = FindObjectOfType<FollowCamera>();
+            cam.SwitchView(gameObject);
+                
+  
+        }
+
+        [Command]
+        private void CmdUpdateVel(float x, float z)
+        {
+            velocityX = x;
+            velocityZ = z;
         }
 
         public override void OnStopLocalPlayer()
@@ -446,32 +526,6 @@ namespace QuickStart
                 toRet[i] += lastInfo[i + 2];
             }
             return toRet;
-        }
-
-        public (float[], float[]) CommPhyDispatcherInfos()
-        {
-            //VEL ANG_VEL TILE TILE_IND X_R Z_R
-            var info = PhysicInfos;
-            var tile = ReturnInfoTileFloat();
-            float[] delta = new float[3];
-            for (int i = 0; i < 3; i++)
-            {
-                delta[i] = info[i + 2] - lastInfo[i + 2];
-            }
-            delta[2] = (delta[2] + 180) % 360 - 180;
-            float[] toRet = { delta[0],
-                delta[1],
-                delta[2],
-                tile[0],
-                tile[1],
-                tile[2],
-                tile[3],
-                LastAction[0],
-                LastAction[1],
-                LastAction[2]
-            };
-
-            return (toRet, info);
         }
 
 

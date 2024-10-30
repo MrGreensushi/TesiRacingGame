@@ -2,6 +2,7 @@ using Mirror;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class CommandLinesManager : MonoBehaviour
@@ -10,6 +11,9 @@ public class CommandLinesManager : MonoBehaviour
     public int bot = 0;
     public LatencyLevel level;
     public bool doNotMPAI;
+    public string filePath;
+    public string playerName,path,fileName;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,6 +32,8 @@ public class CommandLinesManager : MonoBehaviour
         bool startClient = false;
         bool startServer = false;
         int x = -1, y = -1;
+        bool fullscreen = false;
+        playerName = "";
         for (int i = 0; i < args.Length; i++)
         {
             //Debug.Log("ARG " + i + ": " + args[i]);
@@ -38,6 +44,22 @@ public class CommandLinesManager : MonoBehaviour
             else if (args[i] == "-screen-height")
             {
                 int.TryParse(args[i + 1], out heightInput);
+            }
+            else if (args[i] == "-full")
+            {
+                fullscreen = true;
+            }
+            else if (args[i] == "-name")
+            {
+                playerName= args[i + 1];
+            }
+            else if (args[i] == "-evalName")
+            {
+                fileName = args[i + 1];
+            }
+            else if (args[i] == "-evalPath")
+            {
+                path = args[i + 1];
             }
             else if (args[i] == "-client")
             {
@@ -75,21 +97,29 @@ public class CommandLinesManager : MonoBehaviour
             {
                 doNotMPAI = true;
             }
+            else if ( args[i].StartsWith("-path="))
+            {
+                filePath= args[i][6..];
+            }
 
         }
 
 
         var manager = GetComponent<NetworkRoomManager>();
 
-        if (startClient)
+        if (manager != null)
         {
-            manager.StartClient();
+
+            if (startClient)
+            {
+                manager.StartClient();
+            }
+            else if (startServer)
+                manager.StartServer();
         }
-        else if (startServer)
-            manager.StartServer();
 
         if (heightInput != -1 && widthInput != -1)
-            Screen.SetResolution(widthInput, heightInput, false);
+            Screen.SetResolution(widthInput, heightInput, fullscreen);
 
 
         var disp = Screen.mainWindowDisplayInfo;

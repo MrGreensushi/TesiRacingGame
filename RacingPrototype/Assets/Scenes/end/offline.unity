@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -136,7 +136,6 @@ GameObject:
   - component: {fileID: 435397483}
   - component: {fileID: 435397482}
   - component: {fileID: 435397486}
-  - component: {fileID: 435397487}
   - component: {fileID: 435397488}
   - component: {fileID: 435397489}
   m_Layer: 0
@@ -172,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Port: 7777
+  Port: 1111
   DualMode: 1
   NoDelay: 1
   Interval: 10
@@ -203,13 +202,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
-  autoStartServerBuild: 1
+  autoStartServerBuild: 0
   serverTickRate: 30
   offlineScene: Assets/Scenes/end/offline.unity
   onlineScene: Assets/Scenes/end/Room.unity
   transport: {fileID: 435397483}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2874309902315919791, guid: 6fa07589e7819304f96a8cf06465db07, type: 3}
   autoCreatePlayer: 1
@@ -230,13 +229,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435397481}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &435397486
 MonoBehaviour:
@@ -253,25 +252,10 @@ MonoBehaviour:
   bot: 0
   level: 0
   doNotMPAI: 0
---- !u!114 &435397487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435397481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wrap: {fileID: 435397483}
-  jitter: 0
-  jitterSpeed: 1
-  reliableLatency: 0
-  unreliableLoss: 0
-  unreliableLatency: 0
-  unreliableScramble: 0
+  filePath: 
+  playerName: 
+  path: 
+  fileName: 
 --- !u!114 &435397488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,12 +268,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37686dd98dfea5841a5857d65a7bdb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  durationL1: 500
-  durationL2: 1000
-  durationL3: 2000
-  frequencyL1: 10000
-  frequencyL2: 8000
-  frequencyL3: 4000
+  durationL1: 300
+  durationL2: 600
+  durationL3: 1000
+  frequencyL1: 12000
+  frequencyL2: 10000
+  frequencyL3: 8000
 --- !u!114 &435397489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,9 +327,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -379,11 +371,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511487887}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 511487890}
+  - {fileID: 435397485}

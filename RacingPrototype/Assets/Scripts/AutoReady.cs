@@ -21,7 +21,7 @@ public class AutoReady : MonoBehaviour
 
     async void DelayedReady()
     {
-        await Task.Delay(1000);
+        await Task.Delay(5000);
         var player = GetComponent<NetworkRoomPlayer>();
         player.CmdChangeReadyState(true);
     }

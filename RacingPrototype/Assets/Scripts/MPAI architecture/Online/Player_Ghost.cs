@@ -1,14 +1,10 @@
-using Google.Protobuf.WellKnownTypes;
 using Mirror;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Unity.Barracuda;
-using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
+using System.IO;
 
 public class Player_Ghost
 {
@@ -27,13 +23,13 @@ public class Player_Ghost
     private int randomAddedLatency;
     private bool newActivation;
 
-    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z, NNModel nn, bool doNotMPAI, LatencyLevel level)
+    public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z, NNModel nn, bool doNotMPAI, LatencyLevel level, string name)
     {
         this.ghost = y;
         this.player = x;
         this.info = z;
         this.matrix = new Queue<float[]>();
-       
+
         this.prediction = new float[3];
         this.canPredict = true;
         this.min = Random.Range(0, 9);
@@ -58,7 +54,15 @@ public class Player_Ghost
 
         var model = ModelLoader.Load(nn);
         this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
+        UpdateRandomLatency();
         //this.job = new JobHandle();
+
+        WriteOnFile(name);
+    }
+
+    private void UpdateRandomLatency()
+    {
+        randomAddedLatency = Random.Range(0, 4) * 1000 + Random.Range(0, 1001);
     }
 
     public void Prediction(int timesteps, int featuresNumber, float[] lastInfo, MonoBehaviour mb)
@@ -104,7 +108,7 @@ public class Player_Ghost
 
     IEnumerator PredictionRoutine(Tensor input, float[] lastInfo)
     {
-
+        var starTimePrediction = Time.time;
         var output = worker.Execute(input).PeekOutput();
         yield return new WaitForCompletion(output);
         input.Dispose();
@@ -123,7 +127,23 @@ public class Player_Ghost
             prediction[i] = pr[i] + lastInfo[2 + i];
         }
 
+        var timeNeededForPrediction = Time.time - starTimePrediction;
+        WriteOnFile(timeNeededForPrediction.ToString());
+    }
 
+
+
+    void WriteOnFile(string message)
+    {
+        var file = "C:/Users/dansp/OneDrive/Desktop/TempoPrevisioni.txt";
+
+        if (!File.Exists(file))
+        {
+            var myFile = File.Create(file);
+            myFile.Close();
+        }
+
+        File.AppendAllText(file, message + "\n");
     }
 
 
@@ -157,7 +177,7 @@ public class Player_Ghost
         {
             if (newActivation)
             {
-                randomAddedLatency = Random.Range(0, 4) * 1000; //aggiungo da 0 a 3 secondi 
+                UpdateRandomLatency(); //aggiungo da 0 a 4 secondi
                 lastActivation = time;
             }
             newActivation = false;

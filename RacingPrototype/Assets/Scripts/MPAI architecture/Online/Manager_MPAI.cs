@@ -21,8 +21,7 @@ namespace QuickStart
         [SerializeField] GameObject ghostObject, infoObject;
         [SerializeField] Transform UI_transform;
         [SerializeField] NNModel nnModel;
-        [SerializeField] bool firstPlayerHeuristic;
-        public bool commPhy = false;
+
         public int discard;
 
         [Tooltip("Testing: The ghost car is visible on the server but it does not change the player's car\n" +
@@ -30,8 +29,6 @@ namespace QuickStart
         public OperatingMode ghost_OpMode;
 
         public List<Player_Ghost> ghosts = new List<Player_Ghost>();
-        Dictionary<Player_Ghost, JobHandle> jobs;
-
         public int bot;
 
         private void Awake()
@@ -45,7 +42,6 @@ namespace QuickStart
         }
         private void Start()
         {
-            ds.commPhy = commPhy;
 
             counter = 0;
 
@@ -141,9 +137,9 @@ namespace QuickStart
 
 
 
-            ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, doNotMPAI, level));
+            ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, doNotMPAI, level, nnModel.name));
 
-            firstPlayerHeuristic = false; //only the first player is heuristic
+
         }
 
         public void OnInputMessage(NetworkConnectionToClient conn, InputMessage msg)

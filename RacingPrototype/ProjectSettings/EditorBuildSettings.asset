@@ -20,4 +20,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/end/Player Testing.unity
     guid: 7bb1915aeb41b024eb193c180376d557
+  - enabled: 0
+    path: Assets/Scenes/NoWheelsTesting/offline_2.unity
+    guid: 6414a9fb50a4b054b8c9eab11f516be8
+  - enabled: 0
+    path: Assets/Scenes/NoWheelsTesting/Room_2.unity
+    guid: d3aecfe5cc9827e49b566d87c4b8cb9d
+  - enabled: 0
+    path: Assets/Scenes/NoWheelsTesting/Empty.unity
+    guid: fe400fe78229e234ea2d542895a1a159
+  - enabled: 0
+    path: Assets/Scenes/EvaluatingMultipleNN/New Scene.unity
+    guid: 2ee37765a5edc404fb08e9fb52059ecb
   m_configObjects: {}

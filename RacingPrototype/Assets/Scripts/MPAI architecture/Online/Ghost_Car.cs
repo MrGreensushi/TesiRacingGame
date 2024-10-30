@@ -192,6 +192,8 @@ public class Ghost_Car : MonoBehaviour
 
     public void UpdateBody(float[] infos)
     {
+        player.mpaiActive = true;
+
         //The ghost is driven by the prediction
         mybody.velocity = new Vector3(infos[0], 0, infos[1]);
         mybody.rotation = Quaternion.Euler(new Vector3(0, infos[2], 0));
@@ -237,19 +239,28 @@ public class Ghost_Car : MonoBehaviour
         trailRenderer.Clear();
         trailRenderer.enabled = false;
 
+        player.mpaiActive = false;
+
+
     }
 
     private void LateUpdate()
     {
         if (!teleportCar) return;
-        
+
         if (operatingMode == OperatingMode.RealCase)
-            player.TargetTeleportCar(
+        {
+
+            player.TargetTeleport(
                 player.netIdentity.connectionToClient,
-                mybody.position,
-                mybody.rotation,
+                transform.position,
+                transform.rotation,
                 mybody.velocity
                 );
+
+            
+
+        }
 
         
         player.ChangeAuthority(true); //cambio autorità sul selrver

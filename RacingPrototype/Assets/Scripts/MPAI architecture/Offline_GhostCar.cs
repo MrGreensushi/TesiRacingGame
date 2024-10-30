@@ -1,3 +1,4 @@
+#define Visible
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
@@ -157,7 +158,9 @@ public class Offline_GhostCar : MonoBehaviour
         UpdateWheelPoses();
         if (operatingMode == OperatingMode.Testing)
         {
+#if Visible
             UpdateTestingMode();
+#endif
             copyCar = false;
             return;
         }
