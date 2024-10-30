@@ -5,16 +5,14 @@ using UnityEngine;
 
 public class Offline_Dispatcher : MonoBehaviour
 {
-    [SerializeField] int timesteps, featuresNumber;
+    public int timesteps, featuresNumber;
     [SerializeField] Offline_GhostCar car;
     [SerializeField] OfflineCar carTrue;
     [SerializeField] Offline_Physic_Engine pe;
-    [SerializeField] Offline_Rule_Engine re;
-    private bool updateSelf = false;
-
-    public bool UpdateSelf { set { updateSelf = value; } }
+    public OperatingMode operatingMode;
 
 
+    //DELTA VERSION
     public void Routine()
     {
 
@@ -23,15 +21,21 @@ public class Offline_Dispatcher : MonoBehaviour
         car.lastInfo = infos;
         carTrue.lastInfo = infos_T;
 
-        if (updateSelf)
-            pe.UpdateMatrix(delta, timesteps, featuresNumber, infos);
+        if (operatingMode != OperatingMode.Testing)
+            UpdateMatrix(delta, infos);
 
         else
-            pe.UpdateMatrix(delta_T, timesteps, featuresNumber, infos_T);
+            UpdateMatrix(delta_T, infos_T);
 
 
 
 
+    }
+
+    void UpdateMatrix(float[] d, float[] i)
+    {
+
+        pe.UpdateMatrix(d, timesteps, featuresNumber, i);
     }
 
     (float[], float[]) PhysicInfos()
@@ -45,6 +49,33 @@ public class Offline_Dispatcher : MonoBehaviour
         return carTrue.DispatcherInfos();
 
     }
+
+    //REAL
+
+    //public void Routine()
+    //{
+
+    //    var infos = PhysicInfos();
+    //    var infos_t = TruePhysicInfos();
+
+    //    if (updateSelf)
+    //        pe.UpdateMatrix(infos, timesteps, featuresNumber);
+
+    //    else
+    //        pe.UpdateMatrix(infos_t, timesteps, featuresNumber);
+    //}
+
+    //float[] PhysicInfos()
+    //{
+    //    return car.PhysicInfos();
+
+    //}
+
+    //float[] TruePhysicInfos()
+    //{
+    //    return carTrue.DispatcherInfos();
+
+    //}
 
     float[] RuleInfos()
     {

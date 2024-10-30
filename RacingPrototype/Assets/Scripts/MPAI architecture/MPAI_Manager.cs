@@ -10,6 +10,7 @@ public class MPAI_Manager : MonoBehaviour
     [SerializeField] Offline_GhostCar car;
     [SerializeField] Offline_Physic_Engine pe;
     private bool first, predicting;
+    public int discard;
 
     private void Start()
     {
@@ -21,9 +22,9 @@ public class MPAI_Manager : MonoBehaviour
     private void FixedUpdate()
     {
         counter++;
-        if (counter == 2 && predicting)
-            StartCoroutine(Prediction());
-        if (counter == 3)
+        if (counter == discard)
+            Prediction();
+        if (counter == discard + 1)
             Routine();
 
 
@@ -31,58 +32,17 @@ public class MPAI_Manager : MonoBehaviour
     private void Routine()
     {
         counter = 0;
-
         ds.Routine();
-        //cl.CollectPrediction();
-        if (predicting)
-            first = false;
+
     }
 
 
-    private IEnumerator Prediction()
+    private void Prediction()
     {
-        Time.timeScale = 0;
-        if (!first)
+        if (pe.Count == ds.timesteps)
         {
-            //aspetta che finisce la predizione
-            while (!pe.predictionDone)
-            {
-                yield return null;
-            }
-
             cl.CollectPrediction();
         }
-        Time.timeScale = 1f;
-
-    }
-
-
-    public void PredictionCoroutine(bool value)
-    {
-        predicting = value;
-        if (value) PredictionStart();
-        else PredictionStop();
-
-    }
-
-    public void PredictionStop()
-    {
-        pe.usePrediction = false;
-        car.Predicting = false;
-        cl.usePrediction = false;
-        first = true;
-    }
-
-    public void PredictionStart()
-    {
-        Debug.Break();
-        cl.usePrediction = true;
-        pe.usePrediction = true;
-        pe.predictionDone = false;
-        car.Predicting = true;
-
-
-
 
     }
 

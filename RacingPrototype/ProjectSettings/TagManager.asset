@@ -7,6 +7,26 @@ TagManager:
   - Car
   - Wall
   - Checkpoint
+  - C_15_D_R
+  - C_15_R_D
+  - C_15_D_L
+  - C_15_L_D
+  - C_15_R_U
+  - C_15_L_U
+  - C_15_U_L
+  - C_15_U_R
+  - C_30_D_R
+  - C_30_R_D
+  - C_30_D_L
+  - C_30_L_D
+  - C_30_R_U
+  - C_30_L_U
+  - C_30_U_R
+  - C_30_U_L
+  - S_D_U
+  - S_U_D
+  - S_L_R
+  - S_R_L
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499957,
+                "file_path": "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-499957.onnx",
+                "reward": 210.49623880907893,
+                "creation_time": 1693075258.6863983,
+                "auxillary_file_paths": [
+                    "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-499957.pt"
+                ]
+            },
+            {
+                "steps": 999985,
+                "file_path": "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-999985.onnx",
+                "reward": null,
+                "creation_time": 1693076722.9246638,
+                "auxillary_file_paths": [
+                    "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-999985.pt"
+                ]
+            },
+            {
+                "steps": 1499946,
+                "file_path": "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-1499946.onnx",
+                "reward": 289.58497828245163,
+                "creation_time": 1693078164.6771262,
+                "auxillary_file_paths": [
+                    "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-1499946.pt"
+                ]
+            },
+            {
+                "steps": 1500010,
+                "file_path": "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-1500010.onnx",
+                "reward": 289.58497828245163,
+                "creation_time": 1693078164.8255634,
+                "auxillary_file_paths": [
+                    "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-1500010.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500010,
+            "file_path": "results\\NoMem_acc_break_1\\My Behavior.onnx",
+            "reward": 289.58497828245163,
+            "creation_time": 1693078164.8255634,
+            "auxillary_file_paths": [
+                "results\\NoMem_acc_break_1\\My Behavior\\My Behavior-1500010.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

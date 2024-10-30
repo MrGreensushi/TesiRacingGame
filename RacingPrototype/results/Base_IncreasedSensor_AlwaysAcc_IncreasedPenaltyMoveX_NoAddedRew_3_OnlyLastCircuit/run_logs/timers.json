@@ -1,0 +1,49 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1693393336",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\Github\\TesiRacingGame\\RacingPrototype\\venv\\Scripts\\mlagents-learn config/BaseConfig.yaml --run-id=Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_3_OnlyLastCircuit --initialize-from=Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2 --force",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cu110",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1693393341"
+    },
+    "total": 5.427469,
+    "count": 1,
+    "self": 0.008460399999999701,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0813838,
+            "count": 1,
+            "self": 0.0813838
+        },
+        "TrainerController.start_learning": {
+            "total": 5.3376248,
+            "count": 1,
+            "self": 0.0001183000000004597,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 5.2504993,
+                    "count": 1,
+                    "self": 5.2504993
+                },
+                "TrainerController._save_models": {
+                    "total": 0.08700719999999951,
+                    "count": 1,
+                    "self": 0.005881999999998833,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.08112520000000067,
+                            "count": 1,
+                            "self": 0.08112520000000067
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

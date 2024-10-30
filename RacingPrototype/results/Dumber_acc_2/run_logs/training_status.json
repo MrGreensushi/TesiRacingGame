@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499936,
+                "file_path": "results\\Dumber_acc_2\\My Behavior\\My Behavior-499936.onnx",
+                "reward": null,
+                "creation_time": 1692703050.7050748,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_2\\My Behavior\\My Behavior-499936.pt"
+                ]
+            },
+            {
+                "steps": 999973,
+                "file_path": "results\\Dumber_acc_2\\My Behavior\\My Behavior-999973.onnx",
+                "reward": null,
+                "creation_time": 1692704817.2936018,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_2\\My Behavior\\My Behavior-999973.pt"
+                ]
+            },
+            {
+                "steps": 1499996,
+                "file_path": "results\\Dumber_acc_2\\My Behavior\\My Behavior-1499996.onnx",
+                "reward": 30.916498191654682,
+                "creation_time": 1692706553.9421053,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_2\\My Behavior\\My Behavior-1499996.pt"
+                ]
+            },
+            {
+                "steps": 1500060,
+                "file_path": "results\\Dumber_acc_2\\My Behavior\\My Behavior-1500060.onnx",
+                "reward": 30.916498191654682,
+                "creation_time": 1692706554.1119826,
+                "auxillary_file_paths": [
+                    "results\\Dumber_acc_2\\My Behavior\\My Behavior-1500060.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500060,
+            "file_path": "results\\Dumber_acc_2\\My Behavior.onnx",
+            "reward": 30.916498191654682,
+            "creation_time": 1692706554.1119826,
+            "auxillary_file_paths": [
+                "results\\Dumber_acc_2\\My Behavior\\My Behavior-1500060.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

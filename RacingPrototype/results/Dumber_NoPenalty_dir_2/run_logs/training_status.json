@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499951,
+                "file_path": "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-499951.onnx",
+                "reward": 62.58393360177676,
+                "creation_time": 1692888603.3433697,
+                "auxillary_file_paths": [
+                    "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-499951.pt"
+                ]
+            },
+            {
+                "steps": 999953,
+                "file_path": "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-999953.onnx",
+                "reward": 58.45296707749367,
+                "creation_time": 1692889919.0156658,
+                "auxillary_file_paths": [
+                    "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-999953.pt"
+                ]
+            },
+            {
+                "steps": 1499993,
+                "file_path": "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-1499993.onnx",
+                "reward": null,
+                "creation_time": 1692891231.0951664,
+                "auxillary_file_paths": [
+                    "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-1499993.pt"
+                ]
+            },
+            {
+                "steps": 1500121,
+                "file_path": "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-1500121.onnx",
+                "reward": null,
+                "creation_time": 1692891231.2611878,
+                "auxillary_file_paths": [
+                    "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-1500121.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500121,
+            "file_path": "results\\Dumber_NoPenalty_dir_2\\My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1692891231.2611878,
+            "auxillary_file_paths": [
+                "results\\Dumber_NoPenalty_dir_2\\My Behavior\\My Behavior-1500121.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

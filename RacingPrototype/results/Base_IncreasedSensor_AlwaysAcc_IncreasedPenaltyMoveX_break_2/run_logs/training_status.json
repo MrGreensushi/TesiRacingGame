@@ -1,0 +1,59 @@
+{
+    "config_num": {
+        "lesson_num": 4
+    },
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 499949,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-499949.onnx",
+                "reward": 157.91499358415604,
+                "creation_time": 1693342413.9434931,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-499949.pt"
+                ]
+            },
+            {
+                "steps": 999950,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-999950.onnx",
+                "reward": 176.39999290183187,
+                "creation_time": 1693344055.0918634,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-999950.pt"
+                ]
+            },
+            {
+                "steps": 1499992,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-1499992.onnx",
+                "reward": 20.329165429187317,
+                "creation_time": 1693345680.2635539,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-1499992.pt"
+                ]
+            },
+            {
+                "steps": 1500056,
+                "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-1500056.onnx",
+                "reward": 20.329165429187317,
+                "creation_time": 1693345680.443746,
+                "auxillary_file_paths": [
+                    "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-1500056.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500056,
+            "file_path": "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior.onnx",
+            "reward": 20.329165429187317,
+            "creation_time": 1693345680.443746,
+            "auxillary_file_paths": [
+                "results\\Base_IncreasedSensor_AlwaysAcc_IncreasedPenaltyMoveX_break_2\\My Behavior\\My Behavior-1500056.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -133,12 +133,15 @@ public struct Offline_CarInfos : IComparable<Offline_CarInfos>
     public string[] AllInfos()
     {
         string time = ";" + Time.time.ToString();
-        // velocità & accelerazione prova con una macchina invece che 4 nel caso
-        string physic = Player.playerName + ";" + Player.Position + ";" + Player.VectorizedVelocity + ";" + Player.Rotation + time;
+        // Posizione assoluta, Velocità, rotation, angular rotaion, acc, Tile, Tile number, tile relative position, time
+
+
+        string physic = Player.playerName + ";" + Player.Position + ";" + Player.VectorizedVelocity + ";" + Player.Rotation + ";" +
+            Player.AngularVelString + ";" + Player.Acceleration + ";" + Player.ReturnInfoTile() + time;
         //string physic = Player.playerName + ";" + Player.VectorizedVelocity + ';' + Player.Acceleration;
         string rules = Player.playerName + ";" + Car.Laps + ";" + Car.Rank + time;
         int[] action = Player.LastAction;
-        string commands = Player.playerName + ";" + action[0] + ";" + action[1] + ";" + action[2] + time;
+        string commands = action[0] + ";" + action[1] + ";" + action[2];
         return new string[] { physic, rules, commands };
     }
     public float[] PhysicInfos()

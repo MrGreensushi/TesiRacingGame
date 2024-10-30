@@ -22,6 +22,7 @@ namespace QuickStart
             {
                 instance = this;
                 Initialize();
+                //Debug.Log("MAX COUNTS: " + maxGates);
             }
             else
             {
@@ -34,7 +35,7 @@ namespace QuickStart
             if (gates == null || gates.Count == 0)
                 FindGates();
 
-            gates.RemoveAll(x => x.gameObject.activeInHierarchy == false);
+            //gates.RemoveAll(x => x.gameObject.activeInHierarchy == false);
             maxGates = gates.Count;
             if (!initializeIds) return;
             for (int i = 0; i < gates.Count; i++)
@@ -47,7 +48,6 @@ namespace QuickStart
         {
             if (findGates)
             {
-                gates = new List<Gate>();
                 for (int i = 0; i < _parentGates.childCount; i++)
                 {
                     var child = _parentGates.GetChild(i);
@@ -55,6 +55,8 @@ namespace QuickStart
                     for (int j = 0; j < child.childCount; j++)
                     {
                         var gate = child.GetChild(j);
+
+
                         if (gate.TryGetComponent(out Gate item))
                         {
                             gates.Add(item);
@@ -64,6 +66,8 @@ namespace QuickStart
 
             }
         }
+
+        [Server]
         public void CarPassedThrough(int id_gate, string id_car)
         {
             int passed = CarsManager.instance.cars.FindIndex(x => x.Car.Id.Equals(id_car));
@@ -111,7 +115,7 @@ namespace QuickStart
 
             if (passed < 0)
             {
-                Debug.LogError($"Car {id_car} is not in the server cars list");
+                Debug.LogWarning($"Car {id_car} is not in the server cars list");
                 //2 possibilità o c'è stato un errore oppure il codice per aggiungere la macchina nel carmanager non è stato ancora eseguito
                 return -1;
             }
@@ -127,7 +131,10 @@ namespace QuickStart
 
         public Vector3 NextGateForward(string id_car)
         {
-            return gates[GetGateIdPlayer(id_car)].transform.forward;
+            var id = GetGateIdPlayer(id_car);
+            if (id < 0)
+                return Vector3.zero;
+            return gates[id].transform.forward;
         }
 
         public Vector3 NextNextGateForward(string id_car)
