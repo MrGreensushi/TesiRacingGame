@@ -13,6 +13,7 @@ public class CommandLinesManager : MonoBehaviour
     public bool doNotMPAI;
     public string filePath;
     public string playerName,path,fileName;
+    public int mpaiFrequency, mpaiDuration;
 
     // Start is called before the first frame update
     void Awake()
@@ -34,6 +35,9 @@ public class CommandLinesManager : MonoBehaviour
         int x = -1, y = -1;
         bool fullscreen = false;
         playerName = "";
+        var durationParse = false;
+        var frequencyParse = false;
+        
         for (int i = 0; i < args.Length; i++)
         {
             //Debug.Log("ARG " + i + ": " + args[i]);
@@ -101,9 +105,26 @@ public class CommandLinesManager : MonoBehaviour
             {
                 filePath= args[i][6..];
             }
+            else if (args[i]=="-duration")
+            {
+                durationParse=int.TryParse(args[i + 1], out mpaiDuration);
+            }
+            else if (args[i]=="-frequency")
+            {
+                frequencyParse=int.TryParse(args[i + 1], out mpaiFrequency);
+            }
 
         }
 
+        if (durationParse)
+        {
+            LatencyLevels.L1Duration = mpaiDuration;
+        }
+        
+        if (frequencyParse)
+        {
+            LatencyLevels.L1Frequency = mpaiFrequency;
+        }
 
         var manager = GetComponent<NetworkRoomManager>();
 

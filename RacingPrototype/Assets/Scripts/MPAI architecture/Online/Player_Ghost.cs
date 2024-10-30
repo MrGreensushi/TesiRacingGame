@@ -135,15 +135,15 @@ public class Player_Ghost
 
     void WriteOnFile(string message)
     {
-        var file = "C:/Users/dansp/OneDrive/Desktop/TempoPrevisioni.txt";
-
-        if (!File.Exists(file))
-        {
-            var myFile = File.Create(file);
-            myFile.Close();
-        }
-
-        File.AppendAllText(file, message + "\n");
+        // var file = "C:/Users/dansp/OneDrive/Desktop/TempoPrevisioni.txt";
+        //
+        // if (!File.Exists(file))
+        // {
+        //     var myFile = File.Create(file);
+        //     myFile.Close();
+        // }
+        //
+        // File.AppendAllText(file, message + "\n");
     }
 
 
