@@ -54,7 +54,7 @@ namespace QuickStart
             if (ghosts.Count == 0) return;
 
 
-            //controllo se la latenza del giocatore è elevata
+            //controllo se la latenza del giocatore Ã¨ elevata
             //double rtt = NetworkTime.rtt;
             //Debug.Log(rtt);
 

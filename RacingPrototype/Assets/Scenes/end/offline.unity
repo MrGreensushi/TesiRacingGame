@@ -208,7 +208,7 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/end/Room.unity
   transport: {fileID: 435397483}
   networkAddress: localhost
-  maxConnections: 4
+  maxConnections: 5000
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2874309902315919791, guid: 6fa07589e7819304f96a8cf06465db07, type: 3}
   autoCreatePlayer: 1
