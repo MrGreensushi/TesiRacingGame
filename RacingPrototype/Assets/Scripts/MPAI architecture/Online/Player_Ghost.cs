@@ -175,7 +175,7 @@ public class Player_Ghost
         //time in second lo trasformo in millisecodi
         var sub = (time - lastActivation) * 1000;
 
-        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration + randomAddedLatency)
+        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration )
         {
             if (newActivation)
             {

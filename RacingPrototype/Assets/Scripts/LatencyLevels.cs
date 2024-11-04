@@ -16,10 +16,10 @@ public class LatencyLevels : MonoBehaviour
 
     public void Awake()
     {
-        L1Duration = durationL1;
+        // L1Duration = durationL1;
         L2Duration = durationL2;
         L3Duration = durationL3;
-        L1Frequency = frequencyL1;
+        // L1Frequency = frequencyL1;
         L2Frequency = frequencyL2;
         L3Frequency = frequencyL3;
     }

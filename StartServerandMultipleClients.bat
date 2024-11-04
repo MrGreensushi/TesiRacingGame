@@ -55,14 +55,14 @@ set /a yPos=100
 
 set /a maxX=1920 - (%screenWidth%/2)
 set /a maxY=1080 - (%screenHeight%/2)
-start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont %durationParam% %frequencyParam% -pathPredictions=C:\Users\Daniele\Desktop\predictionLogger.txt
+start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -pathPredictions=C:\Users\Daniele\Desktop\predictionLogger.txt %durationParam% %frequencyParam%
 
 
 timeout /t 5 /nobreak
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -batchmode -nographics -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 %durationParam% %frequencyParam%
+	start RacingPrototype.exe -batchmode -nographics -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 
 	
 	REM Aggiorna la posizione per la prossima finestra
 	set /a xPos=xPos+%xIncrement%

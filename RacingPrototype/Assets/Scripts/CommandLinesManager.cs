@@ -34,6 +34,12 @@ public class CommandLinesManager : MonoBehaviour
         int x = -1, y = -1;
         bool fullscreen = false;
         playerName = "";
+         var durationParse = false;
+        var frequencyParse = false;
+
+        int mpaiDuration=0;
+        int mpaiFrequency=0;
+        
         for (int i = 0; i < args.Length; i++)
         {
             //Debug.Log("ARG " + i + ": " + args[i]);
@@ -101,13 +107,29 @@ public class CommandLinesManager : MonoBehaviour
             {
                 filePath= args[i][6..];
             }
-            else if ( args[i].StartsWith("-pathPredictions="))
+            else if (args[i]=="-duration")
+            {
+                durationParse=int.TryParse(args[i + 1], out mpaiDuration);
+            }
+            else if (args[i]=="-frequency")
+            {
+                frequencyParse=int.TryParse(args[i + 1], out mpaiFrequency);
+            } else if ( args[i].StartsWith("-pathPredictions="))
             {
                 filePathPredictionsTime= args[i]["-pathPredictions=".Length..];
             }
 
-        }
+        } 
 
+    if (durationParse)
+    {
+        LatencyLevels.L1Duration = mpaiDuration;
+    }
+        
+    if (frequencyParse)
+    {
+        LatencyLevels.L1Frequency = mpaiFrequency;
+    }
 
         var manager = GetComponent<NetworkRoomManager>();
 

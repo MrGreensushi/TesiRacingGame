@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -22,6 +23,9 @@ public class PredictionLogger : MonoBehaviour
         
         filePath = CommandLinesManager.instance.filePathPredictionsTime;
         Assert.IsFalse(filePath is null or "");
+
+        var lat = new Latency(LatencyLevel.L1);
+        WriteOnFile("L1 Duration L1 Frequency",lat.Duration.ToString(CultureInfo.InvariantCulture),lat.Frequency.ToString(CultureInfo.InvariantCulture) );
     }
 
     public void WriteOnFile(string playerId, string startTimePrediction, string endTimePrediction)
