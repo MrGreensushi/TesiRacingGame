@@ -134,7 +134,7 @@ namespace QuickStart
             var ui_o = Instantiate(infoObject, UI_transform);
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
-
+            ui.SetCameraCarFocus(c_t.gameObject);
 
 
             ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, doNotMPAI, level, nnModel.name));

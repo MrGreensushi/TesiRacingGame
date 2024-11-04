@@ -45,6 +45,13 @@ public class FollowCamera : MonoBehaviour
 
     public void SwitchView(GameObject g)
     {
+        if (g != toFollow)
+        {
+            StopFollowing();
+            StartFollowing(g);
+            return;
+        }
+        
         if (following)
             StopFollowing();
         else

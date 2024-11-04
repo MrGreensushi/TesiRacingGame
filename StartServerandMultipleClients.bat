@@ -1,7 +1,7 @@
 @ECHO off
 setlocal enabledelayedexpansion
 
-cd /D D:\Github\TesiRacingGame\RacingPrototype\Builds\Room_PredicitonOnlyWhenActivated
+cd /D D:\Github\TesiRacingGame\RacingPrototype\Builds\LatestBuild
 
 REM Chiede il numero di giocatori
 set /p playerCount="Quanti giocatori istanziare? (Inserisci un numero intero): "
@@ -28,7 +28,7 @@ start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l2
+	start RacingPrototype.exe -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -dont %durationParam% %frequencyParam%
 	
 	REM Aggiorna la posizione per la prossima finestra
    set /a xPos=xPos+%xIncrement%

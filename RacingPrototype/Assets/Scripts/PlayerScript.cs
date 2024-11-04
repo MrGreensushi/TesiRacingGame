@@ -262,9 +262,11 @@ namespace QuickStart
             string name = "";
             List<PlayerScript> allCars = new List<PlayerScript>();
             allCars.AddRange(FindObjectsOfType<PlayerScript>());
+            int i = allCars.Count;
             do
             {
-                name = "Player " + Random.Range(100, 999);
+                name = "Player " + i;
+                i++;
 
             } while (allCars.FindIndex(x => x.playerName == name) >= 0);
             return name;
@@ -297,6 +299,7 @@ namespace QuickStart
             //Player info sent to server, then server updates sync vars which handles it on all clients
             playerName = _name;
             playerColor = _col;
+            OnNameChanged("",_name);
             OnColorChanged(Color.black, _col);
 
             bot = _bot; //cambio sul client
@@ -454,7 +457,7 @@ namespace QuickStart
         void Update()
         {
             //non-local player run this
-            floatingInfo.transform.LookAt(Camera.main.transform);
+            //floatingInfo.transform.LookAt(Camera.main.transform);
             
             if (!isLocalPlayer) return;
             var vel = _rigidbody.velocity;
