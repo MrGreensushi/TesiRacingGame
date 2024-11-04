@@ -54,7 +54,7 @@ namespace QuickStart
             if (ghosts.Count == 0) return;
 
 
-            //controllo se la latenza del giocatore Ã¨ elevata
+            //controllo se la latenza del giocatore è elevata
             //double rtt = NetworkTime.rtt;
             //Debug.Log(rtt);
 
@@ -134,7 +134,7 @@ namespace QuickStart
             var ui_o = Instantiate(infoObject, UI_transform);
             var ui = ui_o.GetComponent<MPAI_Info>();
             ui.Nome(c_t.playerName, c_t.playerColor);
-
+            ui.SetCameraCarFocus(c_t.gameObject);
 
 
             ghosts.Add(new Player_Ghost(c_t, g_c, ui, nnModel, doNotMPAI, level, nnModel.name));

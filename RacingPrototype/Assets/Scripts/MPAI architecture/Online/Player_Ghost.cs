@@ -2,6 +2,7 @@ using Mirror;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Unity.Barracuda;
 using UnityEngine;
 using System.IO;
@@ -57,7 +58,7 @@ public class Player_Ghost
         UpdateRandomLatency();
         //this.job = new JobHandle();
 
-        WriteOnFile(name);
+        //WriteOnFile(name);
     }
 
     private void UpdateRandomLatency()
@@ -128,22 +129,23 @@ public class Player_Ghost
         }
 
         var timeNeededForPrediction = Time.time - starTimePrediction;
-        WriteOnFile(timeNeededForPrediction.ToString());
+        //WriteOnFile(timeNeededForPrediction.ToString());
+        PredictionLogger.Instance.WriteOnFile(player.playerName,starTimePrediction.ToString(CultureInfo.InvariantCulture),Time.time.ToString(CultureInfo.InvariantCulture));
     }
 
 
 
     void WriteOnFile(string message)
     {
-        // var file = "C:/Users/dansp/OneDrive/Desktop/TempoPrevisioni.txt";
-        //
-        // if (!File.Exists(file))
-        // {
-        //     var myFile = File.Create(file);
-        //     myFile.Close();
-        // }
-        //
-        // File.AppendAllText(file, message + "\n");
+        var file = "C:/Users/dansp/OneDrive/Desktop/TempoPrevisioni.txt";
+
+        if (!File.Exists(file))
+        {
+            var myFile = File.Create(file);
+            myFile.Close();
+        }
+
+        File.AppendAllText(file, message + "\n");
     }
 
 
@@ -173,7 +175,7 @@ public class Player_Ghost
         //time in second lo trasformo in millisecodi
         var sub = (time - lastActivation) * 1000;
 
-        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration + randomAddedLatency)
+        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration )
         {
             if (newActivation)
             {

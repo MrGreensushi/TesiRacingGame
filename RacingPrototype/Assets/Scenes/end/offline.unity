@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -208,7 +208,7 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/end/Room.unity
   transport: {fileID: 435397483}
   networkAddress: localhost
-  maxConnections: 5000
+  maxConnections: 1000000
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2874309902315919791, guid: 6fa07589e7819304f96a8cf06465db07, type: 3}
   autoCreatePlayer: 1
@@ -253,6 +253,7 @@ MonoBehaviour:
   level: 0
   doNotMPAI: 0
   filePath: 
+  filePathPredictionsTime: 
   playerName: 
   path: 
   fileName: 

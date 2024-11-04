@@ -43,9 +43,9 @@ namespace QuickStart
 
         public void CollectPrediction(Player_Ghost pg)
         {
-            //controllo se la predizione Ã¨ simile al dato riscontrato
+            //controllo se la predizione è simile al dato riscontrato
             var conn = pg.player.netIdentity.connectionToClient;
-            //if (ConfrontPrediction(pg))//real data Ã¨ diverso dalla predizione quindi uso la predizione
+            //if (ConfrontPrediction(pg))//real data è diverso dalla predizione quindi uso la predizione
 
             if (pg.predicting)//Se stavo predicendo
             {
@@ -94,7 +94,7 @@ namespace QuickStart
             }
             else
             {
-                ////Controllo la predizione, se il MAE Ã¨ maggiore del treshold allora sbaglia
+                ////Controllo la predizione, se il MAE è maggiore del treshold allora sbaglia
                 //var diff = 0f;
                 //var toCompare = pg.player.CompareWithPrediction();
                 //var prediction = pg.prediction;
