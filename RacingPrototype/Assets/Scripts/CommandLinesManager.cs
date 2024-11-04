@@ -11,7 +11,7 @@ public class CommandLinesManager : MonoBehaviour
     public int bot = 0;
     public LatencyLevel level;
     public bool doNotMPAI;
-    public string filePath;
+    public string filePath,filePathPredictionsTime;
     public string playerName,path,fileName;
 
     // Start is called before the first frame update
@@ -100,6 +100,10 @@ public class CommandLinesManager : MonoBehaviour
             else if ( args[i].StartsWith("-path="))
             {
                 filePath= args[i][6..];
+            }
+            else if ( args[i].StartsWith("-pathPredictions="))
+            {
+                filePathPredictionsTime= args[i]["-pathPredictions=".Length..];
             }
 
         }

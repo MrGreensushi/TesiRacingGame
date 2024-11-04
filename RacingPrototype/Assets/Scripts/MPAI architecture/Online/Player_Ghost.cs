@@ -2,6 +2,7 @@ using Mirror;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Unity.Barracuda;
 using UnityEngine;
 using System.IO;
@@ -57,7 +58,7 @@ public class Player_Ghost
         UpdateRandomLatency();
         //this.job = new JobHandle();
 
-        WriteOnFile(name);
+        //WriteOnFile(name);
     }
 
     private void UpdateRandomLatency()
@@ -128,7 +129,8 @@ public class Player_Ghost
         }
 
         var timeNeededForPrediction = Time.time - starTimePrediction;
-        WriteOnFile(timeNeededForPrediction.ToString());
+        //WriteOnFile(timeNeededForPrediction.ToString());
+        PredictionLogger.Instance.WriteOnFile(player.playerName,starTimePrediction.ToString(CultureInfo.InvariantCulture),Time.time.ToString(CultureInfo.InvariantCulture));
     }
 
 
