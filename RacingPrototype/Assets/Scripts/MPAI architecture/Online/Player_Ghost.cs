@@ -54,7 +54,8 @@ public class Player_Ghost
         if (doNotMPAI) return;
 
         var model = ModelLoader.Load(nn);
-        this.worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model);
+        var workerType = CommandLinesManager.instance?.workerType ?? WorkerFactory.Type.CSharpBurst;
+        this.worker = WorkerFactory.CreateWorker(workerType, model);
         UpdateRandomLatency();
         //this.job = new JobHandle();
 

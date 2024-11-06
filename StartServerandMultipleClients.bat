@@ -55,7 +55,7 @@ set /a yPos=100
 
 set /a maxX=1920 - (%screenWidth%/2)
 set /a maxY=1080 - (%screenHeight%/2)
-start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -pathPredictions=C:\Users\Daniele\Desktop\predictionLogger.txt %durationParam% %frequencyParam%
+start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -pathPredictions=C:\Users\Daniele\Desktop\predictionLoggerTest.txt -workerType=ComputePrecompiled %durationParam% %frequencyParam%
 
 
 timeout /t 5 /nobreak

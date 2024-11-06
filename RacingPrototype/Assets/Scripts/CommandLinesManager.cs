@@ -3,6 +3,7 @@ using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Barracuda;
 using UnityEngine;
 
 public class CommandLinesManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class CommandLinesManager : MonoBehaviour
     public bool doNotMPAI;
     public string filePath,filePathPredictionsTime;
     public string playerName,path,fileName;
+    public WorkerFactory.Type workerType = WorkerFactory.Type.CSharpBurst;
 
     // Start is called before the first frame update
     void Awake()
@@ -117,6 +119,20 @@ public class CommandLinesManager : MonoBehaviour
             } else if ( args[i].StartsWith("-pathPredictions="))
             {
                 filePathPredictionsTime= args[i]["-pathPredictions=".Length..];
+            }
+            else if (args[i].StartsWith("-workerType="))
+            {
+                var type=args[i]["-workerType=".Length..];
+                workerType = type switch
+                {
+                    "Compute" => WorkerFactory.Type.Compute,
+                    "ComputePrecompiled" => WorkerFactory.Type.ComputePrecompiled,
+                    "ComputeRef" => WorkerFactory.Type.ComputeRef,
+                    "CSharp" => WorkerFactory.Type.CSharp,
+                    "CSharpRef" => WorkerFactory.Type.CSharpRef,
+                    "CSharpBurst" => WorkerFactory.Type.CSharpBurst,
+                    _ => workerType
+                };
             }
 
         } 
