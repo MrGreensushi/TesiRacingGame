@@ -16,9 +16,9 @@ if %errorlevel% neq 0 (
 
 REM Chiede la durata e la frequenza (opzionali)
 set "duration="
-set /p duration="Inserisci la durata (in millisecondi, lascia vuoto per ignorare): "
+set /p duration="Inserisci la durata (in millisecondi, lascia vuoto per 300 ms): "
 set "frequency="
-set /p frequency="Inserisci la frequenza (in millisecondi, lascia vuoto per ignorare): "
+set /p frequency="Inserisci la frequenza (in millisecondi, lascia vuoto per 12000 ms): "
    
 REM Verifica che durata e frequenza siano interi positivi solo se specificati
 set "durationParam="
@@ -79,5 +79,5 @@ for /l %%i in (1,1,%playerCount%) do (
 )
 
 
-echo Sono stati istanziati %playerCount% giocatori.
-pause
+rem echo Sono stati istanziati %playerCount% giocatori.
+rem pause
