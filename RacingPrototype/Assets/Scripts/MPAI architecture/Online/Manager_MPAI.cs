@@ -54,7 +54,7 @@ namespace QuickStart
             if (ghosts.Count == 0) return;
 
 
-            //controllo se la latenza del giocatore è elevata
+            //controllo se la latenza del giocatore ï¿½ elevata
             //double rtt = NetworkTime.rtt;
             //Debug.Log(rtt);
 
@@ -73,6 +73,8 @@ namespace QuickStart
 
             foreach (var item in ghosts)
             {
+                if(item.player==null) continue;
+                
                 if (!item.canPredict) continue;
 
                 if (item.doNotMPAI) continue;
@@ -92,6 +94,8 @@ namespace QuickStart
 
             foreach (var item in ghosts)
             {
+                if(item.player==null) continue;
+                
                 if (!item.canPredict) continue;
 
                 if (item.doNotMPAI) continue;

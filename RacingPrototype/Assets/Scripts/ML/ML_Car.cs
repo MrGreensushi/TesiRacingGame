@@ -7,7 +7,6 @@ using QuickStart;
 using Unity.MLAgents.Sensors;
 using Unity.Barracuda;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using Mirror;
 
 public class ML_Car : Agent
@@ -139,7 +138,7 @@ public class ML_Car : Agent
 
         if (completeRace && collision.gameObject.TryGetComponent(out Wall wall))
         {
-            //Se la collisione dura da più di 2 secondi allora fine episodio
+            //Se la collisione dura da piï¿½ di 2 secondi allora fine episodio
             if ((Time.time - collisionDuration) >= 5f)
             {
                 CarsManager.instance.EndEpisodeForAll();
@@ -151,7 +150,7 @@ public class ML_Car : Agent
         if (collision.gameObject.TryGetComponent(out Wall wall1) ||
             collision.gameObject.TryGetComponent(out OfflineCar car))
         {
-            //Se la collisione dura da più di 2 secondi allora fine episodio
+            //Se la collisione dura da piï¿½ di 2 secondi allora fine episodio
             if ((Time.time - collisionDuration) >= 1f)
             {
                 EndEpisode();

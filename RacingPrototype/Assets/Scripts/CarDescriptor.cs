@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace QuickStart
@@ -51,7 +50,7 @@ namespace QuickStart
             if (this.Gates.CompareTo(other.Gates) != 0)
                 return this.Gates.CompareTo(other.Gates);
             //Se anche i gate sono uguali controlliamo la distanza dal next gate 
-            //meno perché minore è la distanza meglio è
+            //meno perchï¿½ minore ï¿½ la distanza meglio ï¿½
             return -this.DistanceNextGate.CompareTo(other.DistanceNextGate);
 
 

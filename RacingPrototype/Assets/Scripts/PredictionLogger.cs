@@ -1,17 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Debug = UnityEngine.Debug;
 
 public class PredictionLogger : MonoBehaviour
 {
     public static PredictionLogger Instance;
 
-    public string filePath="";
+    public float InitialTime { get; private set; }
+    private string folderInfoPath = "";
+    private string scenarioInfoPath=""; 
+    private string predictionInfoPath=""; 
+    private string systemInfoPath=""; 
+    private string fpsInfoPath=""; 
     private string logs = "Player ID,Start Prediction, End Prediction\n";
+    private string fpsData = "Time,FPS\n";
+    private SC_FPSCounter fps;
+    private int counter = 0;
     private void Awake()
     {
         if (Instance == null)
@@ -20,44 +31,55 @@ public class PredictionLogger : MonoBehaviour
         {
             Destroy(this);
         }
-        
-        filePath = CommandLinesManager.instance.filePathPredictionsTime;
-        Assert.IsFalse(filePath is null or "");
 
-        var lat = new Latency(LatencyLevel.L1);
-        WriteOnFile("L1 Duration L1 Frequency",lat.Duration.ToString(CultureInfo.InvariantCulture),lat.Frequency.ToString(CultureInfo.InvariantCulture) );
+        InitialTime = Time.time;
+        fps = FindObjectOfType<SC_FPSCounter>();
+        Assert.IsNotNull(fps);
+        
+        folderInfoPath = CommandLinesManager.instance.filePathPredictionsTime;
+        Assert.IsFalse(string.IsNullOrEmpty(folderInfoPath));
+        
+        folderInfoPath += $"\\{NetworkManager.singleton.numPlayers}_{CommandLinesManager.instance.workerType}_{DateTime.Now:yyyy-M-d_hh_mm_ss}";
+        var dirInfo=Directory.CreateDirectory(folderInfoPath);
+        Assert.IsNotNull(dirInfo);
+        
+        predictionInfoPath = $"{folderInfoPath}\\predictionPerformance.txt";
+        Assert.IsFalse(string.IsNullOrEmpty(predictionInfoPath));
+        
+        fpsInfoPath=$"{folderInfoPath}\\fpsInfo.txt";
+        Assert.IsFalse(string.IsNullOrEmpty(fpsInfoPath));
+        
+        scenarioInfoPath = $"{folderInfoPath}\\scenarioInfo.txt";
+        Assert.IsFalse(string.IsNullOrEmpty(predictionInfoPath));
+        WriteScenarioInfo();
+        
+        systemInfoPath = $"{folderInfoPath}\\systemPerformance.csv";
+        Assert.IsFalse(string.IsNullOrEmpty(predictionInfoPath));
+        File.Create(systemInfoPath);
+        //StartPythonScript();
+
     }
 
-    public void WriteOnFile(string playerId, string startTimePrediction, string endTimePrediction)
+    public void AddPredictionLog(string playerId, string startTimePrediction, string endTimePrediction)
     {
-        if (!File.Exists(filePath))
-        {
-            var myFile = File.Create(filePath);
-            myFile.Close();
-        }
-        
         // Creiamo una stringa con i valori separati da ','
         var contenuto = $"{playerId},{startTimePrediction},{endTimePrediction}\n";
         logs += contenuto;
-        // try
-        // {
-        //     // Scriviamo la stringa sul file specificato
-        //     File.AppendAllText(filePath, contenuto);
-        //     Debug.Log("Dati scritti con successo.");
-        // }
-        // catch (Exception ex)
-        // {
-        //     // Gestione errori in caso di problemi con la scrittura del file
-        //     Debug.LogError($"Errore durante la scrittura del file: {ex.Message}");
-        // }
     }
-
+    
+    private void WriteScenarioInfo()
+    {
+        var lat = new Latency(LatencyLevel.L1);
+        var infos = $"Duration:{lat.Duration}\nWorkerType:{CommandLinesManager.instance.workerType}";
+        File.WriteAllText(scenarioInfoPath, infos);
+    }
     private void OnDestroy()
     {
         try
         {
             // Scriviamo la stringa sul file specificato
-            File.AppendAllText(filePath, logs);
+            File.WriteAllText(predictionInfoPath, logs);
+            File.WriteAllText(fpsInfoPath, fpsData);
             Debug.Log("Dati scritti con successo.");
         }
         catch (Exception ex)
@@ -65,5 +87,21 @@ public class PredictionLogger : MonoBehaviour
             // Gestione errori in caso di problemi con la scrittura del file
             Debug.LogError($"Errore durante la scrittura del file: {ex.Message}");
         }
+    }
+
+    private void StartPythonScript()
+    {
+        var runner=FindObjectOfType<RunPythonAnalysisScript>();
+        Assert.IsNotNull(runner);
+        runner.RunScript(CommandLinesManager.instance.pythonDirectory, CommandLinesManager.instance.pythonScriptPath,
+            systemInfoPath, CommandLinesManager.instance.processName);
+    }
+
+    private void LateUpdate()
+    {
+        counter++;
+        if (counter < 5) return;
+        fpsData += $"{Time.time.ToString(CultureInfo.InvariantCulture)},{fps.fps.ToString("F2", CultureInfo.InvariantCulture)}\n";
+        counter = 0;
     }
 }

@@ -23,6 +23,7 @@ public class Player_Ghost
     private double lastActivation;
     private int randomAddedLatency;
     private bool newActivation;
+    private float initialTime = -1;
 
     public Player_Ghost(PlayerScript x, Ghost_Car y, MPAI_Info z, NNModel nn, bool doNotMPAI, LatencyLevel level, string name)
     {
@@ -59,6 +60,7 @@ public class Player_Ghost
         UpdateRandomLatency();
         //this.job = new JobHandle();
 
+        initialTime = PredictionLogger.Instance.InitialTime;
         //WriteOnFile(name);
     }
 
@@ -131,7 +133,7 @@ public class Player_Ghost
 
         var timeNeededForPrediction = Time.time - starTimePrediction;
         //WriteOnFile(timeNeededForPrediction.ToString());
-        PredictionLogger.Instance.WriteOnFile(player.playerName,starTimePrediction.ToString(CultureInfo.InvariantCulture),Time.time.ToString(CultureInfo.InvariantCulture));
+        PredictionLogger.Instance.AddPredictionLog(player.playerName,starTimePrediction.ToString(CultureInfo.InvariantCulture),Time.time.ToString(CultureInfo.InvariantCulture));
     }
 
 
@@ -172,21 +174,26 @@ public class Player_Ghost
 
     public bool CheckLatencyActivation()
     {
-        var time = NetworkTime.time;
+        // var time = NetworkTime.time;
         //time in second lo trasformo in millisecodi
-        var sub = (time - lastActivation) * 1000;
+        //var sub = (time - lastActivation) * 1000;
+        var time = Time.time;
+        var sub = (time -initialTime) * 1000;
 
-        if (sub < lat.Duration || sub > lat.Frequency + lat.Duration )
-        {
-            if (newActivation)
-            {
-                UpdateRandomLatency(); //aggiungo da 0 a 4 secondi
-                lastActivation = time;
-            }
-            newActivation = false;
-            return true;
-        }
-        newActivation = true;
-        return false;
+        // if (sub < lat.Duration || sub > lat.Frequency + lat.Duration )
+        // {
+        //     if (newActivation)
+        //     {
+        //         UpdateRandomLatency(); //aggiungo da 0 a 4 secondi
+        //         lastActivation = time;
+        //     }
+        //     newActivation = false;
+        //     return true;
+        // }
+        // newActivation = true;
+        // return false;
+
+        return sub > lat.Duration;
+
     }
 }

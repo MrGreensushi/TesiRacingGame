@@ -11,7 +11,7 @@ public class SC_FPSCounter : MonoBehaviour
     float accum = 0.0f;
     int frames = 0;
     float timeleft;
-    float fps;
+    public float fps;
 
     GUIStyle textStyle = new GUIStyle();
 

@@ -6,7 +6,6 @@ using System;
 using QuickStart;
 using TMPro;
 using System.Numerics;
-using Unity.VisualScripting;
 
 namespace QuickStart
 {

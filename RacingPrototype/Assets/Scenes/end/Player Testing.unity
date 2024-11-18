@@ -17545,6 +17545,7 @@ GameObject:
   - component: {fileID: 1640918879}
   - component: {fileID: 1640918878}
   - component: {fileID: 1640918884}
+  - component: {fileID: 1640918885}
   m_Layer: 0
   m_Name: MPAI
   m_TagString: Untagged
@@ -17572,7 +17573,7 @@ MonoBehaviour:
   UI_transform: {fileID: 1432602878}
   nnModel: {fileID: 5022602860645237092, guid: bc992d4f5023a75468dac08dd00cda8c, type: 3}
   discard: 9
-  ghost_OpMode: 1
+  ghost_OpMode: 0
   bot: 0
 --- !u!114 &1640918879
 MonoBehaviour:
@@ -17665,7 +17666,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db60064261655546accc6b08b7e7b7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filePath: 
+--- !u!114 &1640918885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640918876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d118da3bad2ecdf47a60dbe1624b804a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1644136941
 PrefabInstance:
   m_ObjectHideFlags: 0

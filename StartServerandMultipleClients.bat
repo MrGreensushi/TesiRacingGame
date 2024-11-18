@@ -17,11 +17,9 @@ if %errorlevel% neq 0 (
 REM Chiede la durata e la frequenza (opzionali)
 set "duration="
 set /p duration="Inserisci la durata (in millisecondi, lascia vuoto per 300 ms): "
-set "frequency="
-set /p frequency="Inserisci la frequenza (in millisecondi, lascia vuoto per 12000 ms): "
    
 REM Verifica che durata e frequenza siano interi positivi solo se specificati
-set "durationParam="
+set "durationParam=-duration 10000"
 if defined duration (
    set "var="
    for /f "delims=0123456789" %%i in ("%duration%") do set var=%%i
@@ -29,18 +27,6 @@ if defined duration (
 	echo %duration% is numeric
 	set durationParam=-duration %duration%
    )
-)
-
-REM Verifica che durata e frequenza siano interi positivi solo se specificati
-set "frequencyParam="
-if defined frequency (
-   set "var="
-   for /f "delims=0123456789" %%i in ("%frequency%") do set var=%%i
-   if not defined var  (
-	echo %frequency% is numeric
-	set frequencyParam=-frequency %frequency%
-	)
-
 )
 
 REM Imposta le dimensioni della finestra e gli incrementi di posizione
@@ -55,14 +41,16 @@ set /a yPos=100
 
 set /a maxX=1920 - (%screenWidth%/2)
 set /a maxY=1080 - (%screenHeight%/2)
-start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -pathPredictions=C:\Users\Daniele\Desktop\predictionLoggerTest.txt -workerType=ComputePrecompiled %durationParam% %frequencyParam%
+start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -logOutput=C:\Users\Daniele\Desktop\Predictions -workerType=ComputePrecompiled %durationParam% -pythonDirectory=C:\Users\Daniele\AppData\Local\Programs\Python\Python312\python.exe  -pythonScriptPath=C:\Users\Daniele\Downloads\system_info_logger.py -processName= 
+ 
 
-
-timeout /t 5 /nobreak
+rem timeout /t 5 /nobreak
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -batchmode -nographics -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 
+	start RacingPrototype.exe -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 
+	rem -networkAddress=192.168.50.3
+	rem  -batchmode -nographics
 	
 	REM Aggiorna la posizione per la prossima finestra
 	set /a xPos=xPos+%xIncrement%

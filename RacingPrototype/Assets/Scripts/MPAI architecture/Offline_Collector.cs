@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.IO;
-using Unity.VisualScripting;
 using Mirror;
 using QuickStart;
 
@@ -22,7 +21,7 @@ public class Offline_Collector : MonoBehaviour
 
     public void CollectPrediction()
     {
-        if (ConfrontPrediction())//real data è diverso dalla predizione quindi uso la predizione
+        if (ConfrontPrediction())//real data ï¿½ diverso dalla predizione quindi uso la predizione
         {
             //Scrivi su file esterno la differenza tra ghost cat e player car
             if (evaluator != null)
@@ -61,7 +60,7 @@ public class Offline_Collector : MonoBehaviour
         }
         else
         {
-            //Controllo la predizione, se il MAE è maggiore del treshold allora sbaglia
+            //Controllo la predizione, se il MAE ï¿½ maggiore del treshold allora sbaglia
             var diff = 0f;
             var toCompare = trueCar.CompareWithPrediction();
             var prediction = pe.prediction;

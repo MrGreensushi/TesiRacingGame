@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.MLAgents.Policies;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -230,7 +229,7 @@ namespace QuickStart
             net_Rigidbody = GetComponent<NetworkRigidbody>();
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
-            //vedo se il giocatore è un bot o meno
+            //vedo se il giocatore ï¿½ un bot o meno
             var beBot = CommandLinesManager.instance.bot != 0;
 
             //ritrovo le informazioni riguardate la latenza fittizia
@@ -244,9 +243,9 @@ namespace QuickStart
                 doNotMPAI = cl.doNotMPAI;
             }
 
-            //Se è il giocatore attacca lo script che controlla la presenza
+            //Se ï¿½ il giocatore attacca lo script che controlla la presenza
             if (!beBot && !string.IsNullOrEmpty( cl.filePath))
-                this.AddComponent<CheckPresence>();
+                gameObject.AddComponent<CheckPresence>();
 
             mpaiActive =false;
 
@@ -345,10 +344,10 @@ namespace QuickStart
             net_TransformChilds = GetComponents<NetworkTransformChild>();
 
             //colore del giocatore corrisponde anche al colore della scia
-            trilRenderer.enabled = true;
-            trilRenderer.startColor = _col;
-            trilRenderer.endColor = _col;
-
+            //trilRenderer.enabled = true;
+            // trilRenderer.startColor = _col;
+            // trilRenderer.endColor = _col;
+            trilRenderer.enabled = false;
             clientAuthority = true;
             OnAuthorityChanged(false, true);
 
@@ -421,7 +420,7 @@ namespace QuickStart
             frontPassengerW.motorTorque = moveZ;
             frontDriverW.motorTorque = moveZ;
 
-            //Bost per la velocità per aiutare la macchina ad accelerare più velocemente 
+            //Bost per la velocitï¿½ per aiutare la macchina ad accelerare piï¿½ velocemente 
             if (Velocity > 0 && moveZ > 0)
                 _rigidbody.AddForce(initial_boost * transform.forward * motorForce * Mathf.Exp(-Velocity * boost_duration));
 
@@ -546,7 +545,7 @@ namespace QuickStart
             }
 
             //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
-            //quindi provo a spostare il raggio poco più avanti
+            //quindi provo a spostare il raggio poco piï¿½ avanti
             hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
             foreach (var item in hits)
             {

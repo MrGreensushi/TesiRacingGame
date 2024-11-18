@@ -144,7 +144,7 @@ public class Ghost_Car : MonoBehaviour
         }
 
         //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
-        //quindi provo a spostare il raggio poco pi˘ avanti
+        //quindi provo a spostare il raggio poco pi√π avanti
         hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
         foreach (var item in hits)
         {
@@ -217,8 +217,10 @@ public class Ghost_Car : MonoBehaviour
     private void UpdateTestingMode()
     {
         //Car is made visible on the server
-        bodyRenderer.enabled = true;
-        trailRenderer.enabled = true;
+        // bodyRenderer.enabled = true;
+        // trailRenderer.enabled = true;
+        bodyRenderer.enabled = false;
+        trailRenderer.enabled = false;
 
         //if copycar is true it means it is the first time it is called only then the trail must be cleared
         if (copyCar)
@@ -229,7 +231,7 @@ public class Ghost_Car : MonoBehaviour
 
     public void CopyFromTrue()
     {
-        if (!copyCar)// se Ë appena finito SPG allora copycar Ë falso, per assicurarsi che il client posizioni la macchina rispetto al server tardo la consegna dell'autorit‡ di un frame
+        if (!copyCar)// se √® appena finito SPG allora copycar √® falso, per assicurarsi che il client posizioni la macchina rispetto al server tardo la consegna dell'autorit√† di un frame
             teleportCar=true;
 
 
@@ -263,7 +265,7 @@ public class Ghost_Car : MonoBehaviour
         }
 
         
-        player.ChangeAuthority(true); //cambio autorit‡ sul selrver
+        player.ChangeAuthority(true); //cambio autorit√† sul selrver
         teleportCar = false;
     }
 

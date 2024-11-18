@@ -2,7 +2,6 @@
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Offline_GhostCar : MonoBehaviour
@@ -101,7 +100,7 @@ public class Offline_GhostCar : MonoBehaviour
         }
 
         //se non trova nulla con i raycast potrebbe essere proprio nel mezzo tra due
-        //quindi provo a spostare il raggio poco più avanti
+        //quindi provo a spostare il raggio poco piï¿½ avanti
         hits = Physics.RaycastAll(centerOfMass.position + Vector3.up + Vector3.forward * 0.1f, Vector3.down, 10);
         foreach (var item in hits)
         {

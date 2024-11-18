@@ -3,7 +3,6 @@ using Mirror.Experimental;
 using QuickStart;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : NetworkBehaviour
@@ -105,7 +104,7 @@ public class Movement : NetworkBehaviour
         frontPassengerW.motorTorque = moveZ;
         frontDriverW.motorTorque = moveZ;
 
-        //Bost per la velocità per aiutare la macchina ad accelerare più velocemente 
+        //Bost per la velocitï¿½ per aiutare la macchina ad accelerare piï¿½ velocemente 
         if (Velocity > 0 && moveZ > 0)
             _rigidbody.AddForce(initial_boost * transform.forward * motorForce * Mathf.Exp(-Velocity * boost_duration));
 

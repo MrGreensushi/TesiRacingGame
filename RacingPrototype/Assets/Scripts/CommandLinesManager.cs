@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using QuickStart;
 using System.Collections;
@@ -12,8 +13,8 @@ public class CommandLinesManager : MonoBehaviour
     public int bot = 0;
     public LatencyLevel level;
     public bool doNotMPAI;
-    public string filePath,filePathPredictionsTime;
-    public string playerName,path,fileName;
+    public string filePath,filePathPredictionsTime,processName;
+    public string playerName,path,fileName,pythonDirectory,pythonScriptPath;
     public WorkerFactory.Type workerType = WorkerFactory.Type.CSharpBurst;
 
     // Start is called before the first frame update
@@ -41,10 +42,11 @@ public class CommandLinesManager : MonoBehaviour
 
         int mpaiDuration=0;
         int mpaiFrequency=0;
+        var networkAddress = "";
         
         for (int i = 0; i < args.Length; i++)
         {
-            //Debug.Log("ARG " + i + ": " + args[i]);
+            // Debug.LogError($"ARG {i}: {args[i]}");
             if (args[i] == "-screen-width")
             {
                 int.TryParse(args[i + 1], out widthInput);
@@ -116,9 +118,14 @@ public class CommandLinesManager : MonoBehaviour
             else if (args[i]=="-frequency")
             {
                 frequencyParse=int.TryParse(args[i + 1], out mpaiFrequency);
-            } else if ( args[i].StartsWith("-pathPredictions="))
+            }
+            else if (args[i].StartsWith("-networkAddress="))
             {
-                filePathPredictionsTime= args[i]["-pathPredictions=".Length..];
+                networkAddress=args[i]["-networkAddress=".Length..];
+            }
+            else if ( args[i].StartsWith("-logOutput="))
+            {
+                filePathPredictionsTime= args[i]["-logOutput=".Length..];
             }
             else if (args[i].StartsWith("-workerType="))
             {
@@ -134,28 +141,41 @@ public class CommandLinesManager : MonoBehaviour
                     _ => workerType
                 };
             }
-
+            else if ( args[i].StartsWith("-pythonDirectory="))
+            {
+                pythonDirectory= args[i]["-pythonDirectory=".Length..];
+            }
+            else if ( args[i].StartsWith("-pythonScriptPath="))
+            {
+                pythonScriptPath= args[i]["-pythonScriptPath=".Length..];
+            }
+            else if ( args[i].StartsWith("-processName="))
+            {
+                processName= args[i]["-processName=".Length..];
+            }
+            
         } 
 
-    if (durationParse)
-    {
-        LatencyLevels.L1Duration = mpaiDuration;
-    }
+        if (durationParse)
+        {
+            LatencyLevels.L1Duration = mpaiDuration;
+        }
         
-    if (frequencyParse)
-    {
-        LatencyLevels.L1Frequency = mpaiFrequency;
-    }
+        if (frequencyParse)
+        {
+            LatencyLevels.L1Frequency = mpaiFrequency;
+        }
 
         var manager = GetComponent<NetworkRoomManager>();
 
         if (manager != null)
         {
-
+            if (!string.IsNullOrEmpty(networkAddress))
+                manager.networkAddress = networkAddress;
+            
             if (startClient)
-            {
                 manager.StartClient();
-            }
+            
             else if (startServer)
                 manager.StartServer();
         }
