@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using QuickStart;
 using System.Collections;
@@ -39,6 +40,7 @@ public class CommandLinesManager : MonoBehaviour
 
         int mpaiDuration=0;
         int mpaiFrequency=0;
+        var networkAddress = "";
         
         for (int i = 0; i < args.Length; i++)
         {
@@ -114,9 +116,14 @@ public class CommandLinesManager : MonoBehaviour
             else if (args[i]=="-frequency")
             {
                 frequencyParse=int.TryParse(args[i + 1], out mpaiFrequency);
-            } else if ( args[i].StartsWith("-pathPredictions="))
+            } 
+            else if ( args[i].StartsWith("-pathPredictions="))
             {
                 filePathPredictionsTime= args[i]["-pathPredictions=".Length..];
+            }
+            else if ( args[i].StartsWith("-networkAddress="))
+            {
+                networkAddress= args[i]["-networkAddress=".Length..];
             }
 
         } 
@@ -135,13 +142,16 @@ public class CommandLinesManager : MonoBehaviour
 
         if (manager != null)
         {
-
+            if (!String.IsNullOrEmpty(networkAddress))
+                manager.networkAddress = networkAddress;
             if (startClient)
             {
                 manager.StartClient();
             }
             else if (startServer)
                 manager.StartServer();
+            
+           
         }
 
         if (heightInput != -1 && widthInput != -1)
@@ -152,6 +162,5 @@ public class CommandLinesManager : MonoBehaviour
         if (x != -1 && y != -1)
             Screen.MoveMainWindowTo(disp, new Vector2Int(x, y));
     }
-
-
+    
 }
