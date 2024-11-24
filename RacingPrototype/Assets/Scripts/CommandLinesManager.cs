@@ -17,6 +17,7 @@ public class CommandLinesManager : MonoBehaviour
     public string playerName,path,fileName,pythonDirectory,pythonScriptPath;
     public WorkerFactory.Type workerType = WorkerFactory.Type.CSharpBurst;
     public int percentageSPGPlayers=-1, percentageActiveSPG=-1;
+    public int experimentDuration=120;
 
     // Start is called before the first frame update
     void Awake()
@@ -162,6 +163,10 @@ public class CommandLinesManager : MonoBehaviour
             {
                 int.TryParse(args[i + 1], out percentageActiveSPG);
             }
+            else if ( args[i].StartsWith("-experimentDuration"))
+            {
+                int.TryParse(args[i + 1], out experimentDuration);
+            }
         } 
 
         if (durationParse)
@@ -197,5 +202,15 @@ public class CommandLinesManager : MonoBehaviour
             Screen.MoveMainWindowTo(disp, new Vector2Int(x, y));
     }
 
+
+    private void Start()
+    {
+        Invoke("QuitApp",experimentDuration);
+    }
+
+    void QuitApp()
+    {
+        Application.Quit();
+    }
 
 }
