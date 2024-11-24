@@ -16,6 +16,7 @@ public class CommandLinesManager : MonoBehaviour
     public string filePath,filePathPredictionsTime,processName;
     public string playerName,path,fileName,pythonDirectory,pythonScriptPath;
     public WorkerFactory.Type workerType = WorkerFactory.Type.CSharpBurst;
+    public int percentageSPGPlayers=-1, percentageActiveSPG=-1;
 
     // Start is called before the first frame update
     void Awake()
@@ -153,7 +154,14 @@ public class CommandLinesManager : MonoBehaviour
             {
                 processName= args[i]["-processName=".Length..];
             }
-            
+            else if ( args[i].StartsWith("-percentageSPGPlayers"))
+            {
+                int.TryParse(args[i + 1], out percentageSPGPlayers);
+            }
+            else if ( args[i].StartsWith("-percentageActiveSPG"))
+            {
+                int.TryParse(args[i + 1], out percentageActiveSPG);
+            }
         } 
 
         if (durationParse)

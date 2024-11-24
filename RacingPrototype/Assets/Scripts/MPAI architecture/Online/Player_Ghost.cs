@@ -177,9 +177,6 @@ public class Player_Ghost
         // var time = NetworkTime.time;
         //time in second lo trasformo in millisecodi
         //var sub = (time - lastActivation) * 1000;
-        var time = Time.time;
-        var sub = (time -initialTime) * 1000;
-
         // if (sub < lat.Duration || sub > lat.Frequency + lat.Duration )
         // {
         //     if (newActivation)
@@ -192,8 +189,12 @@ public class Player_Ghost
         // }
         // newActivation = true;
         // return false;
-
-        return sub > lat.Duration;
-
+        //Only duration
+        // var time = Time.time;
+        // var sub = (time -initialTime) * 1000;
+        // return sub > lat.Duration;
+        //se sono negli X macchine a cui applicare la previsione
+        var toRet = Manager_MPAI.instance.IsGhostContained(this) && Manager_MPAI.instance.SPGactivated;
+        return toRet;
     }
 }
