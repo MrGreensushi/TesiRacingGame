@@ -18,7 +18,7 @@ if %errorlevel% neq 0 (
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -batchmode -nographics -client -bot -l1 -networkAddress=192.168.50.145 -logRTTOutput=C:\Users\Daniele\Desktop\Predictions\RTTs
+	start RacingPrototype.exe -batchmode -nographics -client -bot -l1 -experimentDuration 120 -networkAddress=192.168.50.3 -logRTTOutput=C:\Users\Daniele\Desktop\Predictions\RTTs
 	rem  -batchmode -nographics
 	
 )

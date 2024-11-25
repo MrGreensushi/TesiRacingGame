@@ -57,14 +57,15 @@ set /a yPos=100
 
 set /a maxX=1920 - (%screenWidth%/2)
 set /a maxY=1080 - (%screenHeight%/2)
-start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -logOutput=C:\Users\Daniele\Desktop\Predictions -workerType=CSharpBurst %durationParam% %frequencyParam% -pythonDirectory=C:\Users\Daniele\AppData\Local\Programs\Python\Python312\python.exe  -pythonScriptPath=C:\Users\Daniele\Downloads\system_info_logger.py -percentageSPGPlayers 100 -percentageActiveSPG 100 -experimentDuration 129
+start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -logOutput=C:\Users\Daniele\Desktop\Predictions -workerType=CSharpBurst %durationParam% %frequencyParam% -pythonDirectory=C:\Users\Daniele\AppData\Local\Programs\Python\Python312\python.exe  -pythonScriptPath=C:\Users\Daniele\Downloads\system_info_logger.py -percentageSPGPlayers 100 -percentageActiveSPG 50 -experimentDuration 129
  
 
 timeout /t 5 /nobreak
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -batchmode -nographics -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 -experimentDuration 120
+	start RacingPrototype.exe -batchmode -nographics -client -bot -l1 -experimentDuration 120
+	rem -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos!
 	rem -networkAddress=192.168.50.3 -logRTTOutput=C:\Users\Daniele\Desktop\Predictions\RTTs
 	rem  -batchmode -nographics
 	

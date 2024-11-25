@@ -53,7 +53,7 @@ namespace QuickStart
             // Debug.LogError("Frequency: "+LatencyLevels.L1Frequency);
             // Debug.LogError("Duration: "+LatencyLevels.L1Duration);
             
-            Invoke("SelectSPGPlayers",1);
+            Invoke("SelectSPGPlayers",5);
             Invoke("ActivateSPG",LatencyLevels.L1Duration/1000);
         }
 
@@ -173,7 +173,7 @@ namespace QuickStart
             var numberOfPlayers = ghosts.Count * percentage / 100;
 
             var playerIndexes = RandomNumbers.Get(numberOfPlayers, 0, ghosts.Count);
-            // Debug.LogError("Players: "+ playerIndexes.Count);
+            Debug.LogError("Players: "+ numberOfPlayers);
             foreach (int index in playerIndexes)
             {
                 ghostSPG.Add(ghosts[index]);
@@ -185,8 +185,11 @@ namespace QuickStart
         {
             var percentage = ghostSPG.Count * CommandLinesManager.instance.percentageActiveSPG / 100;
             var indexes = RandomNumbers.Get(percentage, 0,  ghostSPG.Count);
+            //Print only the first time
+            if(ghostActiveSPG.Count<=0)
+                Debug.LogError("Selected Players: "+ percentage);
             ghostActiveSPG.Clear();
-            // Debug.LogError("Selected Players: "+ indexes.Count);
+            
             foreach (var index in indexes)
             {
                 ghostActiveSPG.Add(ghostSPG[index]);

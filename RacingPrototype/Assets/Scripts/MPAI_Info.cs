@@ -12,6 +12,7 @@ public class MPAI_Info : MonoBehaviour
     private GameObject carObject;
     private FollowCamera camera;
     private Button button;
+    private Image background;
 
     private void Awake()
     {
@@ -21,6 +22,9 @@ public class MPAI_Info : MonoBehaviour
         
         button.onClick.AddListener(ChangeServerCamera);
 
+        background = GetComponent<Image>();
+        Assert.IsNotNull(background,"MPAI-INFO background should not be null");
+        background.color=Color.clear;
     }
 
     public void Nome(string x, Color y)
@@ -32,10 +36,8 @@ public class MPAI_Info : MonoBehaviour
 
     public void Info(bool x)
     {
-        if (x)
-            info.text = "Yes";
-        else
-            info.text = "No";
+        info.text = x ? "Yes" : "No";
+        background.color=x?Color.yellow:Color.clear;
     }
 
     public void SetCameraCarFocus(GameObject car)
