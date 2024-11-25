@@ -113,6 +113,7 @@ public class Player_Ghost
     IEnumerator PredictionRoutine(Tensor input, float[] lastInfo)
     {
         var starTimePrediction = Time.time;
+        var starUnscaledTimePrediction = Time.unscaledTime;
         var output = worker.Execute(input).PeekOutput();
         yield return new WaitForCompletion(output);
         input.Dispose();
@@ -133,7 +134,7 @@ public class Player_Ghost
 
         var timeNeededForPrediction = Time.time - starTimePrediction;
         //WriteOnFile(timeNeededForPrediction.ToString());
-        PredictionLogger.Instance.AddPredictionLog(player.playerName,starTimePrediction.ToString(CultureInfo.InvariantCulture),Time.time.ToString(CultureInfo.InvariantCulture));
+        PredictionLogger.Instance.AddPredictionLog(player.playerName,starUnscaledTimePrediction.ToString(CultureInfo.InvariantCulture),Time.unscaledTime.ToString(CultureInfo.InvariantCulture));
     }
 
 

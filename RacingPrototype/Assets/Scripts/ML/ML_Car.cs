@@ -135,7 +135,9 @@ public class ML_Car : Agent
 
     private void OnCollisionStay(Collision collision)
     {
-
+        if(!this.enabled) return;
+        Debug.LogError("OnCollisionStay ML_Car");
+        
         if (completeRace && collision.gameObject.TryGetComponent(out Wall wall))
         {
             //Se la collisione dura da pi� di 2 secondi allora fine episodio

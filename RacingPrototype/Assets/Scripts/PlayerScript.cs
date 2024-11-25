@@ -369,6 +369,7 @@ namespace QuickStart
                 GameObject ui = Instantiate(uiPrefab, CarsManager.instance.carInfoUi);
                 CarsManager.instance.AddCar(this, ui.GetComponent<UI_Velocity>(), names[i], colors[i]);
             }
+            Debug.LogError("Agent Enabled");
             agent.enabled = true;
         }
 

@@ -9,7 +9,7 @@ public class RandomNumbers
     // Start is called before the first frame update
     public static HashSet<int> Get (int numeroDaGenerare,int minimo,int massimo)
     {
-        Debug.LogError("N: "+numeroDaGenerare+" min: "+minimo+" max: "+massimo);
+        // Debug.LogError("N: "+numeroDaGenerare+" min: "+minimo+" max: "+massimo);
         // Verifica che il range sia sufficiente per il numero richiesto
         Assert.IsFalse(numeroDaGenerare > (massimo - minimo));
         

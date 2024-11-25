@@ -79,7 +79,7 @@ namespace QuickStart
             }
             CarDescriptor c = CarsManager.instance.cars[passed].Car;
 
-            //Gate indica il prossimo Gate da passare, quindi controllo se il gate in cui è passato è lo stesso di quello che doveva passare
+            //Gate indica il prossimo Gate da passare, quindi controllo se il gate in cui ï¿½ passato ï¿½ lo stesso di quello che doveva passare
             if (c.Gates == id_gate)
             {
                 c.Gates = id_gate + 1;
@@ -89,8 +89,8 @@ namespace QuickStart
 
                 return;
             }
-            //se il valore di gate è maggiore del numero di gate in campo vuol dire che è passato in tutti i gate
-            //se è passato per tutti i gates e ora sta passando al gate iniziale ha fatto un giro
+            //se il valore di gate ï¿½ maggiore del numero di gate in campo vuol dire che ï¿½ passato in tutti i gate
+            //se ï¿½ passato per tutti i gates e ora sta passando al gate iniziale ha fatto un giro
             if (c.Gates == maxGates && id_gate == 0)
             {
 
@@ -103,10 +103,10 @@ namespace QuickStart
                 //Premia l'agente per aver concluso un giro
                 CarsManager.instance.cars[passed].Player.agent.lap = true;
 
-                Debug.Log($"Player {id_car} has completed a lap");
+                // Debug.Log($"Player {id_car} has completed a lap");
                 return;
             }
-            Debug.Log($"Player {id_car} has already passed through this gate");
+            // Debug.Log($"Player {id_car} has already passed through this gate");
         }
 
         private int GetGateIdPlayer(string id_car)
@@ -116,7 +116,7 @@ namespace QuickStart
             if (passed < 0)
             {
                 Debug.LogWarning($"Car {id_car} is not in the server cars list");
-                //2 possibilità o c'è stato un errore oppure il codice per aggiungere la macchina nel carmanager non è stato ancora eseguito
+                //2 possibilitï¿½ o c'ï¿½ stato un errore oppure il codice per aggiungere la macchina nel carmanager non ï¿½ stato ancora eseguito
                 return -1;
             }
             CarDescriptor c = CarsManager.instance.cars[passed].Car;

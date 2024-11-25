@@ -50,8 +50,8 @@ namespace QuickStart
 
             bot = CommandLinesManager.instance.bot;
             NetworkServer.RegisterHandler<InputMessage>(OnInputMessage);
-            Debug.LogError("Frequency: "+LatencyLevels.L1Frequency);
-            Debug.LogError("Duration: "+LatencyLevels.L1Duration);
+            // Debug.LogError("Frequency: "+LatencyLevels.L1Frequency);
+            // Debug.LogError("Duration: "+LatencyLevels.L1Duration);
             
             Invoke("SelectSPGPlayers",1);
             Invoke("ActivateSPG",LatencyLevels.L1Duration/1000);
@@ -173,7 +173,7 @@ namespace QuickStart
             var numberOfPlayers = ghosts.Count * percentage / 100;
 
             var playerIndexes = RandomNumbers.Get(numberOfPlayers, 0, ghosts.Count);
-            Debug.LogError("Players: "+ playerIndexes.Count);
+            // Debug.LogError("Players: "+ playerIndexes.Count);
             foreach (int index in playerIndexes)
             {
                 ghostSPG.Add(ghosts[index]);
@@ -186,7 +186,7 @@ namespace QuickStart
             var percentage = ghostSPG.Count * CommandLinesManager.instance.percentageActiveSPG / 100;
             var indexes = RandomNumbers.Get(percentage, 0,  ghostSPG.Count);
             ghostActiveSPG.Clear();
-            Debug.LogError("Selected Players: "+ indexes.Count);
+            // Debug.LogError("Selected Players: "+ indexes.Count);
             foreach (var index in indexes)
             {
                 ghostActiveSPG.Add(ghostSPG[index]);
@@ -196,7 +196,7 @@ namespace QuickStart
 
         private void ActivateSPG()
         {
-            Debug.LogError(Time.time+" Activate SPG");
+            // Debug.LogError(Time.time+" Activate SPG");
             SPGactivated = true;
             SelecteActiveSPGPlayers();
             Invoke("DeactivateSPG", LatencyLevels.L1Duration/1000);
@@ -204,7 +204,7 @@ namespace QuickStart
 
         private void DeactivateSPG()
         {
-            Debug.LogError(Time.time+" DeActivate SPG");
+            //Debug.LogError(Time.time+" DeActivate SPG");
             SPGactivated = false;
             var time = LatencyLevels.L1Frequency - LatencyLevels.L1Duration;
             Invoke("ActivateSPG",time/1000);

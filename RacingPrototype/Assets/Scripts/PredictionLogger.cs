@@ -19,8 +19,7 @@ public class PredictionLogger : MonoBehaviour
     private string predictionInfoPath=""; 
     private string systemInfoPath=""; 
     private string fpsInfoPath=""; 
-    private string logs = "Player ID,Start Prediction, End Prediction\n";
-    private string fpsData = "Time,FPS\n";
+    private string logs = "Player ID, Unscaled Start Prediction, Unscaled End Prediction\n";
     private SC_FPSCounter fps;
     private int counter = 0;
     private void Awake()
@@ -38,8 +37,9 @@ public class PredictionLogger : MonoBehaviour
         
         folderInfoPath = CommandLinesManager.instance.filePathPredictionsTime;
         Assert.IsFalse(string.IsNullOrEmpty(folderInfoPath));
-        
-        folderInfoPath += $"\\{NetworkManager.singleton.numPlayers}_{CommandLinesManager.instance.workerType}_{DateTime.Now:yyyy-M-d_hh_mm_ss}";
+
+        folderInfoPath +=
+            $"\\{DateTime.Now:yyyy-M-d_hh_mm_ss}_{CommandLinesManager.instance.workerType}_{NetworkManager.singleton.numPlayers}";
         var dirInfo=Directory.CreateDirectory(folderInfoPath);
         Assert.IsNotNull(dirInfo);
         
@@ -56,7 +56,7 @@ public class PredictionLogger : MonoBehaviour
         systemInfoPath = $"{folderInfoPath}\\systemPerformance.csv";
         Assert.IsFalse(string.IsNullOrEmpty(predictionInfoPath));
         File.Create(systemInfoPath);
-        //StartPythonScript();
+        StartPythonScript();
 
     }
 
@@ -70,7 +70,8 @@ public class PredictionLogger : MonoBehaviour
     private void WriteScenarioInfo()
     {
         var lat = new Latency(LatencyLevel.L1);
-        var infos = $"Duration:{lat.Duration}\nWorkerType:{CommandLinesManager.instance.workerType}";
+        var infos =
+            $"Duration:{lat.Duration}\nFrequency:{LatencyLevels.L1Frequency}\nWorkerType:{CommandLinesManager.instance.workerType}\nPercentage SPG Players:{CommandLinesManager.instance.percentageSPGPlayers}\nPercentage Active SPG Players:{CommandLinesManager.instance.percentageActiveSPG}";
         File.WriteAllText(scenarioInfoPath, infos);
     }
     private void OnDestroy()
@@ -79,7 +80,7 @@ public class PredictionLogger : MonoBehaviour
         {
             // Scriviamo la stringa sul file specificato
             File.WriteAllText(predictionInfoPath, logs);
-            File.WriteAllText(fpsInfoPath, fpsData);
+            File.WriteAllText(fpsInfoPath, fps.fpsData);
             Debug.Log("Dati scritti con successo.");
         }
         catch (Exception ex)
@@ -99,9 +100,9 @@ public class PredictionLogger : MonoBehaviour
 
     private void LateUpdate()
     {
-        counter++;
-        if (counter < 5) return;
-        fpsData += $"{Time.time.ToString(CultureInfo.InvariantCulture)},{fps.fps.ToString("F2", CultureInfo.InvariantCulture)}\n";
-        counter = 0;
+        // counter++;
+        // if (counter < 5) return;
+        // fpsData += $"{Time.time.ToString(CultureInfo.InvariantCulture)},{fps.fps.ToString("F2", CultureInfo.InvariantCulture)}\n";
+        // counter = 0;
     }
 }

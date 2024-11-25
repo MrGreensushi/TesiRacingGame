@@ -16,7 +16,7 @@ if %errorlevel% neq 0 (
 
 REM Chiede la durata e la frequenza (opzionali)
 set "duration="
-set /p duration="Inserisci la durata (in millisecondi, lascia vuoto per 300 ms): "
+set /p duration="Inserisci la durata (in millisecondi, lascia vuoto per 10000 ms): "
    
 REM Verifica che durata e frequenza siano interi positivi solo se specificati
 set "durationParam=-duration 10000"
@@ -28,6 +28,22 @@ if defined duration (
 	set durationParam=-duration %duration%
    )
 )
+
+
+set "frequency="
+set /p frequency="Inserisci l'intervallo di tempo tra le attivazione di SPG (in millisecondi, lascia vuoto per 13000 ms): "
+   
+REM Verifica che durata e frequenza siano interi positivi solo se specificati
+set "frequencyParam=-frequency 13000"
+if defined frequency (
+   set "var="
+   for /f "delims=0123456789" %%i in ("%duration%") do set var=%%i
+   if not defined var (
+	echo %frequency% is numeric
+	set frequencyParam=-frequency %frequency%
+   )
+)
+
 
 REM Imposta le dimensioni della finestra e gli incrementi di posizione
 set screenWidth=960
@@ -41,15 +57,15 @@ set /a yPos=100
 
 set /a maxX=1920 - (%screenWidth%/2)
 set /a maxY=1080 - (%screenHeight%/2)
-start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -logOutput=C:\Users\Daniele\Desktop\Predictions -workerType=ComputePrecompiled %durationParam% -pythonDirectory=C:\Users\Daniele\AppData\Local\Programs\Python\Python312\python.exe  -pythonScriptPath=C:\Users\Daniele\Downloads\system_info_logger.py -processName= 
+start RacingPrototype.exe -screen-width 960 -screen-height 540 -x 0 -y 0 -server -dont -logOutput=C:\Users\Daniele\Desktop\Predictions -workerType=CSharpBurst %durationParam% %frequencyParam% -pythonDirectory=C:\Users\Daniele\AppData\Local\Programs\Python\Python312\python.exe  -pythonScriptPath=C:\Users\Daniele\Downloads\system_info_logger.py -percentageSPGPlayers 100 -percentageActiveSPG 100 -experimentDuration 129
  
 
-rem timeout /t 5 /nobreak
+timeout /t 5 /nobreak
 
 REM Avvia il gioco per il numero di giocatori specificato
 for /l %%i in (1,1,%playerCount%) do (
-	start RacingPrototype.exe -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 
-	rem -networkAddress=192.168.50.3
+	start RacingPrototype.exe -batchmode -nographics -screen-width %screenWidth% -screen-height %screenHeight% -x !xPos! -y !yPos! -client -bot -l1 -experimentDuration 120
+	rem -networkAddress=192.168.50.3 -logRTTOutput=C:\Users\Daniele\Desktop\Predictions\RTTs
 	rem  -batchmode -nographics
 	
 	REM Aggiorna la posizione per la prossima finestra

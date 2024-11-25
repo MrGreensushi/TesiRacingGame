@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class SC_FPSCounter : MonoBehaviour
@@ -7,7 +8,8 @@ public class SC_FPSCounter : MonoBehaviour
     /* Assign this script to any object in the Scene to display frames per second */
 
     public float updateInterval = 0.5f; //How often should the number update
-
+    public string fpsData = "UnscaledTime,FPS\n";
+    
     float accum = 0.0f;
     int frames = 0;
     float timeleft;
@@ -25,6 +27,7 @@ public class SC_FPSCounter : MonoBehaviour
     }
 
     // Update is called once per frame
+// Update is called once per frame
     void Update()
     {
         timeleft -= Time.deltaTime;
@@ -39,9 +42,9 @@ public class SC_FPSCounter : MonoBehaviour
             timeleft = updateInterval;
             accum = 0.0f;
             frames = 0;
+            fpsData += $"{Time.unscaledTime.ToString(CultureInfo.InvariantCulture)},{fps.ToString("F2", CultureInfo.InvariantCulture)}\n";
         }
     }
-
     void OnGUI()
     {
         //Display the fps and round to 2 decimals

@@ -13,7 +13,7 @@ public class CommandLinesManager : MonoBehaviour
     public int bot = 0;
     public LatencyLevel level;
     public bool doNotMPAI;
-    public string filePath,filePathPredictionsTime,processName;
+    public string filePath,filePathPredictionsTime,processName,rttClientPath;
     public string playerName,path,fileName,pythonDirectory,pythonScriptPath;
     public WorkerFactory.Type workerType = WorkerFactory.Type.CSharpBurst;
     public int percentageSPGPlayers=-1, percentageActiveSPG=-1;
@@ -23,9 +23,12 @@ public class CommandLinesManager : MonoBehaviour
     void Awake()
     {
         if (instance != null)
+        {
             Destroy(this);
-        else
-            instance = this;
+            return;
+        }
+        
+        instance = this;
 
         bot = 0;
         level = LatencyLevel.None;
@@ -129,6 +132,10 @@ public class CommandLinesManager : MonoBehaviour
             {
                 filePathPredictionsTime= args[i]["-logOutput=".Length..];
             }
+            else if ( args[i].StartsWith("-logRTTOutput="))
+            {
+                rttClientPath= args[i]["-logRTTOutput=".Length..];
+            }
             else if (args[i].StartsWith("-workerType="))
             {
                 var type=args[i]["-workerType=".Length..];
@@ -205,11 +212,12 @@ public class CommandLinesManager : MonoBehaviour
 
     private void Start()
     {
-        Invoke("QuitApp",experimentDuration);
+        StartCoroutine("QuitApp");
     }
 
-    void QuitApp()
+    IEnumerator QuitApp()
     {
+        yield return new WaitForSecondsRealtime(experimentDuration);
         Application.Quit();
     }
 
